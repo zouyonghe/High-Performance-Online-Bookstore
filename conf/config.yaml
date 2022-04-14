@@ -1,0 +1,28 @@
+runmode: debug                 # 开发模式, debug, release, test
+addr: :8080                  # HTTP绑定端口
+name: bookstore-server              # API Server的名字
+url: http://127.0.0.1:8080   # pingServer函数请求的API服务器的ip:port
+max_ping_count: 10           # pingServer函数try的次数
+jwt_secret: Rtg8BPKNEf2mB4mgvKONGPZZQSaJWNLijxR42qRgq0iBb5
+tls:
+  addr: :8081
+  cert: conf/server.crt
+  key: conf/server.key
+log:
+  writers: stdout
+  log_level: DEBUG
+  log_file: log/server.log
+  max_backups: 5
+  max_size: 1
+  max_age: 30
+  compress: false
+db:
+  name: bookstore_server
+  addr: 127.0.0.1:3306
+  username: root
+  password: aa11bb22cc33
+docker_db:
+  name: db_apiserver
+  addr: 127.0.0.1:3306
+  username: root
+  password: aa11bb22cc33
