@@ -11,7 +11,7 @@ tls:
 log:
   writers: stdout
   log_level: DEBUG
-  log_file: log/server.log
+  log_file: blog/server.log
   max_backups: 5
   max_size: 1
   max_age: 30

@@ -5,6 +5,7 @@ import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
+	l "log"
 	"strings"
 )
 
@@ -13,7 +14,16 @@ type Config struct {
 }
 
 // Init 初始化配置
-func Init(cfg string) (*zap.Logger, error) {
+func Init(cfg string) *zap.Logger {
+	logger, err := initAll(cfg)
+	if err != nil {
+		l.Fatal("init config failed", zap.Error(err))
+	}
+	return logger
+}
+
+// initAll 初始化配置和日志
+func initAll(cfg string) (*zap.Logger, error) {
 	c := Config{
 		Name: cfg,
 	}

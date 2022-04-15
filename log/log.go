@@ -5,6 +5,8 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
+	"log"
+	"os"
 )
 
 type Logger struct {
@@ -34,9 +36,20 @@ func InitLogger() *zap.Logger {
 	default:
 		logLevel = zapcore.DebugLevel
 	}
-	core := zapcore.NewCore(encoder, writeSyncer, logLevel)
+
+	//core := zapcore.NewCore(encoder, writeSyncer, logLevel)
+	core := zapcore.NewTee(
+		zapcore.NewCore(encoder, writeSyncer, logLevel),
+		zapcore.NewCore(encoder, zapcore.AddSync(os.Stdout), logLevel),
+	)
+
 	logger := zap.New(core)
-	defer logger.Sync()
+	defer func(logger *zap.Logger) {
+		err := logger.Sync()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(logger)
 	return logger
 }
 

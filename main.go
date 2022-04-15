@@ -22,10 +22,7 @@ func main() {
 	ver.CheckShowVersion(*version)
 
 	// 初始化配置
-	logger, err := config.Init(*cfg)
-	if err != nil {
-		logger.Fatal("init config failed", zap.Error(err))
-	}
+	logger = config.Init(*cfg)
 
 	logger.Info("Start server successfully")
 }
