@@ -15,6 +15,7 @@ func InitLogger() *zap.Logger {
 	writeSyncer := getLogWriter()
 	encoder := getEncoder()
 	var logLevel zapcore.Level
+
 	switch viper.GetString("log.log_level") {
 	case "DEBUG":
 		logLevel = zapcore.DebugLevel
@@ -30,6 +31,8 @@ func InitLogger() *zap.Logger {
 		logLevel = zapcore.PanicLevel
 	case "FATAL":
 		logLevel = zapcore.FatalLevel
+	default:
+		logLevel = zapcore.DebugLevel
 	}
 	core := zapcore.NewCore(encoder, writeSyncer, logLevel)
 	logger := zap.New(core)

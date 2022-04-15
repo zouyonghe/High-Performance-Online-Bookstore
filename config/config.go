@@ -1,6 +1,7 @@
 package config
 
 import (
+	"Jinshuzhai-Bookstore/log"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -11,27 +12,29 @@ type Config struct {
 	Name string
 }
 
-// Init
-func Init(cfg string, log *zap.Logger) error {
+// Init 初始化配置
+func Init(cfg string) (*zap.Logger, error) {
 	c := Config{
 		Name: cfg,
 	}
-
-	if err := c.initConfig(log); err != nil {
-		return err
+	// 初始化配置文件
+	if err := c.initConfig(); err != nil {
+		return nil, err
 	}
 
-	//Logger, _ := c.initLogger()
+	// 建立logger实例
+	logger := log.InitLogger()
 
-	if err := c.watchConfig(log); err != nil {
-		return err
+	// 监控配置文件变化并热加载程序
+	if err := c.watchConfig(logger); err != nil {
+		return nil, err
 	}
 
-	return nil
+	return logger, nil
 }
 
 // initConfig 初始配置设置
-func (c *Config) initConfig(log *zap.Logger) error {
+func (c *Config) initConfig() error {
 	if c.Name != "" {
 		viper.SetConfigFile(c.Name)
 	} else {
@@ -46,15 +49,15 @@ func (c *Config) initConfig(log *zap.Logger) error {
 	if err := viper.ReadInConfig(); err != nil {
 		return err
 	}
-	log.Info("Using config file: " + viper.ConfigFileUsed())
+
 	return nil
 }
 
 // watchConfig 监听配置文件变化
-func (c *Config) watchConfig(log *zap.Logger) error {
+func (c *Config) watchConfig(logger *zap.Logger) error {
 	viper.WatchConfig()
 	viper.OnConfigChange(func(e fsnotify.Event) {
-		log.Info("Config file changed:", zap.String("change", e.Name))
+		logger.Info("Config file changed:" + e.Name)
 	})
 	return nil
 }

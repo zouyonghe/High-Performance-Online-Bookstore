@@ -1,30 +1,43 @@
 package version
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/object"
 	"log"
-	"runtime"
+	"os"
 	"strings"
-	"time"
 )
 
 // Info contains versioning information.
 type Info struct {
-	GitTag       string    `json:"gitTag"`
-	GitCommit    string    `json:"gitCommit"`
-	GitTreeState string    `json:"gitTreeState"`
-	BuildDate    time.Time `json:"buildDate"`
-	GoVersion    string    `json:"goVersion"`
-	Compiler     string    `json:"compiler"`
-	Platform     string    `json:"platform"`
+	GitTag       string `json:"gitTag"`
+	GitCommit    string `json:"gitCommit"`
+	GitTreeState string `json:"gitTreeState"`
+	BuildDate    string `json:"buildDate"`
+	GoVersion    string `json:"goVersion"`
+	Compiler     string `json:"compiler"`
+	Platform     string `json:"platform"`
 }
 
 // String returns info as a human-friendly version string.
 func (info Info) String() string {
 	return info.GitTag
+}
+
+func CheckShowVersion(b bool) {
+	if b {
+		v := Get()
+		marshalled, err := json.MarshalIndent(&v, "", "  ")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Println(string(marshalled))
+		os.Exit(0)
+	}
 }
 
 func Get() Info {
@@ -33,9 +46,9 @@ func Get() Info {
 		GitCommit:    gitCommit,
 		GitTreeState: gitTreeState,
 		BuildDate:    buildDate,
-		GoVersion:    runtime.Version(),
-		Compiler:     runtime.Compiler,
-		Platform:     fmt.Sprintf("%s/%s", runtime.GOOS, runtime.GOARCH),
+		GoVersion:    goVersion,
+		Compiler:     compiler,
+		Platform:     platform,
 	}
 }
 
@@ -51,15 +64,6 @@ func getLastCommit() string {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	/*	repository, _ := git.PlainOpen(".")
-		headRef, err := repository.Head()
-		if err != nil {
-			log.Fatal(err)
-		}
-		headSha := headRef.Hash().String()
-
-		return headSha*/
 	commitMessage := commit.Message
 	commitMessage = strings.Replace(commitMessage, "\n", "", -1)
 	return commitMessage
