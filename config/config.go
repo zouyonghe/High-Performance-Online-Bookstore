@@ -17,7 +17,7 @@ type Config struct {
 func Init(cfg string) *zap.Logger {
 	logger, err := initAll(cfg)
 	if err != nil {
-		l.Fatal("init config failed", zap.Error(err))
+		l.Fatal("init config failed", err)
 	}
 	return logger
 }
@@ -59,7 +59,6 @@ func (c *Config) initConfig() error {
 	if err := viper.ReadInConfig(); err != nil {
 		return err
 	}
-
 	return nil
 }
 

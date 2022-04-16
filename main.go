@@ -2,6 +2,7 @@ package main
 
 import (
 	"Jinshuzhai-Bookstore/config"
+	"Jinshuzhai-Bookstore/model"
 	ver "Jinshuzhai-Bookstore/pkg/version"
 	"github.com/spf13/pflag"
 	"go.uber.org/zap"
@@ -24,5 +25,5 @@ func main() {
 	// 初始化配置
 	logger = config.Init(*cfg)
 
-	logger.Info("Start server successfully")
+	model.DB.Init(logger)
 }

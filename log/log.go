@@ -5,7 +5,6 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
-	"log"
 	"os"
 )
 
@@ -45,10 +44,7 @@ func InitLogger() *zap.Logger {
 
 	logger := zap.New(core)
 	defer func(logger *zap.Logger) {
-		err := logger.Sync()
-		if err != nil {
-			log.Fatal(err)
-		}
+		_ = logger.Sync()
 	}(logger)
 	return logger
 }
@@ -63,6 +59,6 @@ func getLogWriter() zapcore.WriteSyncer {
 		MaxSize:    viper.GetInt("log.max_size"),    //文件大小限制,单位MB
 		MaxBackups: viper.GetInt("log.max_backups"), //最大保留日志文件数量
 		MaxAge:     viper.GetInt("log.max_age"),     //日志文件保留天数
-		Compress:   viper.GetBool("log.compress"),   //压缩                             //是否压缩处理
+		Compress:   viper.GetBool("log.compress"),   //是否压缩处理
 	})
 }
