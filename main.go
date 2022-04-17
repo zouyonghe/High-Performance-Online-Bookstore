@@ -17,17 +17,19 @@ var (
 )
 
 func main() {
-	// 解析命令行参数
+	// parse command line arguments
 	pflag.Parse()
 
-	// 显示版本信息
+	// show version info
 	ver.CheckShowVersion(*version)
 
-	// 初始化配置
+	// initialize config
 	logger = config.Init(*cfg)
 
+	// initialize gorm
 	model.DB.Init(logger)
 
+	// initialize router
 	router.InitRouter(logger)
 
 	logger.Info("Jinshuzhai-Bookstore service started")

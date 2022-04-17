@@ -13,7 +13,8 @@ type Config struct {
 	Name string
 }
 
-// Init 初始化配置
+// Init inits configures,
+// and return a zap logger.
 func Init(cfg string) *zap.Logger {
 	logger, err := initAll(cfg)
 	if err != nil {
@@ -22,20 +23,21 @@ func Init(cfg string) *zap.Logger {
 	return logger
 }
 
-// initAll 初始化配置和日志
+// initAll inits config and log,
+// and it will watch config file change.
 func initAll(cfg string) (*zap.Logger, error) {
 	c := Config{
 		Name: cfg,
 	}
-	// 初始化配置文件
+	// initialize log file
 	if err := c.initConfig(); err != nil {
 		return nil, err
 	}
 
-	// 建立logger实例
+	// build a logger example
 	logger := log.InitLogger()
 
-	// 监控配置文件变化并热加载程序
+	// watch config file change
 	if err := c.watchConfig(logger); err != nil {
 		return nil, err
 	}
@@ -43,7 +45,8 @@ func initAll(cfg string) (*zap.Logger, error) {
 	return logger, nil
 }
 
-// initConfig 初始配置设置
+// initConfig read the config file
+// and initialize the config.
 func (c *Config) initConfig() error {
 	if c.Name != "" {
 		viper.SetConfigFile(c.Name)
@@ -62,7 +65,7 @@ func (c *Config) initConfig() error {
 	return nil
 }
 
-// watchConfig 监听配置文件变化
+// watchConfig watches the config file change.
 func (c *Config) watchConfig(logger *zap.Logger) error {
 	viper.WatchConfig()
 	viper.OnConfigChange(func(e fsnotify.Event) {

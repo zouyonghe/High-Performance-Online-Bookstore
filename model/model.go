@@ -1,15 +1,24 @@
 package model
 
 import (
-	"gorm.io/gorm"
 	"sync"
+	"time"
 )
 
+type BaseModel struct {
+	ID        uint64     `gorm:"primary_key;AUTO_INCREMENT;column:id" json:"-"`
+	CreatedAt time.Time  `gorm:"column:createdAt" json:"-"`
+	UpdatedAt time.Time  `gorm:"column:updatedAt" json:"-"`
+	DeletedAt *time.Time `gorm:"column:deletedAt" sql:"index" json:"-"`
+}
+
 type UserInfo struct {
-	gorm.Model
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Email    string `json:"email"`
+	Id        uint64 `json:"id"`
+	Username  string `json:"username"`
+	ShortId   string `json:"sayHello"`
+	Password  string `json:"password"`
+	CreatedAt string `json:"createdAt"`
+	UpdatedAt string `json:"updatedAt"`
 }
 
 type UserList struct {

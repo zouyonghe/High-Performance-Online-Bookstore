@@ -1,18 +1,16 @@
 package model
 
 import (
-	"fmt"
-	"gorm.io/gorm"
-
 	"Jinshuzhai-Bookstore/pkg/auth"
 	"Jinshuzhai-Bookstore/pkg/constvar"
+	"fmt"
 
 	"gopkg.in/go-playground/validator.v9"
 )
 
 // UserModel represents a registered user.
 type UserModel struct {
-	gorm.Model
+	BaseModel
 	Username string `json:"username" gorm:"column:username;not null" binding:"required" validate:"min=1,max=32"`
 	Password string `json:"password" gorm:"column:password;not null" binding:"required" validate:"min=5,max=128"`
 }
@@ -27,9 +25,9 @@ func (u *UserModel) Create() error {
 }
 
 // DeleteUser deletes the user by the user identifier.
-func DeleteUser(id uint) error {
+func DeleteUser(id uint64) error {
 	user := UserModel{}
-	user.Model.ID = id
+	user.ID = id
 	return DB.Self.Delete(&user).Error
 }
 

@@ -8,10 +8,12 @@ import (
 	"os"
 )
 
-type Logger struct {
+/*type Logger struct {
 	Log *zap.Logger
 }
+*/
 
+// InitLogger inits a logger
 func InitLogger() *zap.Logger {
 	writeSyncer := getLogWriter()
 	encoder := getEncoder()
@@ -35,14 +37,17 @@ func InitLogger() *zap.Logger {
 	default:
 		logLevel = zapcore.DebugLevel
 	}
+	// Default output log in stdout
+	core := zapcore.NewCore(encoder, os.Stdout, logLevel)
+	// Optional output log in file
+	if viper.GetBool("log.file_output") {
+		core = zapcore.NewTee(
+			core,
+			zapcore.NewCore(encoder, writeSyncer, logLevel),
+		)
+	}
 
-	//core := zapcore.NewCore(encoder, writeSyncer, logLevel)
-	core := zapcore.NewTee(
-		zapcore.NewCore(encoder, writeSyncer, logLevel),
-		zapcore.NewCore(encoder, zapcore.AddSync(os.Stdout), logLevel),
-	)
-
-	logger := zap.New(core)
+	logger := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1))
 	defer func(logger *zap.Logger) {
 		_ = logger.Sync()
 	}(logger)
@@ -55,10 +60,10 @@ func getEncoder() zapcore.Encoder {
 
 func getLogWriter() zapcore.WriteSyncer {
 	return zapcore.AddSync(&lumberjack.Logger{
-		Filename:   viper.GetString("log.log_file"), //日志文件存放目录
-		MaxSize:    viper.GetInt("log.max_size"),    //文件大小限制,单位MB
-		MaxBackups: viper.GetInt("log.max_backups"), //最大保留日志文件数量
-		MaxAge:     viper.GetInt("log.max_age"),     //日志文件保留天数
-		Compress:   viper.GetBool("log.compress"),   //是否压缩处理
+		Filename:   viper.GetString("log.log_file"), //log file path
+		MaxSize:    viper.GetInt("log.max_size"),    //file size limit
+		MaxBackups: viper.GetInt("log.max_backups"), //max number of backups
+		MaxAge:     viper.GetInt("log.max_age"),     //max age limit
+		Compress:   viper.GetBool("log.compress"),   //log compression mode
 	})
 }

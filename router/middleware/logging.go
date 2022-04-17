@@ -82,6 +82,6 @@ func Logging() gin.HandlerFunc {
 			message = response.Message
 		}
 
-		log.Println("%-13s | %-12s | %s %s | {code: %d, message: %s}", costTime, ip, pad.Right(method, 5, ""), path, code, message)
+		log.Printf("%-13s | %-12s | %s %s | {code: %d, message: %s}\n", costTime, ip, pad.Right(method, 5, ""), path, code, message)
 	}
 }

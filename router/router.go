@@ -1,9 +1,10 @@
 package router
 
 import (
+	"Jinshuzhai-Bookstore/handler/user"
 	"errors"
 	"github.com/spf13/viper"
-	ginSwagger "github.com/swaggo/gin-swagger"
+	swag "github.com/swaggo/gin-swagger"
 	"go.uber.org/zap"
 	"net/http"
 	"time"
@@ -13,18 +14,22 @@ import (
 	"Jinshuzhai-Bookstore/router/middleware"
 
 	"github.com/gin-contrib/pprof"
+	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
 func InitRouter(logger *zap.Logger) {
-	gin.SetMode(viper.GetString("runmode"))
-	g := gin.Default()
+	gin.SetMode(viper.GetString("mode"))
+	g := gin.New()
 	Load(
 		// Cores
 		g,
-
+		/*		middleware.GinLogger(logger),
+				middleware.GinRecovery(logger, true),*/
 		// Middlewares
+		ginzap.Ginzap(logger, time.RFC3339, true),
+		ginzap.RecoveryWithZap(logger, true),
 		middleware.RequestId(),
 	)
 
@@ -82,24 +87,25 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	})
 
 	// swagger api docs
-	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	g.GET("/swagger/*any", swag.WrapHandler(swaggerFiles.Handler))
 
 	// pprof router
 	pprof.Register(g)
 
 	// api for authentication functionalities
-	//g.POST("/login", user.Login)
+	g.POST("/login", user.Login)
 
-	/*	// The user handlers, requiring authentication
-		u := g.Group("/v1/user")
-		u.Use(middleware.AuthMiddleware())
-		{
-			u.POST("", user.Create)
-			u.DELETE("/:id", user.Delete)
-			u.PUT("/:id", user.Update)
-			u.GET("", user.List)
-			u.GET("/:username", user.Get)
-		}*/
+	// The user handlers, requiring authentication
+	u := g.Group("/v1/user")
+	// use authentication middleware
+	//u.Use(middleware.AuthMiddleware())
+	{
+		u.POST("", user.Create)
+		u.DELETE("/:id", user.Delete)
+		u.PUT("/:id", user.Update)
+		u.GET("", user.List)
+		u.GET("/:username", user.Get)
+	}
 
 	// The health check handlers
 	st := g.Group("/state")

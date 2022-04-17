@@ -17,7 +17,7 @@ var (
 
 // Context is the context of the JSON web token.
 type Context struct {
-	ID       uint
+	ID       uint64
 	Username string
 }
 
@@ -47,7 +47,7 @@ func Parse(tokenString string, secret string) (*Context, error) {
 
 		// Read the token if it's valid.
 	} else if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		ctx.ID = uint(claims["id"].(float64))
+		ctx.ID = uint64(claims["id"].(float64))
 		ctx.Username = claims["username"].(string)
 		return ctx, nil
 
@@ -58,7 +58,7 @@ func Parse(tokenString string, secret string) (*Context, error) {
 }
 
 // ParseRequest gets the token from the header and
-// pass it to the Parse function to parses the token.
+// pass it to the Parse function to parse the token.
 func ParseRequest(c *gin.Context) (*Context, error) {
 	header := c.Request.Header.Get("Authorization")
 
@@ -71,7 +71,10 @@ func ParseRequest(c *gin.Context) (*Context, error) {
 
 	var t string
 	// Parse the header to get the token part.
-	fmt.Sscanf(header, "Bearer %s", &t)
+	_, err := fmt.Sscanf(header, "Bearer %s", &t)
+	if err != nil {
+		return nil, err
+	}
 	return Parse(t, secret)
 }
 
