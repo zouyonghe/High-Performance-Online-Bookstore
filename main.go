@@ -4,6 +4,7 @@ import (
 	"Jinshuzhai-Bookstore/config"
 	"Jinshuzhai-Bookstore/model"
 	ver "Jinshuzhai-Bookstore/pkg/version"
+	"Jinshuzhai-Bookstore/router"
 	"github.com/spf13/pflag"
 	"go.uber.org/zap"
 )
@@ -26,4 +27,8 @@ func main() {
 	logger = config.Init(*cfg)
 
 	model.DB.Init(logger)
+
+	router.InitRouter(logger)
+
+	logger.Info("Jinshuzhai-Bookstore service started")
 }

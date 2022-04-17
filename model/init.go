@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/schema"
 )
 
 type Database struct {
@@ -31,10 +32,10 @@ func openDB(username, password, addr, name string, logger *zap.Logger) *gorm.DB 
 	})
 	cfg := &gorm.Config{
 		SkipDefaultTransaction: false,
-		/*		NamingStrategy: schema.NamingStrategy{
-				TablePrefix:   "t_",	//表名前缀
-				SingularTable: true,	//是否复数表名
-			},*/
+		NamingStrategy: schema.NamingStrategy{
+			TablePrefix:   "tb_", //表名前缀
+			SingularTable: true,  //是否复数表名
+		},
 		DisableForeignKeyConstraintWhenMigrating: true,
 	}
 

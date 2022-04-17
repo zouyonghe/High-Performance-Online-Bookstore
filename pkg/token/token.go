@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
@@ -17,7 +17,7 @@ var (
 
 // Context is the context of the JSON web token.
 type Context struct {
-	ID       uint64
+	ID       uint
 	Username string
 }
 
@@ -47,7 +47,7 @@ func Parse(tokenString string, secret string) (*Context, error) {
 
 		// Read the token if it's valid.
 	} else if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		ctx.ID = uint64(claims["id"].(float64))
+		ctx.ID = uint(claims["id"].(float64))
 		ctx.Username = claims["username"].(string)
 		return ctx, nil
 
