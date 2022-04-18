@@ -100,7 +100,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	u := g.Group("/v1/user")
 	// use authentication middleware
 	u.Use(middleware.AuthMiddleware())
-	// user permission middleware
+
 	u.Use(middleware.HasPermission())
 	{
 		u.DELETE("/:id", user.Delete)

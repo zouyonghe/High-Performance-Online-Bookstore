@@ -9,12 +9,13 @@ import (
 )
 
 func Update(c *gin.Context) {
-	//log.Info("Update function called.", lager.Data{"X-Request-Id": util.GetReqID(c)})
 	// Get the user id from the url parameter.
 	userId, _ := strconv.Atoi(c.Param("id"))
 
 	// Binding the user data.
 	var u model.UserModel
+
+	u.Role = "general"
 	if err := c.Bind(&u); err != nil {
 		SendResponse(c, berror.ErrBind, nil)
 		return
