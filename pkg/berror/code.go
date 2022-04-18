@@ -19,8 +19,10 @@ var (
 	ErrEncrypt = &Berror{Code: 20101, Message: "Error occurred while encrypting the user password."}
 	// ErrUserNotFound user was not found
 	ErrUserNotFound = &Berror{Code: 20102, Message: "The user was not found."}
+	// ErrUserExists user already exists
+	ErrUserExists = &Berror{Code: 20103, Message: "The username is already exists."}
 	// ErrTokenInvalid token was invalid error
-	ErrTokenInvalid = &Berror{Code: 20103, Message: "The token was invalid."}
+	ErrTokenInvalid = &Berror{Code: 20104, Message: "The token was invalid."}
 	// ErrPasswordIncorrect user password was incorrect
-	ErrPasswordIncorrect = &Berror{Code: 20104, Message: "The password was incorrect."}
+	ErrPasswordIncorrect = &Berror{Code: 20105, Message: "The password was incorrect."}
 )

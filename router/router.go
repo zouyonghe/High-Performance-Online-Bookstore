@@ -19,7 +19,7 @@ import (
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
-func InitRouter(logger *zap.Logger) {
+func InitRouter() {
 	gin.SetMode(viper.GetString("mode"))
 	g := gin.New()
 	Load(
@@ -28,38 +28,38 @@ func InitRouter(logger *zap.Logger) {
 		/*		middleware.GinLogger(logger),
 				middleware.GinRecovery(logger, true),*/
 		// Middlewares
-		ginzap.Ginzap(logger, time.RFC3339, true),
-		ginzap.RecoveryWithZap(logger, true),
+		ginzap.Ginzap(zap.L(), time.RFC3339, true),
+		ginzap.RecoveryWithZap(zap.L(), true),
 		middleware.RequestId(),
 	)
 
-	go testPing(logger)
+	go testPing()
 
-	startListen(g, logger)
+	startListen(g)
 }
 
-func testPing(logger *zap.Logger) {
-	if err := pingServer(logger); err != nil {
-		logger.Fatal("The router has no response, or it might took too long to start up.", zap.Error(err))
+func testPing() {
+	if err := pingServer(); err != nil {
+		zap.L().Error("The router has no response, or it might took too long to start up.", zap.Error(err))
 	}
-	logger.Info("The router has been deployed successfully.")
+	zap.L().Info("The router has been deployed successfully.")
 }
 
-func startListen(g *gin.Engine, logger *zap.Logger) {
+func startListen(g *gin.Engine) {
 	cert := viper.GetString("tls.cert")
 	key := viper.GetString("tls.key")
 	if cert != "" && key != "" {
 		go func() {
-			logger.Info("Start to listening the incoming requests on https address", zap.String("tls.addr", viper.GetString("tls.addr")))
-			logger.Info(http.ListenAndServeTLS(viper.GetString("tls.addr"), cert, key, g).Error())
+			zap.L().Info("Start to listening the incoming requests on https address", zap.String("tls.addr", viper.GetString("tls.addr")))
+			zap.L().Info(http.ListenAndServeTLS(viper.GetString("tls.addr"), cert, key, g).Error())
 		}()
 	}
-	logger.Info("Start to listening the incoming requests on http address", zap.String("addr", viper.GetString("addr")))
-	logger.Info(http.ListenAndServe(viper.GetString("addr"), g).Error())
+	zap.L().Info("Start to listening the incoming requests on http address", zap.String("addr", viper.GetString("addr")))
+	zap.L().Info(http.ListenAndServe(viper.GetString("addr"), g).Error())
 }
 
 // pingServer pings the http server to make sure the router is working.
-func pingServer(logger *zap.Logger) error {
+func pingServer() error {
 	for i := 0; i < viper.GetInt("max_ping_count"); i++ {
 		// Ping the server by sending a GET request to `/state/health`.
 		resp, err := http.Get(viper.GetString("url") + "/state/health")
@@ -68,7 +68,7 @@ func pingServer(logger *zap.Logger) error {
 		}
 
 		// Sleep for a second to continue the next ping.
-		logger.Info("Waiting for the router, retry in 1 second.")
+		zap.L().Info("Waiting for the router, retry in 1 second.")
 		time.Sleep(time.Second)
 	}
 	return errors.New("connect to the router failed")
@@ -94,13 +94,15 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 
 	// api for authentication functionalities
 	g.POST("/login", user.Login)
-
+	// api for register functionalities
+	g.POST("/register", user.Create)
 	// The user handlers, requiring authentication
 	u := g.Group("/v1/user")
 	// use authentication middleware
-	//u.Use(middleware.AuthMiddleware())
+	u.Use(middleware.AuthMiddleware())
+	// user permission middleware
+	u.Use(middleware.HasPermission())
 	{
-		u.POST("", user.Create)
 		u.DELETE("/:id", user.Delete)
 		u.PUT("/:id", user.Update)
 		u.GET("", user.List)

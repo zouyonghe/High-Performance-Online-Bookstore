@@ -17,6 +17,7 @@ type UserInfo struct {
 	Username  string `json:"username"`
 	ShortId   string `json:"sayHello"`
 	Password  string `json:"password"`
+	Role      string `json:"role"`
 	CreatedAt string `json:"createdAt"`
 	UpdatedAt string `json:"updatedAt"`
 }

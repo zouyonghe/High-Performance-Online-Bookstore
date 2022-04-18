@@ -1,4 +1,4 @@
-package middleware
+package unused
 
 import (
 	"bytes"
@@ -12,7 +12,6 @@ import (
 	"Jinshuzhai-Bookstore/pkg/berror"
 
 	"github.com/gin-gonic/gin"
-
 	"github.com/willf/pad"
 )
 

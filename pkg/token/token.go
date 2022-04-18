@@ -19,6 +19,7 @@ var (
 type Context struct {
 	ID       uint64
 	Username string
+	Role     string
 }
 
 // secretFunc validates the secret format.
@@ -49,6 +50,7 @@ func Parse(tokenString string, secret string) (*Context, error) {
 	} else if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		ctx.ID = uint64(claims["id"].(float64))
 		ctx.Username = claims["username"].(string)
+		ctx.Role = claims["role"].(string)
 		return ctx, nil
 
 		// Other errors.
@@ -79,7 +81,7 @@ func ParseRequest(c *gin.Context) (*Context, error) {
 }
 
 // Sign signs the context with the specified secret.
-func Sign(ctx *gin.Context, c Context, secret string) (tokenString string, err error) {
+func Sign(c Context, secret string) (tokenString string, err error) {
 	// Load the jwt secret from the Gin config if the secret isn't specified.
 	if secret == "" {
 		secret = viper.GetString("jwt_secret")
@@ -88,6 +90,7 @@ func Sign(ctx *gin.Context, c Context, secret string) (tokenString string, err e
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":       c.ID,
 		"username": c.Username,
+		"role":     c.Role,
 		"nbf":      time.Now().Unix(),
 		"iat":      time.Now().Unix(),
 	})

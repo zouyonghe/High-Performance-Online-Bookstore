@@ -18,6 +18,8 @@
 
 blog/server.log
 
+router/unused/*
+
 conf/*
 
 Jinshuzhai-Bookstore

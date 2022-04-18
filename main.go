@@ -12,11 +12,11 @@ import (
 var (
 	cfg     = pflag.StringP("config", "c", "", "Specify config file path.")
 	version = pflag.BoolP("version", "v", false, "show version info.")
-
-	logger *zap.Logger
+	logger  *zap.Logger
 )
 
 func main() {
+
 	// parse command line arguments
 	pflag.Parse()
 
@@ -26,11 +26,14 @@ func main() {
 	// initialize config
 	logger = config.Init(*cfg)
 
+	// Replace global logger
+	gl := zap.ReplaceGlobals(logger)
+	defer gl()
+
 	// initialize gorm
-	model.DB.Init(logger)
+	model.DB.Init()
 
 	// initialize router
-	router.InitRouter(logger)
+	router.InitRouter()
 
-	logger.Info("Jinshuzhai-Bookstore service started")
 }

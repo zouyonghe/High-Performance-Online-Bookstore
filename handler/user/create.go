@@ -26,6 +26,12 @@ func Create(c *gin.Context) {
 		return
 	}
 
+	// Validate if the user exists
+	if _, err := model.GetUser(r.Username); err == nil {
+		SendResponse(c, berror.ErrUserExists, nil)
+		return
+	}
+
 	// Encrypt the user password.
 	if err := u.Encrypt(); err != nil {
 		SendResponse(c, berror.ErrEncrypt, nil)

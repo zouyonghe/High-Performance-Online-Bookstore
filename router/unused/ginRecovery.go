@@ -1,4 +1,4 @@
-package middleware
+package unused
 
 import (
 	"github.com/gin-gonic/gin"

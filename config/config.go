@@ -38,7 +38,7 @@ func initAll(cfg string) (*zap.Logger, error) {
 	logger := log.InitLogger()
 
 	// watch config file change
-	if err := c.watchConfig(logger); err != nil {
+	if err := c.watchConfig(); err != nil {
 		return nil, err
 	}
 
@@ -66,10 +66,10 @@ func (c *Config) initConfig() error {
 }
 
 // watchConfig watches the config file change.
-func (c *Config) watchConfig(logger *zap.Logger) error {
+func (c *Config) watchConfig() error {
 	viper.WatchConfig()
 	viper.OnConfigChange(func(e fsnotify.Event) {
-		logger.Info("Config file changed:" + e.Name)
+		zap.L().Info("Config file changed:" + e.Name)
 	})
 	return nil
 }
