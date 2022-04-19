@@ -18,8 +18,8 @@ func Login(c *gin.Context) {
 	}
 
 	// Get the user information by the login username.
-	d, err := model.GetUser(u.Username)
-	if err != nil {
+	d, deleted, err := model.GetUser(u.Username)
+	if deleted == true || err != nil {
 		SendResponse(c, berror.ErrUserNotFound, nil)
 		return
 	}

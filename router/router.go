@@ -25,8 +25,7 @@ func InitRouter() {
 	Load(
 		// Cores
 		g,
-		/*		middleware.GinLogger(logger),
-				middleware.GinRecovery(logger, true),*/
+
 		// Middlewares
 		ginzap.Ginzap(zap.L(), time.RFC3339, true),
 		ginzap.RecoveryWithZap(zap.L(), true),
@@ -100,6 +99,8 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	u := g.Group("/v1/user")
 	// use authentication middleware
 	u.Use(middleware.AuthMiddleware())
+	// use HasPermission middleware
+	u.DELETE("", user.Delself)
 
 	u.Use(middleware.HasPermission())
 	{

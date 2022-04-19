@@ -10,8 +10,9 @@ import (
 func Get(c *gin.Context) {
 	username := c.Param("username")
 	// Get the user by the `username` from the database.
-	user, err := model.GetUser(username)
-	if err != nil {
+	user, deleted, err := model.GetUser(username)
+	// if user is not found or deleted, send error
+	if deleted == true || err != nil {
 		SendResponse(c, berror.ErrUserNotFound, nil)
 		return
 	}

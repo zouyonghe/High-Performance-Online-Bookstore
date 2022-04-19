@@ -27,7 +27,10 @@ func Create(c *gin.Context) {
 	}
 
 	// Validate if the user exists
-	if _, err := model.GetUser(r.Username); err == nil {
+	_, deleted, err := model.GetUser(r.Username)
+	// if user data exists and deleted is false, send error
+	//zap.L().Info("msg", zap.Bool("deleted", deleted), zap.Bool("err", err == nil))
+	if deleted == false && err == nil {
 		SendResponse(c, berror.ErrUserExists, nil)
 		return
 	}
@@ -38,7 +41,7 @@ func Create(c *gin.Context) {
 		return
 	}
 	// Insert the user to the database.
-	if err := u.Create(); err != nil {
+	if err := u.Create(deleted); err != nil {
 		SendResponse(c, berror.ErrDatabase, nil)
 		return
 	}

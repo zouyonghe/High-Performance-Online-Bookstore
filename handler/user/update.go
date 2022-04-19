@@ -16,6 +16,7 @@ func Update(c *gin.Context) {
 	var u model.UserModel
 
 	u.Role = "general"
+
 	if err := c.Bind(&u); err != nil {
 		SendResponse(c, berror.ErrBind, nil)
 		return

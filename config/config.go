@@ -13,8 +13,8 @@ type Config struct {
 	Name string
 }
 
-// Init inits configures,
-// and return a zap logger.
+// Init inits configures and deal with errors
+// then return a zap logger.
 func Init(cfg string) *zap.Logger {
 	logger, err := initAll(cfg)
 	if err != nil {

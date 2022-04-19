@@ -3,9 +3,10 @@ package model
 import (
 	"Jinshuzhai-Bookstore/pkg/auth"
 	"Jinshuzhai-Bookstore/pkg/constvar"
+	"errors"
 	"fmt"
-
 	"gopkg.in/go-playground/validator.v9"
+	"gorm.io/gorm"
 )
 
 // UserModel represents a registered user.
@@ -21,7 +22,14 @@ func (u *UserModel) TableName() string {
 }
 
 // Create creates a new user account.
-func (u *UserModel) Create() error {
+func (u *UserModel) Create(deleted bool) error {
+	if deleted == true {
+		// zap.L().Info("delete called")
+		um := &UserModel{}
+		DB.Self.Unscoped().Where("username = ?", u.Username).First(&um)
+		DB.Self.Unscoped().Delete(&um)
+		//return DB.Self.Unscoped().Save(&u).Error
+	}
 	return DB.Self.Create(&u).Error
 }
 
@@ -37,11 +45,29 @@ func (u *UserModel) Update() error {
 	return DB.Self.Save(u).Error
 }
 
-// GetUser gets a user by the user identifier.
-func GetUser(username string) (*UserModel, error) {
-	u := &UserModel{}
-	d := DB.Self.Where("username = ?", username).First(&u)
-	return u, d.Error
+// GetUser gets a user by the user identifier
+// return user model, deleted and error
+func GetUser(username string) (um *UserModel, deleted bool, err error) {
+	um = &UserModel{}
+	d1 := DB.Self.Where("username = ?", username).First(&um)
+
+	// found record
+	if d1.Error == nil {
+		// zap.L().Info("found record called")
+		return um, false, nil
+	}
+	d2 := DB.Self.Unscoped().Where("username = ?", username).First(&um)
+	// not found record
+	if errors.Is(d2.Error, gorm.ErrRecordNotFound) {
+		// zap.L().Info("not found record called")
+		return um, false, gorm.ErrRecordNotFound
+	}
+	// found record but deleted
+	if errors.Is(d1.Error, gorm.ErrRecordNotFound) && d2.Error == nil {
+		// zap.L().Info("record but deleted called")
+		return um, true, nil
+	}
+	return um, false, nil
 }
 
 // ListUser lists all users.

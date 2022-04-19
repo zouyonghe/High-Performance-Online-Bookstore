@@ -25,4 +25,6 @@ var (
 	ErrTokenInvalid = &Berror{Code: 20104, Message: "The token was invalid."}
 	// ErrPasswordIncorrect user password was incorrect
 	ErrPasswordIncorrect = &Berror{Code: 20105, Message: "The password was incorrect."}
+	// ErrDeleteUser deletes the user failed
+	ErrDeleteUser = &Berror{Code: 20106, Message: "Error occurred while deleting the user"}
 )
