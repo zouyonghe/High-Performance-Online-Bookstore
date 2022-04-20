@@ -1,4 +1,226 @@
+basePath: /v1
+definitions:
+  user.CreateRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  user.CreateResponse:
+    properties:
+      userId:
+        type: integer
+      username:
+        type: string
+    type: object
+  user.DeleteResponse:
+    properties:
+      userId:
+        type: integer
+    type: object
+  user.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  user.LoginResponse:
+    properties:
+      token:
+        type: string
+      userId:
+        type: integer
+    type: object
+  user.SelfDelResponse:
+    properties:
+      userId:
+        type: integer
+    type: object
+  user.SelfUpdRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  user.SelfUpdResponse:
+    properties:
+      userId:
+        type: integer
+      username:
+        type: string
+    type: object
+  user.UpdateRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  user.UpdateResponse:
+    properties:
+      userId:
+        type: integer
+      username:
+        type: string
+    type: object
+host: 127.0.0.1:8081
 info:
-  contact: {}
-paths: {}
+  contact:
+    email: 1259085392z@gmail.com
+    name: API Support
+    url: https://github.com/zouyonghe
+  description: The jinshuzhai bookstore api server.
+  license:
+    name: GPLv3
+    url: https://www.gnu.org/licenses/gpl-3.0.html
+  termsOfService: https://github.com/zouyonghe
+  title: Jinshuzhai-Bookstore
+  version: "0.3"
+paths:
+  /user/admin/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a user by user ID
+      parameters:
+      - description: the ID of the specified user to delete
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{"userId":5}}'
+          schema:
+            $ref: '#/definitions/user.DeleteResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a user
+      tags:
+      - user/admin
+    put:
+      consumes:
+      - application/json
+      description: Update a user account specified by user ID
+      parameters:
+      - description: the ID of the specified user to update
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: user information include username and password
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/user.UpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{"userId":5}}'
+          schema:
+            $ref: '#/definitions/user.UpdateResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update a user account
+      tags:
+      - user/admin
+  /user/common:
+    put:
+      consumes:
+      - application/json
+      description: Update the current user information by username and password
+      parameters:
+      - description: Create a new user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/user.SelfUpdRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{"userId":6,"username":"夏秀兰"}}'
+          schema:
+            $ref: '#/definitions/user.SelfUpdResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update the current user information
+      tags:
+      - user/common
+  /user/common/:
+    delete:
+      consumes:
+      - application/json
+      description: SelfDel deletes the user of token specified
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{"userId":8}}'
+          schema:
+            $ref: '#/definitions/user.SelfDelResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: SelfDel deletes the user of token specified
+      tags:
+      - user/common
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: Login a user account with username and password
+      parameters:
+      - description: Login account
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/user.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{"userId":"7","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTA0MzkzNDAsImlkIjo3LCJuYmYiOjE2NTA0MzkzNDAsInJvbGUiOiJnZW5lcmFsIiwidXNlcm5hbWUiOiLpob7no4oifQ.ZqeFEugcvTS2Rgq0qR4Na49-rkye6CoXPV_R9ub-QYQ"}}'
+          schema:
+            $ref: '#/definitions/user.LoginResponse'
+      summary: Login  a user account
+      tags:
+      - user
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user by username and password
+      parameters:
+      - description: user information include username and password
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/user.CreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{"userId":"7","username":"顾磊"}}'
+          schema:
+            $ref: '#/definitions/user.CreateResponse'
+      summary: Create a new user
+      tags:
+      - user
+schemes:
+- https
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

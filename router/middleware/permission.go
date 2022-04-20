@@ -17,7 +17,7 @@ func HasPermission() gin.HandlerFunc {
 				"message": "Permission denied",
 			})
 			c.Abort()
-			zap.L().Info("Not admin user")
+			zap.L().Info("Request denied by non-admin user", zap.String("role", ctx.Role), zap.String("username", ctx.Username))
 			return
 		}
 		c.Next()

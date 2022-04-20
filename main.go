@@ -15,6 +15,24 @@ var (
 	logger  *zap.Logger
 )
 
+// @title           Jinshuzhai-Bookstore
+// @version         0.3
+// @description     The jinshuzhai bookstore api server.
+// @termsOfService  https://github.com/zouyonghe
+
+// @contact.name   API Support
+// @contact.url    https://github.com/zouyonghe
+// @contact.email  1259085392z@gmail.com
+
+// @license.name  GPLv3
+// @license.url   https://www.gnu.org/licenses/gpl-3.0.html
+
+// @host      127.0.0.1:8081
+// @BasePath  /v1
+// @Schemes   https
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 
 	// parse command line arguments

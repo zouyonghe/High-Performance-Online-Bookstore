@@ -1,15 +1,27 @@
-package user
+package common
 
 import (
 	. "Jinshuzhai-Bookstore/handler"
+	"Jinshuzhai-Bookstore/handler/user"
 	"Jinshuzhai-Bookstore/model"
 	"Jinshuzhai-Bookstore/pkg/berror"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
+// Create creates a new user account.
+//
+// @Summary Create a new user
+// @Description Create a new user by username and password
+// @Tags user
+// @Accept  json
+// @Produce  json
+// @Param user body user.CreateRequest true "user information include username and password"
+// @Success 200 {object} user.CreateResponse "{"code":0,"message":"OK","data":{"userId":"7","username":"顾磊"}}"
+// @Router /user/register [post]
 func Create(c *gin.Context) {
-	//log.Info("User Create function called.", lager.Data{"X-Request-Id": util.GetReqID(c)})
-	var r CreateRequest
+	zap.L().Info("user create function called.", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
+	var r user.CreateRequest
 	if err := c.Bind(&r); err != nil {
 		SendResponse(c, berror.ErrBind, nil)
 		return
@@ -46,7 +58,8 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	rsp := CreateResponse{
+	rsp := user.CreateResponse{
+		UserId:   u.ID,
 		Username: r.Username,
 	}
 

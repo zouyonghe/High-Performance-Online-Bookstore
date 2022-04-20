@@ -1,17 +1,19 @@
-package user
+package admin
 
 import (
+	"Jinshuzhai-Bookstore/handler/user"
 	"Jinshuzhai-Bookstore/model"
 	"Jinshuzhai-Bookstore/pkg/berror"
 	"Jinshuzhai-Bookstore/util"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"sync"
 )
 import . "Jinshuzhai-Bookstore/handler"
 
 func List(c *gin.Context) {
-	//log.Info("List function called.")
-	var r ListRequest
+	zap.L().Info("List function called", zap.String("X-Request-Id", util.GetReqID(c)))
+	var r user.ListRequest
 	if err := c.Bind(&r); err != nil {
 		SendResponse(c, berror.ErrBind, nil)
 		return
@@ -23,7 +25,7 @@ func List(c *gin.Context) {
 		return
 	}
 
-	SendResponse(c, nil, ListResponse{
+	SendResponse(c, nil, user.ListResponse{
 		TotalCount: count,
 		UserList:   infos,
 	})

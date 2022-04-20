@@ -33,7 +33,7 @@ func (u *UserModel) Create(deleted bool) error {
 	return DB.Self.Create(&u).Error
 }
 
-// DeleteUser deletes the user by the user identifier.
+// DeleteUser deletes the user by the user ID.
 func DeleteUser(id uint64) error {
 	user := UserModel{}
 	user.ID = id
@@ -45,8 +45,8 @@ func (u *UserModel) Update() error {
 	return DB.Self.Save(u).Error
 }
 
-// GetUser gets a user by the user identifier
-// return user model, deleted and error
+// GetUser gets a user by the user name
+// return user model, deleted and error.
 func GetUser(username string) (um *UserModel, deleted bool, err error) {
 	um = &UserModel{}
 	d1 := DB.Self.Where("username = ?", username).First(&um)
@@ -68,6 +68,18 @@ func GetUser(username string) (um *UserModel, deleted bool, err error) {
 		return um, true, nil
 	}
 	return um, false, nil
+}
+
+// GetUserByID gets a user model by ID
+func GetUserByID(ID uint64) (um *UserModel, err error) {
+	um = &UserModel{}
+	d1 := DB.Self.Where("id = ?", ID).First(&um)
+
+	// found record
+	if d1.Error == nil {
+		return um, nil
+	}
+	return um, d1.Error
 }
 
 // ListUser lists all users.
