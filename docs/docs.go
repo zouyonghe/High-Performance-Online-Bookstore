@@ -25,7 +25,64 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/user/admin": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "List all users account include id, username, encrypted password, etc",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user/admin"
+                ],
+                "summary": "List all users account",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"totalCount\":1,\"userList\":[{\"id\":1,\"username\":\"admin\",\"ShortId\":\"5P9Ia4QnR\",\"password\":\"$2a$10$Fv9BWzqsiQ.JuuGdcXdvN.Fx3ml.dVR47W22GoJMWQAlm9wHQIMVe\",\"role\":\"admin\",\"createdAt\":\"2021-04-18 15:40:33\",\"updatedAt\":\"2021-04-18 15:40:33\"}]}}",
+                        "schema": {
+                            "$ref": "#/definitions/user.SwaggerListResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/user/admin/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get a user account specified by user ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user/admin"
+                ],
+                "summary": "Get a user information",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "the ID of the specified user to update",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"username\":\"傅秀英\",\"password\":\"$2a$10$5pLrLpEQ1HAD2Hcm3Bnud.Shhmf5bTaf1yTWYloot0i5nvn1Td4hq\",\"role\":\"general\"}}",
+                        "schema": {
+                            "$ref": "#/definitions/user.SwaggerGetResponse"
+                        }
+                    }
+                }
+            },
             "put": {
                 "security": [
                     {
@@ -65,7 +122,7 @@ const docTemplate = `{
                     "200": {
                         "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"userId\":5}}",
                         "schema": {
-                            "$ref": "#/definitions/user.UpdateResponse"
+                            "$ref": "#/definitions/user.SwaggerUpdateResponse"
                         }
                     }
                 }
@@ -100,7 +157,7 @@ const docTemplate = `{
                     "200": {
                         "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"userId\":5}}",
                         "schema": {
-                            "$ref": "#/definitions/user.DeleteResponse"
+                            "$ref": "#/definitions/user.SwaggerDeleteResponse"
                         }
                     }
                 }
@@ -139,7 +196,7 @@ const docTemplate = `{
                     "200": {
                         "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"userId\":6,\"username\":\"夏秀兰\"}}",
                         "schema": {
-                            "$ref": "#/definitions/user.SelfUpdResponse"
+                            "$ref": "#/definitions/user.SwaggerSelfUpdResponse"
                         }
                     }
                 }
@@ -153,9 +210,6 @@ const docTemplate = `{
                     }
                 ],
                 "description": "SelfDel deletes the user of token specified",
-                "consumes": [
-                    "application/json"
-                ],
                 "produces": [
                     "application/json"
                 ],
@@ -167,7 +221,7 @@ const docTemplate = `{
                     "200": {
                         "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"userId\":8}}",
                         "schema": {
-                            "$ref": "#/definitions/user.SelfDelResponse"
+                            "$ref": "#/definitions/user.SwaggerSelfDelResponse"
                         }
                     }
                 }
@@ -199,9 +253,9 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"userId\":\"7\",\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTA0MzkzNDAsImlkIjo3LCJuYmYiOjE2NTA0MzkzNDAsInJvbGUiOiJnZW5lcmFsIiwidXNlcm5hbWUiOiLpob7no4oifQ.ZqeFEugcvTS2Rgq0qR4Na49-rkye6CoXPV_R9ub-QYQ\"}}",
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"userId\":7,\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTA0NTkzODEsImlkIjo3LCJuYmYiOjE2NTA0NTkzODEsInJvbGUiOiJnZW5lcmFsIiwidXNlcm5hbWUiOiLkuIHno4oifQ.0kA4whaE9bZjXu4bN3Sw0DgrKwYzJ7kZenaGDOcdFRQ\"}}",
                         "schema": {
-                            "$ref": "#/definitions/user.LoginResponse"
+                            "$ref": "#/definitions/user.SwaggerLoginResponse"
                         }
                     }
                 }
@@ -235,7 +289,7 @@ const docTemplate = `{
                     "200": {
                         "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"userId\":\"7\",\"username\":\"顾磊\"}}",
                         "schema": {
-                            "$ref": "#/definitions/user.CreateResponse"
+                            "$ref": "#/definitions/user.SwaggerCreateResponse"
                         }
                     }
                 }
@@ -243,6 +297,32 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "model.UserInfo": {
+            "type": "object",
+            "properties": {
+                "ShortId": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "user.CreateRequest": {
             "type": "object",
             "properties": {
@@ -270,6 +350,23 @@ const docTemplate = `{
             "properties": {
                 "userId": {
                     "type": "integer"
+                }
+            }
+        },
+        "user.GetResponse": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
                 }
             }
         },
@@ -321,6 +418,118 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.SwaggerCreateResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/user.CreateResponse"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.SwaggerDeleteResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/user.DeleteResponse"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.SwaggerGetResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/user.GetResponse"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.SwaggerListResponse": {
+            "type": "object",
+            "properties": {
+                "totalCount": {
+                    "type": "integer"
+                },
+                "userList": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.UserInfo"
+                    }
+                }
+            }
+        },
+        "user.SwaggerLoginResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/user.LoginResponse"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.SwaggerSelfDelResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/user.SelfDelResponse"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.SwaggerSelfUpdResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/user.SelfUpdResponse"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.SwaggerUpdateResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/user.UpdateResponse"
+                },
+                "message": {
                     "type": "string"
                 }
             }

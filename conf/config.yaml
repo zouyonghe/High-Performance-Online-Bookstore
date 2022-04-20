@@ -1,26 +1,26 @@
-mode: debug                 # 开发模式, debug, release, test
-name: bookstore-server              # API Server的名字
+level: debug                 # 开发模式, debug, release, test
+name: bookstore-server       # API服务的名字
 addr: :8080                  # HTTP绑定端口
 url: http://127.0.0.1:8080   # pingServer函数请求的API服务器的ip:port
 max_ping_count: 10           # pingServer函数try的次数
-jwt_secret: Rtg8BPKNEf2mB4mgvKONGPZZQSaJWNLijxR42qRgq0iBb5
+jwt_secret: Rtg8BPKNEf2mB4mgvKONGPZZQSaJWNLijxR42qRgq0iBb5 #token密钥
 tls:
-  addr: :8081
-  cert: conf/server.crt
-  key: conf/server.key
+  addr: :8081                # https地址
+  cert: conf/server.crt      # 证书地址
+  key: conf/server.key       # 私钥文件
 log:
-  log_level: DEBUG
-  file_output: true
-  log_file: blog/server.log
-  max_backups: 5
-  max_size: 1
-  max_age: 30
-  compress: false
+  log_level: DEBUG           # 日志级别，可选DEBUG, INFO, WARN, ERROR, DPANIC, PANIC, FATAL
+  file_output: true          # 是否在文件中输出日志
+  log_file: blog/server.log  # 输出日志文件路径
+  max_backups: 5             # 日志文件最大保留数量
+  max_size: 1                # 日志文件最大大小，单位 MB
+  max_age: 30                # 日志文件最大存储时间，单位 天
+  compress: false            # 是否启用日志压缩
 db:
-  name: bookstore_server
-  addr: 127.0.0.1:3306
-  username: root
-  password: aa11bb22cc33
+  name: bookstore_server     # 数据库名称
+  addr: 127.0.0.1:3306       # 数据库所在IP及端口号
+  username: root             # 数据库登陆用户
+  password: aa11bb22cc33     # 数据库登陆密码
 docker_db:
   name: bookstore_server
   addr: 127.0.0.1:3306

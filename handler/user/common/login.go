@@ -20,7 +20,7 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param user body user.LoginRequest true "Login account"
-// @Success 200 {object} user.LoginResponse "{"code":0,"message":"OK","data":{"userId":"7","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTA0MzkzNDAsImlkIjo3LCJuYmYiOjE2NTA0MzkzNDAsInJvbGUiOiJnZW5lcmFsIiwidXNlcm5hbWUiOiLpob7no4oifQ.ZqeFEugcvTS2Rgq0qR4Na49-rkye6CoXPV_R9ub-QYQ"}}"
+// @Success 200 {object} user.SwaggerLoginResponse "{"code":0,"message":"OK","data":{"userId":7,"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTA0NTkzODEsImlkIjo3LCJuYmYiOjE2NTA0NTkzODEsInJvbGUiOiJnZW5lcmFsIiwidXNlcm5hbWUiOiLkuIHno4oifQ.0kA4whaE9bZjXu4bN3Sw0DgrKwYzJ7kZenaGDOcdFRQ"}}"
 // @Router /user/login [post]
 func Login(c *gin.Context) {
 	zap.L().Info("login function called", zap.String("X-Request-Id", util.GetReqID(c)))

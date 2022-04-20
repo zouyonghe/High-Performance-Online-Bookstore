@@ -8,47 +8,50 @@ An online bookstore system based on Gin.
 
 ### Summary 概要
 
+使用go语言编写的，基于gin、gorm、viper、zap等模块的在线书店商城后端服务。
+
 ### Features 特性
+
+路由高效性，日志高性能，配置读取高便捷性，代码通俗易懂。
 
 ## Requirements 必要条件
 
-参考go.mod文件。
+系统支持Go语言环境，已经安装mariadb或mysql数据库，其它模块依赖参考go.mod文件。
 
 ## Configuration 配置
 
 在conf/config.yaml文件中修改配置。
 
 ```yaml
-runmode: debug               # 开发模式, debug, release, test
+level: debug                 # 开发模式, debug, release, test
+name: bookstore-server       # API服务的名字
 addr: :8080                  # HTTP绑定端口
-name: bookstore-server       # API Server的名字
 url: http://127.0.0.1:8080   # pingServer函数请求的API服务器的ip:port
 max_ping_count: 10           # pingServer函数try的次数
-jwt_secret: Rtg8BPKNEf2mB4mgvKONGPZZQSaJWNLijxR42qRgq0iBb5
+jwt_secret: Rtg8BPKNEf2mB4mgvKONGPZZQSaJWNLijxR42qRgq0iBb5 #token密钥
 tls:
-  addr: :8081                # tls端口
-  cert: conf/server.crt      # cert文件
-  key: conf/server.key       # key文件
+  addr: :8081                # https地址
+  cert: conf/server.crt      # 证书地址
+  key: conf/server.key       # 私钥文件
 log:
-  log_level: DEBUG           # 日志级别
-  log_file: blog/server.log  # 日志位置
-  max_backups: 5             # 日志最大备份数量
-  max_size: 1                # 日志最大文件大小，单位MB
-  max_age: 30                # 日志最大保留天数
-  compress: false            # 是否压缩
+  log_level: DEBUG           # 日志级别，可选DEBUG, INFO, WARN, ERROR, DPANIC, PANIC, FATAL
+  file_output: true          # 是否在文件中输出日志
+  log_file: blog/server.log  # 输出日志文件路径
+  max_backups: 5             # 日志文件最大保留数量
+  max_size: 1                # 日志文件最大大小，单位 MB
+  max_age: 30                # 日志文件最大存储时间，单位 天
+  compress: false            # 是否启用日志压缩
 db:
   name: bookstore_server     # 数据库名称
   addr: 127.0.0.1:3306       # 数据库所在IP及端口号
-  username: root             # 数据库登陆用户名
+  username: root             # 数据库登陆用户
   password: aa11bb22cc33     # 数据库登陆密码
 docker_db:
-  name: db_apiserver
+  name: bookstore_server
   addr: 127.0.0.1:3306
   username: root
   password: aa11bb22cc33
 ```
-
-
 
 ## Installation 安装
 
@@ -63,8 +66,6 @@ cd Jinshuzhai-Bookstore
 go mod tidy
 ```
 
-
-
 ## Usage 用法
 
 ```bash
@@ -75,7 +76,54 @@ go mod tidy
 #终止服务
 
 ./server.sh stop
+
+
+#初始化数据库
+cd sql
+mysql -uroot -pPASSWORD -e "
+source db.sql
+quit
+"
+cd ..
 ```
+
+## Struct 项目结构
+
+#### main
+
+程序入口。
+
+#### config
+
+服务配置获取。
+
+#### log
+
+日志配置获取。
+
+#### router
+
+路由与中间件。
+
+#### handler
+
+路由处理函数，包括用户路由处理函数等。
+
+#### model
+
+对象关系映射，建立数据库连接，CRUD等。
+
+#### sql
+
+数据库初始化。
+
+#### util
+
+工具包，支持生成短ID、获取请求ID等。
+
+#### pkg
+
+其他功能包，支持认证、错误码、状态、token、版本等。
 
 ## Development 开发文档
 
@@ -85,6 +133,7 @@ go mod tidy
 |:---------:|:------------------:|:------:|
 | 2022-4-14 | 初始化项目，完成配置和日志记录代码  | buding |
 | 2022-4-15 | 完成版本信息，调整配置和日志记录代码 | buding |
+| 2022-4-21 | 完成用户接口设计，接口文档生成    | buding |
 
 ## FAQ - 常见问题（常见问题。）
 

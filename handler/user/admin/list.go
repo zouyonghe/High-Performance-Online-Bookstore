@@ -11,6 +11,15 @@ import (
 )
 import . "Jinshuzhai-Bookstore/handler"
 
+// List lists all users account.
+//
+// @Summary List all users account
+// @Description List all users account include id, username, encrypted password, etc
+// @Tags user/admin
+// @Produce  json
+// @Success 200 {object} user.SwaggerListResponse "{"code":0,"message":"OK","data":{"totalCount":1,"userList":[{"id":1,"username":"admin","ShortId":"5P9Ia4QnR","password":"$2a$10$Fv9BWzqsiQ.JuuGdcXdvN.Fx3ml.dVR47W22GoJMWQAlm9wHQIMVe","role":"admin","createdAt":"2021-04-18 15:40:33","updatedAt":"2021-04-18 15:40:33"}]}}"
+// @Router /user/admin [get]
+// @Security ApiKeyAuth
 func List(c *gin.Context) {
 	zap.L().Info("List function called", zap.String("X-Request-Id", util.GetReqID(c)))
 	var r user.ListRequest
@@ -39,8 +48,8 @@ func listUser(username string, offset, limit int) ([]*model.UserInfo, int64, err
 	}
 
 	var ids []uint64
-	for _, user := range users {
-		ids = append(ids, user.ID)
+	for _, u := range users {
+		ids = append(ids, u.ID)
 	}
 
 	wg := sync.WaitGroup{}

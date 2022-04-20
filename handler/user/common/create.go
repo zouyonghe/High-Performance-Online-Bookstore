@@ -17,7 +17,7 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param user body user.CreateRequest true "user information include username and password"
-// @Success 200 {object} user.CreateResponse "{"code":0,"message":"OK","data":{"userId":"7","username":"顾磊"}}"
+// @Success 200 {object} user.SwaggerCreateResponse "{"code":0,"message":"OK","data":{"userId":"7","username":"顾磊"}}"
 // @Router /user/register [post]
 func Create(c *gin.Context) {
 	zap.L().Info("user create function called.", zap.String("X-Request-Id", c.GetString("X-Request-Id")))

@@ -17,7 +17,7 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param id path uint64 true "the ID of the specified user to delete"
-// @Success 200 {object} user.DeleteResponse "{"code":0,"message":"OK","data":{"userId":5}}"
+// @Success 200 {object} user.SwaggerDeleteResponse "{"code":0,"message":"OK","data":{"userId":5}}"
 // @Router /user/admin/{id} [delete]
 // @Security ApiKeyAuth
 func Delete(c *gin.Context) {

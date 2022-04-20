@@ -16,9 +16,8 @@ import (
 // @Summary SelfDel deletes the user of token specified
 // @Description SelfDel deletes the user of token specified
 // @Tags user/common
-// @Accept  json
 // @Produce  json
-// @Success 200 {object} user.SelfDelResponse "{"code":0,"message":"OK","data":{"userId":8}}"
+// @Success 200 {object} user.SwaggerSelfDelResponse "{"code":0,"message":"OK","data":{"userId":8}}"
 // @Router /user/common/ [delete]
 // @Security ApiKeyAuth
 func SelfDel(c *gin.Context) {

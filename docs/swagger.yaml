@@ -1,5 +1,22 @@
 basePath: /v1
 definitions:
+  model.UserInfo:
+    properties:
+      ShortId:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      role:
+        type: string
+      updatedAt:
+        type: string
+      username:
+        type: string
+    type: object
   user.CreateRequest:
     properties:
       password:
@@ -18,6 +35,17 @@ definitions:
     properties:
       userId:
         type: integer
+    type: object
+  user.GetResponse:
+    properties:
+      password:
+        type: string
+      role:
+        type: string
+      userId:
+        type: integer
+      username:
+        type: string
     type: object
   user.LoginRequest:
     properties:
@@ -52,6 +80,78 @@ definitions:
       username:
         type: string
     type: object
+  user.SwaggerCreateResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/user.CreateResponse'
+      message:
+        type: string
+    type: object
+  user.SwaggerDeleteResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/user.DeleteResponse'
+      message:
+        type: string
+    type: object
+  user.SwaggerGetResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/user.GetResponse'
+      message:
+        type: string
+    type: object
+  user.SwaggerListResponse:
+    properties:
+      totalCount:
+        type: integer
+      userList:
+        items:
+          $ref: '#/definitions/model.UserInfo'
+        type: array
+    type: object
+  user.SwaggerLoginResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/user.LoginResponse'
+      message:
+        type: string
+    type: object
+  user.SwaggerSelfDelResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/user.SelfDelResponse'
+      message:
+        type: string
+    type: object
+  user.SwaggerSelfUpdResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/user.SelfUpdResponse'
+      message:
+        type: string
+    type: object
+  user.SwaggerUpdateResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/user.UpdateResponse'
+      message:
+        type: string
+    type: object
   user.UpdateRequest:
     properties:
       password:
@@ -80,6 +180,23 @@ info:
   title: Jinshuzhai-Bookstore
   version: "0.3"
 paths:
+  /user/admin:
+    get:
+      description: List all users account include id, username, encrypted password,
+        etc
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{"totalCount":1,"userList":[{"id":1,"username":"admin","ShortId":"5P9Ia4QnR","password":"$2a$10$Fv9BWzqsiQ.JuuGdcXdvN.Fx3ml.dVR47W22GoJMWQAlm9wHQIMVe","role":"admin","createdAt":"2021-04-18
+            15:40:33","updatedAt":"2021-04-18 15:40:33"}]}}'
+          schema:
+            $ref: '#/definitions/user.SwaggerListResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: List all users account
+      tags:
+      - user/admin
   /user/admin/{id}:
     delete:
       consumes:
@@ -97,10 +214,30 @@ paths:
         "200":
           description: '{"code":0,"message":"OK","data":{"userId":5}}'
           schema:
-            $ref: '#/definitions/user.DeleteResponse'
+            $ref: '#/definitions/user.SwaggerDeleteResponse'
       security:
       - ApiKeyAuth: []
       summary: Delete a user
+      tags:
+      - user/admin
+    get:
+      description: Get a user account specified by user ID
+      parameters:
+      - description: the ID of the specified user to update
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{"username":"傅秀英","password":"$2a$10$5pLrLpEQ1HAD2Hcm3Bnud.Shhmf5bTaf1yTWYloot0i5nvn1Td4hq","role":"general"}}'
+          schema:
+            $ref: '#/definitions/user.SwaggerGetResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get a user information
       tags:
       - user/admin
     put:
@@ -125,7 +262,7 @@ paths:
         "200":
           description: '{"code":0,"message":"OK","data":{"userId":5}}'
           schema:
-            $ref: '#/definitions/user.UpdateResponse'
+            $ref: '#/definitions/user.SwaggerUpdateResponse'
       security:
       - ApiKeyAuth: []
       summary: Update a user account
@@ -149,7 +286,7 @@ paths:
         "200":
           description: '{"code":0,"message":"OK","data":{"userId":6,"username":"夏秀兰"}}'
           schema:
-            $ref: '#/definitions/user.SelfUpdResponse'
+            $ref: '#/definitions/user.SwaggerSelfUpdResponse'
       security:
       - ApiKeyAuth: []
       summary: Update the current user information
@@ -157,8 +294,6 @@ paths:
       - user/common
   /user/common/:
     delete:
-      consumes:
-      - application/json
       description: SelfDel deletes the user of token specified
       produces:
       - application/json
@@ -166,7 +301,7 @@ paths:
         "200":
           description: '{"code":0,"message":"OK","data":{"userId":8}}'
           schema:
-            $ref: '#/definitions/user.SelfDelResponse'
+            $ref: '#/definitions/user.SwaggerSelfDelResponse'
       security:
       - ApiKeyAuth: []
       summary: SelfDel deletes the user of token specified
@@ -188,9 +323,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{"code":0,"message":"OK","data":{"userId":"7","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTA0MzkzNDAsImlkIjo3LCJuYmYiOjE2NTA0MzkzNDAsInJvbGUiOiJnZW5lcmFsIiwidXNlcm5hbWUiOiLpob7no4oifQ.ZqeFEugcvTS2Rgq0qR4Na49-rkye6CoXPV_R9ub-QYQ"}}'
+          description: '{"code":0,"message":"OK","data":{"userId":7,"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTA0NTkzODEsImlkIjo3LCJuYmYiOjE2NTA0NTkzODEsInJvbGUiOiJnZW5lcmFsIiwidXNlcm5hbWUiOiLkuIHno4oifQ.0kA4whaE9bZjXu4bN3Sw0DgrKwYzJ7kZenaGDOcdFRQ"}}'
           schema:
-            $ref: '#/definitions/user.LoginResponse'
+            $ref: '#/definitions/user.SwaggerLoginResponse'
       summary: Login  a user account
       tags:
       - user
@@ -212,7 +347,7 @@ paths:
         "200":
           description: '{"code":0,"message":"OK","data":{"userId":"7","username":"顾磊"}}'
           schema:
-            $ref: '#/definitions/user.CreateResponse'
+            $ref: '#/definitions/user.SwaggerCreateResponse'
       summary: Create a new user
       tags:
       - user

@@ -18,7 +18,7 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param user body user.SelfUpdRequest true "Create a new user"
-// @Success 200 {object} user.SelfUpdResponse "{"code":0,"message":"OK","data":{"userId":6,"username":"夏秀兰"}}"
+// @Success 200 {object} user.SwaggerSelfUpdResponse "{"code":0,"message":"OK","data":{"userId":6,"username":"夏秀兰"}}"
 // @Router /user/common [put]
 // @Security ApiKeyAuth
 func SelfUpd(c *gin.Context) {
