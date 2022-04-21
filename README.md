@@ -96,49 +96,44 @@ cd ..
 
 ## Struct 项目结构
 
-#### main
+* main
 
 程序入口。
 
-#### conf
+* conf
 
 配置文件，yaml文档及TLS证书和私钥
 
-#### config
+* config
 
 服务配置获取。
 
-#### log
+* log
 
 日志配置获取。
 
-#### router
+* router
 
 路由与中间件。
 
-router/router.go 路由函数及中间件注册
-
-router/middleware 中间件
+> - router/router.go 路由函数及中间件注册
+> - router/middleware 中间件
 
 #### handler
 
 路由处理函数，包括用户路由处理函数等。
 
-handler/handler.go 响应结构体，响应函数
-
-handler/state 状态查询响应
-
-handler/user 用户请求响应
+> - handler/handler.go 响应结构体，响应函数
+> - handler/state 状态查询响应
+> - handler/user 用户请求响应
 
 #### model
 
 对象关系映射，建立数据库连接，CRUD等。
 
-model/init.go 配置使用gorm连接数据库
-
-model/model.go 数据模型
-
-model/user.go 用户相关函数
+> - model/init.go 配置使用gorm连接数据库
+> - model/model.go 数据模型
+> - model/user.go 用户相关函数
 
 #### service
 
