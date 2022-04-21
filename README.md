@@ -12,7 +12,7 @@ An online bookstore system.
 
 ### Features 特性
 
-路由高效性，日志高性能，配置读取高便捷性，代码通俗易懂。
+路由高效，日志高性能，配置读取便捷，代码通俗易懂。
 
 ## Requirements 必要条件
 
@@ -85,7 +85,13 @@ cd ..
 
 ./server.sh stop
 
+#重启服务
 
+./server.sh restart
+
+#版本信息
+
+./server.sh version
 
 ```
 

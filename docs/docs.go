@@ -571,7 +571,7 @@ var SwaggerInfo = &swag.Spec{
 	Version:          "0.3",
 	Host:             "127.0.0.1:8081",
 	BasePath:         "/v1",
-	Schemes:          []string{"https"},
+	Schemes:          []string{"http", "https"},
 	Title:            "Jinshuzhai-Bookstore",
 	Description:      "The jinshuzhai bookstore api server.",
 	InfoInstanceName: "swagger",
