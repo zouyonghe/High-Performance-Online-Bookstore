@@ -92,7 +92,6 @@ cd ..
 #版本信息
 
 ./server.sh version
-
 ```
 
 ## Struct 项目结构
