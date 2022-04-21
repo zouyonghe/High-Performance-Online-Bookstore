@@ -59,12 +59,10 @@ func GetUser(username string) (um *UserModel, deleted bool, err error) {
 	d2 := DB.Self.Unscoped().Where("username = ?", username).First(&um)
 	// not found record
 	if errors.Is(d2.Error, gorm.ErrRecordNotFound) {
-		// zap.L().Info("not found record called")
 		return um, false, gorm.ErrRecordNotFound
 	}
 	// found record but deleted
 	if errors.Is(d1.Error, gorm.ErrRecordNotFound) && d2.Error == nil {
-		// zap.L().Info("record but deleted called")
 		return um, true, nil
 	}
 	return um, false, nil

@@ -41,7 +41,6 @@ func Create(c *gin.Context) {
 	// Validate if the user exists
 	_, deleted, err := model.GetUser(r.Username)
 	// if user data exists and deleted is false, send error
-	//zap.L().Info("msg", zap.Bool("deleted", deleted), zap.Bool("err", err == nil))
 	if deleted == false && err == nil {
 		SendResponse(c, berror.ErrUserExists, nil)
 		return

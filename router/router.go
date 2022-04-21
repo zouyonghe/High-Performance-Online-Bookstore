@@ -27,8 +27,8 @@ func InitRouter() {
 		// Cores
 		g,
 
-		// Middlewares
-		ginzap.Ginzap(zap.L(), time.RFC3339, true),
+		// Global Middlewares
+		ginzap.Ginzap(zap.L(), time.RFC3339, false),
 		ginzap.RecoveryWithZap(zap.L(), true),
 		middleware.RequestId(),
 	)
@@ -38,6 +38,8 @@ func InitRouter() {
 	startListen(g)
 }
 
+// testPing tests if the server is listening
+// normally by ping the server address.
 func testPing() {
 	if err := pingServer(); err != nil {
 		zap.L().Error("The router has no response, or it might took too long to start up.", zap.Error(err))
@@ -45,6 +47,8 @@ func testPing() {
 	zap.L().Info("The router has been deployed successfully.")
 }
 
+// startListen starts listening the
+// requests by http or https protocol.
 func startListen(g *gin.Engine) {
 	cert := viper.GetString("tls.cert")
 	key := viper.GetString("tls.key")
@@ -58,7 +62,8 @@ func startListen(g *gin.Engine) {
 	zap.L().Error(http.ListenAndServe(viper.GetString("addr"), g).Error())
 }
 
-// pingServer pings the http server to make sure the router is working.
+// pingServer pings the http server
+// to make sure the server is working.
 func pingServer() error {
 	for i := 0; i < viper.GetInt("max_ping_count"); i++ {
 		// Ping the server by sending a GET request to `/state/health`.
@@ -76,7 +81,7 @@ func pingServer() error {
 
 // Load loads the middlewares, routes, handlers.
 func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
-	// Middlewares.
+	// Local Middlewares.
 	g.Use(middleware.NoCache)
 	g.Use(middleware.Options)
 	g.Use(middleware.Secure)

@@ -34,10 +34,10 @@ func Update(c *gin.Context) {
 		return
 	}
 	var role string
-	if userId != 0 {
-		role = "general"
-	} else {
+	if userId == 1 {
 		role = "admin"
+	} else {
+		role = "general"
 	}
 
 	u.ID = uint64(userId)

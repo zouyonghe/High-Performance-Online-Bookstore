@@ -1,6 +1,6 @@
-# Jinshuzhai-Bookstore
+# Jinshuzhai-Bookstore 锦书斋网上书店
 
-An online bookstore system based on Gin.
+An online bookstore system.
 
 ## Introduction 介绍
 
@@ -69,6 +69,14 @@ go mod tidy
 ## Usage 用法
 
 ```bash
+#初始化数据库
+cd sql
+mysql -uroot -pPASSWORD -e "
+source db.sql
+quit
+"
+cd ..
+
 #启动服务
 
 ./server.sh start
@@ -78,13 +86,7 @@ go mod tidy
 ./server.sh stop
 
 
-#初始化数据库
-cd sql
-mysql -uroot -pPASSWORD -e "
-source db.sql
-quit
-"
-cd ..
+
 ```
 
 ## Struct 项目结构
@@ -153,10 +155,12 @@ email: 1259085392z@gamil.com
 
 The [Go](https://github.com/golang/go) programming language
 
-[Gin](https://github.com/gin-gonic/gin) is a HTTP web framework written in Go (Golang). It features a Martini-like API with much better performance -- up to 40 times faster. If you need smashing performance, get yourself some Gin
+[Gin](https://github.com/gin-gonic/gin) is a HTTP web framework written in Golang. 
 
-[Gorm](https://github.com/go-gorm/gorm)  is the fantastic ORM library for Golang, aims to be developer friendly
+[Gorm](https://github.com/go-gorm/gorm) is a fantastic ORM library for Golang, aims to be developer friendly.
+
+[Viper](https://github.com/spf13/viper) is a complete configuration solution for Go applications including 12-Factor apps.
 
 ## License 版权信息
 
-本软件基于 [GPLv3](https://github.com/zouyonghe/Jinshuzhai-Bookstore/blob/main/LICENSE) 协议开源，开发者可以自由的使用、修改、再分发此软件源代码，但须遵守相关协议。
+本软件基于 [GPLv3](https://github.com/zouyonghe/Jinshuzhai-Bookstore/blob/main/LICENSE) 协议开源，使用者可以自由的使用、修改、再分发此软件源代码，但须遵守许可证相关条例。

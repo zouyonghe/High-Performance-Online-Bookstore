@@ -9,25 +9,28 @@ ARGS=""
 
 function start()
 {
-	if [ "`pgrep $SERVER -u $UID`" != "" ];then
+	if [ "$(pgrep $SERVER -u $UID)" != "" ];then
 		echo "$SERVER already running"
 		exit 1
 	fi
 
-	nohup $BASE_DIR/$SERVER $ARGS  server &>/dev/null &
+	nohup "$BASE_DIR"/$SERVER "$ARGS" &>/dev/null &
 
-	echo "sleeping..." &&  sleep $INTERVAL
+	echo "running in background, please check ./blog/server.log for running log"
+
+	echo "Waiting for server status check..." &&  sleep $INTERVAL
 
 	# check status
-	if [ "`pgrep $SERVER -u $UID`" == "" ];then
+	if [ "$(pgrep $SERVER -u $UID)" == "" ];then
 		echo "$SERVER start failed"
 		exit 1
 	fi
+	echo "$SERVER start successfully"
 }
 
 function status()
 {
-	if [ "`pgrep $SERVER -u $UID`" != "" ];then
+	if [ "$(pgrep $SERVER -u $UID)" != "" ];then
 		echo $SERVER is running
 	else
 		echo $SERVER is not running
@@ -36,16 +39,24 @@ function status()
 
 function stop()
 {
-	if [ "`pgrep $SERVER -u $UID`" != "" ];then
-		kill -9 `pgrep $SERVER -u $UID`
+	if [ "$(pgrep $SERVER -u $UID)" != "" ];then
+		kill -9 "$(pgrep $SERVER -u $UID)"
 	fi
 
-	echo "sleeping..." &&  sleep $INTERVAL
+	echo "Waiting for server status check..." &&  sleep $INTERVAL
 
-	if [ "`pgrep $SERVER -u $UID`" != "" ];then
+	if [ "$(pgrep $SERVER -u $UID)" != "" ];then
 		echo "$SERVER stop failed"
 		exit 1
 	fi
+
+	echo "$SERVER stopped successfully"
+}
+
+function version()
+{
+  ARGS="-v"
+  "$BASE_DIR"/$SERVER $ARGS
 }
 
 case "$1" in
@@ -61,8 +72,11 @@ case "$1" in
 	'restart')
 	stop && start
 	;;
+  'version')
+  version
+  ;;
 	*)
-	echo "usage: $0 {start|stop|restart|status}"
+	echo "usage: $0 {start|stop|restart|status|version}"
 	exit 1
 	;;
 esac

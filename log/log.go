@@ -8,11 +8,6 @@ import (
 	"os"
 )
 
-/*type Logger struct {
-	Log *zap.Logger
-}
-*/
-
 // InitLogger inits a logger
 func InitLogger() *zap.Logger {
 	writeSyncer := getLogWriter()
