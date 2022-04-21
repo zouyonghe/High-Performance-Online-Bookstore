@@ -20,8 +20,10 @@ import (
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
+// InitRouter creates a gin router,
+// load middlewares and start listening.
 func InitRouter() {
-	gin.SetMode(viper.GetString("mode"))
+	gin.SetMode(viper.GetString("level"))
 	g := gin.New()
 	Load(
 		// Cores
