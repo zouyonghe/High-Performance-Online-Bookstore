@@ -53,6 +53,7 @@ func getEncoder() zapcore.Encoder {
 	return zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig())
 }
 
+// getLogWriter returns a writeSyncer
 func getLogWriter() zapcore.WriteSyncer {
 	return zapcore.AddSync(&lumberjack.Logger{
 		Filename:   viper.GetString("log.log_file"), //log file path
