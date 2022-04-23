@@ -28,7 +28,7 @@ func List(c *gin.Context) {
 		return
 	}
 
-	infos, count, err := listUser(r.Username, r.Offset, r.Limit)
+	infos, count, err := listUser(r.Username, r.PageNum, r.PageSize)
 	if err != nil {
 		SendResponse(c, err, nil)
 		return

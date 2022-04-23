@@ -56,7 +56,7 @@ func SelfUpd(c *gin.Context) {
 	}
 
 	// Save changed fields.
-	if err := u.Update(); err != nil {
+	if err := u.UpdateUser(); err != nil {
 		SendResponse(c, berror.ErrDatabase, nil)
 		return
 	}

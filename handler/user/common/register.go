@@ -21,7 +21,7 @@ import (
 // @Router /user/register [post]
 func Create(c *gin.Context) {
 	zap.L().Info("user create function called.", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
-	var r user.CreateRequest
+	var r user.RegisterRequest
 	if err := c.Bind(&r); err != nil {
 		SendResponse(c, berror.ErrBind, nil)
 		return
@@ -52,12 +52,12 @@ func Create(c *gin.Context) {
 		return
 	}
 	// Insert the user to the database.
-	if err := u.Create(deleted); err != nil {
+	if err := u.CreateUser(deleted); err != nil {
 		SendResponse(c, berror.ErrDatabase, nil)
 		return
 	}
 
-	rsp := user.CreateResponse{
+	rsp := user.RegisterResponse{
 		UserId:   u.ID,
 		Username: r.Username,
 	}

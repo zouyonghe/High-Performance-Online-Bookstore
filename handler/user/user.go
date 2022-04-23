@@ -1,19 +1,17 @@
 package user
 
 import (
+	"Jinshuzhai-Bookstore/handler"
 	"Jinshuzhai-Bookstore/model"
 )
 
-type BaseResponse struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
-}
+type BaseResponse handler.BaseResponse
 
 // swagger struct
 
 type SwaggerCreateResponse struct {
 	BaseResponse
-	Data CreateResponse `json:"data"`
+	Data RegisterResponse `json:"data"`
 }
 
 type SwaggerLoginResponse struct {
@@ -53,14 +51,14 @@ type SwaggerListResponse struct {
 
 //--- common user struct ---
 
-// CreateRequest includes username and password
-type CreateRequest struct {
+// RegisterRequest includes username and password
+type RegisterRequest struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
 
-// CreateResponse includes userId and username
-type CreateResponse struct {
+// RegisterResponse includes userId and username
+type RegisterResponse struct {
 	UserId   uint64 `json:"userId"`
 	Username string `json:"username"`
 }
@@ -117,8 +115,8 @@ type DeleteResponse struct {
 
 type ListRequest struct {
 	Username string `json:"username"`
-	Offset   int    `json:"offset"`
-	Limit    int    `json:"limit"`
+	PageNum  int    `json:"pageNum"`
+	PageSize int    `json:"pageSize"`
 }
 
 type ListResponse struct {

@@ -23,3 +23,8 @@ func SendResponse(c *gin.Context, err error, data interface{}) {
 		Data:    data,
 	})
 }
+
+type BaseResponse struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+}

@@ -119,10 +119,9 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		u.POST("/register", common.Create)
 	}
 
+	u.Use(middleware.AuthMiddleware())
 	// common user router group
 	c := u.Group("/common")
-	// use authentication middleware
-	c.Use(middleware.AuthMiddleware())
 	{
 		// common user router
 		c.PUT("", common.SelfUpd)
@@ -130,8 +129,6 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	}
 	// admin user router group
 	a := u.Group("/admin")
-	// use authentication middleware
-	a.Use(middleware.AuthMiddleware())
 	// use HasPermission middleware
 	a.Use(middleware.HasPermission())
 	{

@@ -1,5 +1,5 @@
 package constvar
 
 const (
-	DefaultLimit = 50
+	DefaultPageSize = 50
 )
