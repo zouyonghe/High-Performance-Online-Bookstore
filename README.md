@@ -70,6 +70,7 @@ go mod tidy
 
 ```bash
 #初始化数据库
+
 cd database
 mysql -uroot -pPASSWORD -e "
 source bookstore_server.sql
@@ -96,50 +97,49 @@ cd ..
 
 ## Struct 项目结构
 
-* main
+#### main
 
 程序入口。
 
-* conf
+#### conf
 
-配置文件，yaml文档及TLS证书和私钥
+配置文件，yaml文档及TLS证书和私钥，基于角色的权限控制配置等。
 
-* config
+#### config
 
 服务配置获取。
 
-* log
+#### log
 
 日志配置获取。
 
-* router
+#### router
 
 路由与中间件。
 
-> - router/router.go 路由函数及中间件注册
-> - router/middleware 中间件
+> - router.go 路由函数及中间件注册
+> - middleware 中间件
 
 #### handler
 
 路由处理函数，包括用户路由处理函数等。
 
-> - handler/handler.go 响应结构体，响应函数
-> - handler/state 状态查询响应
-> - handler/user 用户请求响应
+> - handler.go 响应结构体，响应函数
+> - state 状态查询响应
+> - user 用户请求响应
 
 #### model
 
 对象关系映射，建立数据库连接，CRUD等。
 
-> - model/init.go 配置使用gorm连接数据库
-> - model/model.go 数据模型
-> - model/user.go 用户相关函数
+> - model.go 数据模型
+> - user.go 用户相关函数
 
 #### service
 
 业务逻辑函数。
 
-#### sql
+#### database
 
 数据库初始化脚本。
 
@@ -155,11 +155,12 @@ cd ..
 
 ## Changelog 更新日志
 
-| 日期        | 事项                 | 开发者    |
-|:---------:|:------------------:|:------:|
-| 2022-4-14 | 初始化项目，完成配置和日志记录代码  | buding |
-| 2022-4-15 | 完成版本信息，调整配置和日志记录代码 | buding |
-| 2022-4-21 | 完成用户接口设计，接口文档生成    | buding |
+|    日期     |         事项         |   开发者   |
+|:---------:|:------------------:|:-------:|
+| 2022-4-14 | 初始化项目，完成配置和日志记录代码  | buding  |
+| 2022-4-15 | 完成版本信息，调整配置和日志记录代码 | buding  |
+| 2022-4-21 |  完成用户接口设计，接口文档生成   | buding  |
+| 2022-4-24 |    添加基于角色的访问控制     | buding  |
 
 ## FAQ - 常见问题
 
@@ -184,6 +185,8 @@ The [Go](https://github.com/golang/go) programming language
 [Gorm](https://github.com/go-gorm/gorm) is a fantastic ORM library for Golang, aims to be developer friendly.
 
 [Viper](https://github.com/spf13/viper) is a complete configuration solution for Go applications including 12-Factor apps.
+
+[Casbin](https://github.com/casbin/casbin) is a powerful and efficient open-source access control library for Golang projects.
 
 ## License 版权信息
 
