@@ -70,7 +70,7 @@ go mod tidy
 
 ```bash
 #初始化数据库
-cd sql
+cd database
 mysql -uroot -pPASSWORD -e "
 source db.sql
 quit

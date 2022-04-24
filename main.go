@@ -2,8 +2,9 @@ package main
 
 import (
 	"Jinshuzhai-Bookstore/config"
-	"Jinshuzhai-Bookstore/model"
+	"Jinshuzhai-Bookstore/database"
 	ver "Jinshuzhai-Bookstore/pkg/version"
+	"Jinshuzhai-Bookstore/policy"
 	"Jinshuzhai-Bookstore/router"
 	"github.com/spf13/pflag"
 	"go.uber.org/zap"
@@ -49,7 +50,10 @@ func main() {
 	defer gl()
 
 	// initialize gorm
-	model.DB.Init()
+	database.DB.InitDatabase()
+
+	// initialize RBAC
+	policy.InitPolicy()
 
 	// initialize router
 	router.InitRouter()

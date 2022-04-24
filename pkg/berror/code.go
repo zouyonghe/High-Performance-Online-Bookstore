@@ -14,6 +14,8 @@ var (
 	ErrDatabase = &Berror{Code: 20002, Message: "Database error."}
 	// ErrToken signing the JSON web token failed
 	ErrToken = &Berror{Code: 20003, Message: "Error occurred while signing the JSON web token."}
+	// ErrCheckRole check the user role failed
+	ErrCheckRole = &Berror{Code: 20004, Message: "Error occurred while checking the role."}
 
 	// ErrEncrypt encrypting the user password failed
 	ErrEncrypt = &Berror{Code: 20101, Message: "Error occurred while encrypting the user password."}

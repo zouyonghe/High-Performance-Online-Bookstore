@@ -3,12 +3,16 @@ module Jinshuzhai-Bookstore
 go 1.18
 
 require (
+	github.com/casbin/casbin/v2 v2.41.0
+	github.com/casbin/zap-logger/v2 v2.0.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fsnotify/fsnotify v1.5.1
+	github.com/gin-contrib/authz v0.0.0-20220321040446-9d155922c410
 	github.com/gin-contrib/pprof v1.3.0
 	github.com/gin-contrib/zap v0.0.2
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-git/go-git/v5 v5.4.2
+	github.com/go-playground/validator/v10 v10.4.1
 	github.com/google/uuid v1.1.2
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/spf13/pflag v1.0.5
@@ -19,7 +23,6 @@ require (
 	github.com/willf/pad v0.0.0-20200313202418-172aa767f2a4
 	go.uber.org/zap v1.21.0
 	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4
-	gopkg.in/go-playground/validator.v9 v9.31.0
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gorm.io/driver/mysql v1.3.3
 	gorm.io/gorm v1.23.4
@@ -27,6 +30,7 @@ require (
 )
 
 require (
+	github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/Microsoft/go-winio v0.4.16 // indirect
 	github.com/ProtonMail/go-crypto v0.0.0-20210428141323-04723f9f07d7 // indirect
@@ -42,7 +46,6 @@ require (
 	github.com/go-openapi/swag v0.21.1 // indirect
 	github.com/go-playground/locales v0.13.0 // indirect
 	github.com/go-playground/universal-translator v0.17.0 // indirect
-	github.com/go-playground/validator/v10 v10.4.1 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
@@ -80,7 +83,6 @@ require (
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/tools v0.1.10 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
-	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/ini.v1 v1.66.4 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect

@@ -1,6 +1,9 @@
 package status
 
 var (
-	Ok   = Status{Code: 0, Message: "ok"}
-	Fail = Status{Code: 1, Message: "fail"}
+	Ok   = BaseStatus{Code: 0, Status: "ok"}
+	Fail = BaseStatus{Code: 1, Status: "fail"}
+
+	Open  = ShopStatus{Ok, "open"}
+	Close = ShopStatus{Fail, "close"}
 )

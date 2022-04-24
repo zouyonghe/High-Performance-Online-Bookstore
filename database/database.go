@@ -1,4 +1,4 @@
-package model
+package database
 
 import (
 	"fmt"
@@ -81,16 +81,11 @@ func GetDockerDB() *gorm.DB {
 	return InitDockerDB()
 }
 
-// Init initialize the database connection.
-func (db *Database) Init() {
+// InitDatabase initialize the database connection.
+func (db *Database) InitDatabase() {
 	DB = &Database{
 		Self:   GetSelfDB(),
 		Docker: GetDockerDB(),
 	}
 	zap.L().Info("Database connection established.")
 }
-
-/*func (db *Database) Close() {
-	DB.Self.Close()
-	DB.Docker.Close()
-}*/

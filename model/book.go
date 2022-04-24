@@ -1,6 +1,7 @@
 package model
 
 import (
+	. "Jinshuzhai-Bookstore/database"
 	"Jinshuzhai-Bookstore/pkg/constvar"
 	"errors"
 	"gorm.io/gorm"
@@ -8,19 +9,18 @@ import (
 
 // BookBaseModel represents book base information.
 type BookBaseModel struct {
-	Title       string  `json:"title" gorm:"column:title;not null" binding:"required" validate:"min=1,max=32"`
 	Author      string  `json:"author" gorm:"column:author;not null" binding:"required" validate:"min=1,max=32"`
 	Price       float64 `json:"price" gorm:"column:price;not null" binding:"required" validate:"gte=0"`
 	PublishDate string  `json:"publish_date" gorm:"column:publishDate;not null" binding:"required" validate:"min=1,max=32,datetime=2006-01-02"`
 	Category    string  `json:"category" gorm:"column:category;not null" binding:"required" validate:"min=1,max=32"`
-	//ImagePath   string  `json:"image_path" gorm:"column:image_path;not null" binding:"required" validate:"min=1,max=128"`
 }
 
 // BookModel represents a book information model.
 type BookModel struct {
 	BaseModel
-	BookBaseModel
-	Shop   ShopModel `json:"shop" gorm:"column:shop;not null" binding:"required"`
+	//BookBaseModel
+	Title  string    `json:"title" gorm:"column:title;not null" binding:"required" validate:"min=1,max=32"`
+	Shop   ShopModel `json:"shop" gorm:"column:shop;not null;foreignkey:ShopID" binding:"required"`
 	IsSell bool      `json:"sell" gorm:"column:isSale;not null;default:false" binding:"required"`
 	Number uint64    `json:"number" gorm:"column:number;not null;default:0" binding:"required" validate:"gte=0"`
 }

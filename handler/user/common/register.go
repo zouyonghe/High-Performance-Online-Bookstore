@@ -54,6 +54,7 @@ func Register(c *gin.Context) {
 		SendResponse(c, berror.ErrEncrypt, nil)
 		return
 	}
+
 	// Insert the user to the database.
 	if err := u.CreateUser(deleted); err != nil {
 		SendResponse(c, berror.ErrDatabase, nil)
