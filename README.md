@@ -72,7 +72,7 @@ go mod tidy
 #初始化数据库
 cd database
 mysql -uroot -pPASSWORD -e "
-source db.sql
+source bookstore_server.sql
 quit
 "
 cd ..
