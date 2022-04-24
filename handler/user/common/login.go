@@ -23,7 +23,7 @@ import (
 // @Success 200 {object} user.SwaggerLoginResponse "{"code":0,"message":"OK","data":{"userId":7,"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTA0NTkzODEsImlkIjo3LCJuYmYiOjE2NTA0NTkzODEsInJvbGUiOiJnZW5lcmFsIiwidXNlcm5hbWUiOiLkuIHno4oifQ.0kA4whaE9bZjXu4bN3Sw0DgrKwYzJ7kZenaGDOcdFRQ"}}"
 // @Router /user/login [post]
 func Login(c *gin.Context) {
-	zap.L().Info("login function called", zap.String("X-Request-Id", util.GetReqID(c)))
+	zap.L().Info("Login function called.", zap.String("X-Request-Id", util.GetReqID(c)))
 	// Binding the data with the user struct.
 	var l user.LoginRequest
 	//var u model.UserModel

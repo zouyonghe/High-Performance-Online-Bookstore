@@ -18,7 +18,7 @@ type UserModel struct {
 	BaseModel
 	Username string `json:"username" gorm:"column:username;not null" binding:"required" validate:"min=1,max=32"`
 	Password string `json:"password" gorm:"column:password;not null" binding:"required" validate:"min=5,max=128"`
-	Role     string `json:"role"     gorm:"column:role;not null;default:general"`
+	Role     string `json:"role"     gorm:"column:role;not null;default:general" validate:"oneof=general business"`
 }
 
 // TableName returns the table name.

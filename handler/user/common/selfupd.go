@@ -22,7 +22,7 @@ import (
 // @Router /user/common [put]
 // @Security ApiKeyAuth
 func SelfUpd(c *gin.Context) {
-	zap.L().Info("update self function called", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
+	zap.L().Info("Update self function called.", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
 	ctx, _ := token.ParseRequest(c)
 	userId := ctx.ID
 	var r user.SelfUpdRequest

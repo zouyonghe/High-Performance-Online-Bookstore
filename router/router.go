@@ -116,7 +116,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		// user login router
 		u.POST("/login", common.Login)
 		// user register router
-		u.POST("/register", common.Create)
+		u.POST("/register", common.Register)
 	}
 
 	u.Use(middleware.AuthMiddleware())

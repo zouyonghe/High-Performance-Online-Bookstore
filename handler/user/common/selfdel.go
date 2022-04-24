@@ -21,7 +21,7 @@ import (
 // @Router /user/common/ [delete]
 // @Security ApiKeyAuth
 func SelfDel(c *gin.Context) {
-	zap.L().Info("delete self function called", zap.String("X-Request-Id", util.GetReqID(c)))
+	zap.L().Info("Delete self function called", zap.String("X-Request-Id", util.GetReqID(c)))
 	ctx, _ := token.ParseRequest(c)
 	userId := ctx.ID
 	if err := model.DeleteUser(userId); err != nil {

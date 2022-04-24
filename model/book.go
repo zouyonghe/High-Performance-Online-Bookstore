@@ -20,8 +20,9 @@ type BookBaseModel struct {
 type BookModel struct {
 	BaseModel
 	BookBaseModel
-	IsSell bool   `json:"sell" gorm:"column:isSale;not null;default:false" binding:"required"`
-	Number uint64 `json:"number" gorm:"column:number;not null;default:0" binding:"required" validate:"gte=0"`
+	Shop   ShopModel `json:"shop" gorm:"column:shop;not null" binding:"required"`
+	IsSell bool      `json:"sell" gorm:"column:isSale;not null;default:false" binding:"required"`
+	Number uint64    `json:"number" gorm:"column:number;not null;default:0" binding:"required" validate:"gte=0"`
 }
 
 // TableName returns the table name.
@@ -33,7 +34,7 @@ func (b *BookModel) TableName() string {
 func (b *BookModel) CreateBook(deleted bool) error {
 	if deleted == true {
 		bm := &BookModel{}
-		DB.Self.Unscoped().Where("bookname = ?", b.Title).First(&bm)
+		DB.Self.Unscoped().Where("title = ?", b.Title).First(&bm)
 		DB.Self.Unscoped().Delete(&bm)
 	}
 	return DB.Self.Create(&b).Error
@@ -51,15 +52,15 @@ func (b *BookModel) UpdateBook() error {
 
 // GetBook gets a book by the book name
 // returns book model, deleted and error
-func GetBook(bookname string) (bm *BookModel, deleted bool, err error) {
+func GetBook(title string) (bm *BookModel, deleted bool, err error) {
 	bm = &BookModel{}
-	d1 := DB.Self.Where("bookname = ?", bookname).First(&bm)
+	d1 := DB.Self.Where("title = ?", title).First(&bm)
 
 	// found record
 	if err := d1.Error; err == nil {
 		return bm, false, err
 	}
-	d2 := DB.Self.Unscoped().Where("bookname = ?", bookname).First(&bm)
+	d2 := DB.Self.Unscoped().Where("title = ?", title).First(&bm)
 	if errors.Is(d2.Error, gorm.ErrRecordNotFound) {
 		return bm, false, gorm.ErrRecordNotFound
 	}

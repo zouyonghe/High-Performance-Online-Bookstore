@@ -9,7 +9,7 @@ type BaseResponse handler.BaseResponse
 
 // swagger struct
 
-type SwaggerCreateResponse struct {
+type SwaggerRegisterResponse struct {
 	BaseResponse
 	Data RegisterResponse `json:"data"`
 }
@@ -55,12 +55,14 @@ type SwaggerListResponse struct {
 type RegisterRequest struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
+	Role     string `json:"role"`
 }
 
 // RegisterResponse includes userId and username
 type RegisterResponse struct {
 	UserId   uint64 `json:"userId"`
 	Username string `json:"username"`
+	Role     string `json:"role"`
 }
 
 // LoginRequest includes username and password

@@ -9,32 +9,35 @@ import (
 	"go.uber.org/zap"
 )
 
-// Create creates a new user account.
+// Register registers a new user account.
 //
-// @Summary Create a new user
-// @Description Create a new user by username and password
+// @Summary Register a new user
+// @Description Register a new user by username and password
 // @Tags user
 // @Accept  json
 // @Produce  json
-// @Param user body user.CreateRequest true "user information include username and password"
-// @Success 200 {object} user.SwaggerCreateResponse "{"code":0,"message":"OK","data":{"userId":"7","username":"顾磊"}}"
+// @Param user body user.RegisterRequest true "user information include username and password"
+// @Success 200 {object} user.SwaggerRegisterResponse "{"code":0,"message":"OK","data":{"userId":12,"username":"汤桂英","role":"business"}}"
 // @Router /user/register [post]
-func Create(c *gin.Context) {
-	zap.L().Info("user create function called.", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
+func Register(c *gin.Context) {
+	zap.L().Info("User create function called.", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
 	var r user.RegisterRequest
 	if err := c.Bind(&r); err != nil {
 		SendResponse(c, berror.ErrBind, nil)
 		return
 	}
-
+	if r.Role == "" {
+		r.Role = "general"
+	}
 	u := model.UserModel{
 		Username: r.Username,
 		Password: r.Password,
+		Role:     r.Role,
 	}
-
 	// Validate the data.
 	if err := u.Validate(); err != nil {
 		SendResponse(c, berror.ErrValidation, nil)
+		zap.L().Error("Error validating user data.", zap.Error(err))
 		return
 	}
 
@@ -59,7 +62,8 @@ func Create(c *gin.Context) {
 
 	rsp := user.RegisterResponse{
 		UserId:   u.ID,
-		Username: r.Username,
+		Username: u.Username,
+		Role:     u.Role,
 	}
 
 	// Show the user information.
