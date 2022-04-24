@@ -5,14 +5,13 @@ go 1.18
 require (
 	github.com/casbin/casbin/v2 v2.41.0
 	github.com/casbin/zap-logger/v2 v2.0.0
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fsnotify/fsnotify v1.5.1
-	github.com/gin-contrib/authz v0.0.0-20220321040446-9d155922c410
 	github.com/gin-contrib/pprof v1.3.0
 	github.com/gin-contrib/zap v0.0.2
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-git/go-git/v5 v5.4.2
 	github.com/go-playground/validator/v10 v10.4.1
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.1.2
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/spf13/pflag v1.0.5
