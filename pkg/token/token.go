@@ -92,6 +92,7 @@ func Sign(c Context, secret string) (tokenString string, err error) {
 		"role":     c.Role,
 		"nbf":      time.Now().Unix(),
 		"iat":      time.Now().Unix(),
+		"exp":      time.Now().Add(time.Hour * 72).Unix(),
 	})
 	// Sign the token with the specified secret.
 	tokenString, err = token.SignedString([]byte(secret))
