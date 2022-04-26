@@ -29,19 +29,23 @@ func Update(c *gin.Context) {
 
 	var u model.UserModel
 	// Binding the user data.
-	if err := c.Bind(&u); err != nil {
+	if err := c.ShouldBindJSON(&u); err != nil {
 		SendResponse(c, berror.ErrBind, nil)
 		return
 	}
-	var role string
-	if userId == 1 {
-		role = "admin"
-	} else {
-		role = "general"
-	}
 
 	u.ID = uint64(userId)
-	u.Role = role
+
+	d, err := model.GetUserByID(u.ID)
+	if err != nil {
+		zap.L().Error("GetUserByID error", zap.Error(err))
+	}
+	if d.Role == "admin" && u.Role != "admin" {
+		zap.L().Error("admin user can't change role")
+		SendResponse(c, berror.ErrPermissionDenied, nil)
+		return
+	}
+	u.Role = d.Role
 
 	// Validate the data.
 	if err := u.Validate(); err != nil {

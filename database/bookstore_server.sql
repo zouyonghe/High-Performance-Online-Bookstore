@@ -21,51 +21,25 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- Table structure for tb_books
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_books`;
-CREATE TABLE `tb_books` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,
-  `price` double NOT NULL,
-  `category` varchar(255) NOT NULL,
-  `shopID` bigint(20) unsigned NOT NULL,
-  `isSell` tinyint(1) NOT NULL DEFAULT 0,
-  `number` int(11) unsigned NOT NULL,
-  `publishDate` timestamp NOT NULL DEFAULT current_timestamp(),
-  `createdAt` timestamp NULL DEFAULT NULL,
-  `updatedAt` timestamp NULL DEFAULT NULL,
-  `deletedAt` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`title`),
-  KEY `tb_shops` (`shopID`),
-  KEY `idx_tb_books_deletedAt` (`deletedAt`),
-  CONSTRAINT `tb_shops` FOREIGN KEY (`shopID`) REFERENCES `tb_shops` (`id`)
+CREATE TABLE `tb_books`(
+                           `id`          bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                           `title`       varchar(255)        NOT NULL,
+                           `author`      varchar(255)        NOT NULL,
+                           `price`       double              NOT NULL,
+                           `category`    varchar(255)        NOT NULL,
+                           `isSell`      tinyint(1)          NOT NULL DEFAULT 0,
+                           `number`      int(11) unsigned    NOT NULL,
+                           `publishDate` timestamp           NOT NULL DEFAULT current_timestamp(),
+                           `createdAt`   timestamp           NULL     DEFAULT NULL,
+                           `updatedAt`   timestamp           NULL     DEFAULT NULL,
+                           `deletedAt`   timestamp           NULL     DEFAULT NULL,
+                           PRIMARY KEY (`id`),
+                           UNIQUE KEY `username` (`title`),
+                           KEY `idx_tb_books_deletedAt` (`deletedAt`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- ----------------------------
 -- Records of tb_books
--- ----------------------------
-BEGIN;
-COMMIT;
-
--- ----------------------------
--- Table structure for tb_shops
--- ----------------------------
-DROP TABLE IF EXISTS `tb_shops`;
-CREATE TABLE `tb_shops` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `owner` bigint(20) unsigned NOT NULL,
-  `createdAt` timestamp NULL DEFAULT NULL,
-  `updatedAt` timestamp NULL DEFAULT NULL,
-  `deletedAt` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`),
-  KEY `tb_users` (`owner`),
-  KEY `idx_tb_shops_deletedAt` (`deletedAt`),
-  CONSTRAINT `tb_users` FOREIGN KEY (`owner`) REFERENCES `tb_users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- ----------------------------
--- Records of tb_shops
 -- ----------------------------
 BEGIN;
 COMMIT;

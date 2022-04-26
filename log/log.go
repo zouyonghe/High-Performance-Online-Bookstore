@@ -42,7 +42,7 @@ func InitLogger() *zap.Logger {
 		)
 	}
 
-	logger := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1))
+	logger := zap.New(core, zap.AddCaller())
 	defer func(logger *zap.Logger) {
 		_ = logger.Sync()
 	}(logger)

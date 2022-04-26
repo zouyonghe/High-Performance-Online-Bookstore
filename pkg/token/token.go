@@ -41,7 +41,7 @@ func Parse(tokenString string, secret string) (*Context, error) {
 	// Parse the token.
 	token, err := jwt.Parse(tokenString, secretFunc(secret))
 
-	// Parse berror.
+	// Parse the token error.
 	if err != nil {
 		return ctx, err
 

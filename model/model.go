@@ -42,13 +42,16 @@ type UserList struct {
 
 // BookInfo represents book information.
 type BookInfo struct {
-	Id     uint64  `json:"bookId"`
-	Title  string  `json:"title"`
-	Price  float64 `json:"price"`
-	Class  string  `json:"bookClass"`
-	Author string  `json:"author"`
-	Sell   bool    `json:"sell"`
-	Number uint64  `json:"number"`
+	Id        uint64  `json:"bookId"`
+	ShortId   string  `json:"shortId"`
+	Title     string  `json:"title"`
+	Price     float64 `json:"price"`
+	Category  string  `json:"category"`
+	Author    string  `json:"author"`
+	IsSell    bool    `json:"isSell"`
+	Number    uint64  `json:"number"`
+	CreatedAt string  `json:"createdAt"`
+	UpdatedAt string  `json:"updatedAt"`
 }
 
 // BookClass represents the class of a book.
@@ -61,4 +64,10 @@ type BookClass struct {
 type BookList struct {
 	Lock  *sync.Mutex
 	IdMap map[uint64]*BookInfo
+}
+
+type CartInfo struct {
+}
+
+type OrderInfo struct {
 }

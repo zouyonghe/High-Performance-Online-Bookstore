@@ -19,7 +19,6 @@ require (
 	github.com/swaggo/gin-swagger v1.4.1
 	github.com/swaggo/swag v1.8.1
 	github.com/teris-io/shortid v0.0.0-20201117134242-e59966efd125
-	github.com/willf/pad v0.0.0-20200313202418-172aa767f2a4
 	go.uber.org/zap v1.21.0
 	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0

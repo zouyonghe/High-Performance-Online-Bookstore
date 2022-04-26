@@ -8,6 +8,9 @@ var (
 	InternalServerError = &Berror{Code: 10001, Message: "Internal server error"}
 	// ErrBind binding the request body to the struct failed
 	ErrBind = &Berror{Code: 10002, Message: "Error occurred while binding the request body to the struct."}
+	// ErrPermissionDenied Permission denied
+	ErrPermissionDenied = &Berror{Code: 10003, Message: "Permission denied"}
+
 	// ErrValidation validation failed
 	ErrValidation = &Berror{Code: 20001, Message: "Validation failed."}
 	// ErrDatabase database operation failed
@@ -29,4 +32,7 @@ var (
 	ErrPasswordIncorrect = &Berror{Code: 20105, Message: "The password was incorrect."}
 	// ErrDeleteUser deletes the user failed
 	ErrDeleteUser = &Berror{Code: 20106, Message: "Error occurred while deleting the user"}
+
+	// ErrBookExists Book exists error
+	ErrBookExists = &Berror{Code: 20201, Message: "The book was already exists."}
 )

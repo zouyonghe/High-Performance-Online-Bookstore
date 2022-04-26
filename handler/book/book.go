@@ -1,40 +1,32 @@
 package book
 
-import "Jinshuzhai-Bookstore/handler"
+import "Jinshuzhai-Bookstore/model"
 
-type BaseResponse handler.BaseResponse
+//swagger struct
 
-// swagger struct
-
-// 创建书籍
-
-// CreateBookRequest includes the book information
-type CreateBookRequest struct {
+// AddRequest represents a request for adding a book.
+type AddRequest struct {
 	Title       string  `json:"title"`
 	Author      string  `json:"author"`
 	Price       float64 `json:"price"`
-	PublishDate string  `json:"publish_date"`
+	PublishDate string  `json:"publishDate"`
 	Category    string  `json:"category"`
+	IsSell      bool    `json:"isSell"`
 	Number      uint64  `json:"number"`
-	//ImagePath   string `json:"imagePath"`
 }
 
-// CreateBookResponse includes the bookId and the book title.
-type CreateBookResponse struct {
-	BookId string `json:"bookId"`
+type AddResponse struct {
+	BookID uint64 `json:"bookId"`
 	Title  string `json:"title"`
 }
 
-// 删除书籍
-// DeleteBookRequest includes the book title.
-type DeleteBookRequest struct {
-	Title string `json:"title"`
+type ListRequest struct {
+	Title    string `json:"title"`
+	PageNum  int    `json:"pageNum"`
+	PageSize int    `json:"pageSize"`
 }
 
-// 设置数量
-
-// 设置上架
-
-// 设置下架
-
-// 设置作者
+type ListResponse struct {
+	TotalCount int64             `json:"totalCount"`
+	BookList   []*model.BookInfo `json:"bookList"`
+}

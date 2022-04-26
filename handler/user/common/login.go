@@ -25,22 +25,22 @@ import (
 func Login(c *gin.Context) {
 	zap.L().Info("Login function called.", zap.String("X-Request-Id", util.GetReqID(c)))
 	// Binding the data with the user struct.
-	var l user.LoginRequest
+	var r user.LoginRequest
 	//var u model.UserModel
-	if err := c.Bind(&l); err != nil {
+	if err := c.ShouldBindJSON(&r); err != nil {
 		SendResponse(c, berror.ErrBind, nil)
 		return
 	}
 
 	// Get the user information by the login username.
-	d, deleted, err := model.GetUser(l.Username)
+	d, deleted, err := model.GetUser(r.Username)
 	if deleted == true || err != nil {
 		SendResponse(c, berror.ErrUserNotFound, nil)
 		return
 	}
 
 	// Compare the login password with the user password.
-	if err := auth.Compare(d.Password, l.Password); err != nil {
+	if err := auth.Compare(d.Password, r.Password); err != nil {
 		SendResponse(c, berror.ErrPasswordIncorrect, nil)
 		return
 	}

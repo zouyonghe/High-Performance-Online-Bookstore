@@ -27,16 +27,5 @@ func HasPermission() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		/*		ctx, _ := token.ParseRequest(c)
-				if ctx.Role != "admin" {
-					c.JSON(403, gin.H{
-						"code":    403,
-						"message": "Permission denied",
-					})
-					c.Abort()
-					zap.L().Info("Request denied by non-admin user", zap.String("role", ctx.Role), zap.String("username", ctx.Username))
-					return
-				}
-				c.Next()*/
 	}
 }

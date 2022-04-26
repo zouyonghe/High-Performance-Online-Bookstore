@@ -1,4 +1,4 @@
-package common
+package admin
 
 import (
 	. "Jinshuzhai-Bookstore/handler"
@@ -9,17 +9,17 @@ import (
 	"go.uber.org/zap"
 )
 
-// Register registers a new user account.
+// RegisterSeller registers a new seller account.
 //
-// @Summary Register a new user
-// @Description Register a new user by username and password
+// @Summary Register a new seller account.
+// @Description Register a new seller account by username and password
 // @Tags user
 // @Accept  json
 // @Produce  json
 // @Param user body user.RegisterRequest true "user information include username and password"
 // @Success 200 {object} user.SwaggerRegisterResponse "{"code":0,"message":"OK","data":{"userId":12,"username":"汤桂英","role":"business"}}"
 // @Router /user/register [post]
-func Register(c *gin.Context) {
+func RegisterSeller(c *gin.Context) {
 	zap.L().Info("User create function called.", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
 	var r user.RegisterRequest
 	if err := c.ShouldBindJSON(&r); err != nil {
@@ -30,7 +30,7 @@ func Register(c *gin.Context) {
 	u := model.UserModel{
 		Username: r.Username,
 		Password: r.Password,
-		Role:     "general",
+		Role:     "seller",
 	}
 	// Validate the data.
 	if err := u.Validate(); err != nil {

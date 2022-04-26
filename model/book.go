@@ -4,25 +4,26 @@ import (
 	. "Jinshuzhai-Bookstore/database"
 	"Jinshuzhai-Bookstore/pkg/constvar"
 	"errors"
+	"github.com/go-playground/validator/v10"
 	"gorm.io/gorm"
 )
 
 // BookBaseModel represents book base information.
-type BookBaseModel struct {
-	Author      string  `json:"author" gorm:"column:author;not null" binding:"required" validate:"min=1,max=32"`
-	Price       float64 `json:"price" gorm:"column:price;not null" binding:"required" validate:"gte=0"`
-	PublishDate string  `json:"publish_date" gorm:"column:publishDate;not null" binding:"required" validate:"min=1,max=32,datetime=2006-01-02"`
-	Category    string  `json:"category" gorm:"column:category;not null" binding:"required" validate:"min=1,max=32"`
-}
+/*type BookBaseModel struct {
 
+}
+*/
 // BookModel represents a book information model.
 type BookModel struct {
 	BaseModel
-	//BookBaseModel
-	Title  string    `json:"title" gorm:"column:title;not null" binding:"required" validate:"min=1,max=32"`
-	Shop   ShopModel `json:"shop" gorm:"column:shop;not null;foreignkey:ShopID" binding:"required"`
-	IsSell bool      `json:"sell" gorm:"column:isSale;not null;default:false" binding:"required"`
-	Number uint64    `json:"number" gorm:"column:number;not null;default:0" binding:"required" validate:"gte=0"`
+	/*	BookBaseModel*/
+	Title       string  `json:"title" gorm:"column:title;not null" binding:"required" validate:"min=1,max=32"`
+	Author      string  `json:"author" gorm:"column:author;not null" binding:"required" validate:"min=5,max=32"`
+	Price       float64 `json:"price" gorm:"column:price;not null" binding:"required" validate:"gte=0"`
+	PublishDate string  `json:"publish_date" gorm:"column:publishDate;not null" binding:"required" validate:"min=1,max=32,datetime=2006-01-02"`
+	Category    string  `json:"category" gorm:"column:category;not null" binding:"required" validate:"min=1,max=32"`
+	IsSell      bool    `json:"sell" gorm:"column:isSell;not null;default:false" binding:"required"`
+	Number      uint64  `json:"number" gorm:"column:number;not null;default:0" binding:"required" validate:"gte=0"`
 }
 
 // TableName returns the table name.
@@ -77,19 +78,29 @@ func GetBookByID(id uint) (*BookModel, error) {
 	return bm, DB.Self.Where("id = ?", id).First(&bm).Error
 }
 
-// ListBooks lists all books.
-func ListBooks(pageNum, pageSize int) ([]*BookModel, int64, error) {
+// ListBook lists books.
+func ListBook(title string, pageNum int, pageSize int) ([]*BookModel, int64, error) {
 	if pageSize <= 0 {
 		pageSize = constvar.DefaultPageSize
 	}
-	var books []*BookModel
+	var bookList []*BookModel
 	var count int64
-	if pageSize > 0 && pageNum > 0 {
-		offset := (pageNum - 1) * pageSize
-		DB.Self.Offset(offset).Limit(pageSize).Find(&books)
+	var err error
+	// Check page number format.
+	if pageNum <= 0 {
+		pageNum = 1
+	}
+
+	offset := (pageNum - 1) * pageSize
+	if len(title) > 0 {
+		DB.Self.Where("title like ?", "%"+title+"%").Count(&count)
+		err = DB.Self.Where("title like ?", "%"+title+"%").Offset(offset).Limit(pageSize).Find(&bookList).Error
+	} else {
+		err = DB.Self.Offset(offset).Limit(pageSize).Find(&bookList).Error
 		DB.Self.Model(&BookModel{}).Count(&count)
 	}
-	return books, count, nil
+
+	return bookList, count, err
 }
 
 // ListBookByCategory lists all the books,
@@ -187,4 +198,10 @@ func (b *BookModel) SetUnSell() error {
 // and returns error.
 func (b *BookModel) SetBookSell(sell bool) error {
 	return DB.Self.Model(&b).Update("isSell", sell).Error
+}
+
+// Validate the fields.
+func (b *BookModel) Validate() error {
+	validate := validator.New()
+	return validate.Struct(b)
 }
