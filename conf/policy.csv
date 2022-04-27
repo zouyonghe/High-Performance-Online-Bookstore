@@ -1,0 +1,41 @@
+p, normal, /state/*, GET
+
+p, normal, /swagger/*, GET
+
+p, normal, /debug/*, GET
+
+p, normal, /v1/user/login, POST
+p, normal, /v1/user/register, POST
+
+p, register, /v1/user/common, GET
+p, register, /v1/user/common, PUT
+p, register, /v1/user/common, DELETE
+
+p, admin, /v1/user/admin, GET
+p, admin, /v1/user/admin/:id, GET
+p, admin, /v1/user/admin/:id, PUT
+p, admin, /v1/user/admin/:id, DELETE
+p, admin, /v1/user/admin/register, POST
+
+p, manager, /v1/book, POST
+p, manager, /v1/book, GET
+p, manager, /v1/book, PUT
+p, manager, /v1/book, DELETE
+p, manager, /v1/book/:id, GET
+p, manager, /v1/book/:id, PUT
+p, manager, /v1/book/:id, DELETE
+
+p, manager, /v1/order, GET
+p, manager, /v1/order/:id, GET
+p, manager, /v1/order/:id, POST
+p, manager, /v1/order/:id, DELETE
+
+g, guest, normal
+g, general, normal
+g, seller, normal
+
+g, general, register
+g, seller, register
+
+g, seller, manager
+g, admin, manager
