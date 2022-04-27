@@ -3,12 +3,11 @@ package common
 import (
 	. "Jinshuzhai-Bookstore/handler"
 	"Jinshuzhai-Bookstore/handler/user"
+	"Jinshuzhai-Bookstore/log"
 	"Jinshuzhai-Bookstore/model"
 	"Jinshuzhai-Bookstore/pkg/berror"
-	"Jinshuzhai-Bookstore/pkg/token"
-	"Jinshuzhai-Bookstore/util"
+	"Jinshuzhai-Bookstore/service"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 // SelfDel deletes the user of token specified.
@@ -21,11 +20,15 @@ import (
 // @Router /user/common/ [delete]
 // @Security ApiKeyAuth
 func SelfDel(c *gin.Context) {
-	zap.L().Info("Delete self function called", zap.String("X-Request-Id", util.GetReqID(c)))
-	ctx, _ := token.ParseRequest(c)
-	userId := ctx.ID
+	log.SelfDelCalled(c)
+
+	userId, err := service.GetIDByToken(c)
+	if err != nil {
+		log.ErrParseToken(err)
+		SendResponse(c, berror.InternalServerError, nil)
+	}
 	if err := model.DeleteUser(userId); err != nil {
-		zap.L().Error("Delete self user failed", zap.Error(err))
+		log.ErrDeleteUser(err)
 		SendResponse(c, berror.ErrDeleteUser, nil)
 		return
 	}

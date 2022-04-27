@@ -42,16 +42,17 @@ type UserList struct {
 
 // BookInfo represents book information.
 type BookInfo struct {
-	Id        uint64  `json:"bookId"`
-	ShortId   string  `json:"shortId"`
-	Title     string  `json:"title"`
-	Price     float64 `json:"price"`
-	Category  string  `json:"category"`
-	Author    string  `json:"author"`
-	IsSell    bool    `json:"isSell"`
-	Number    uint64  `json:"number"`
-	CreatedAt string  `json:"createdAt"`
-	UpdatedAt string  `json:"updatedAt"`
+	Id          uint64  `json:"bookId"`
+	Title       string  `json:"title"`
+	ShortId     string  `json:"shortId"`
+	Author      string  `json:"author"`
+	Price       float64 `json:"price"`
+	PublishDate string  `json:"publishDate"`
+	Category    string  `json:"category"`
+	IsSell      bool    `json:"isSell"`
+	Number      uint64  `json:"number"`
+	CreatedAt   string  `json:"createdAt"`
+	UpdatedAt   string  `json:"updatedAt"`
 }
 
 // BookClass represents the class of a book.

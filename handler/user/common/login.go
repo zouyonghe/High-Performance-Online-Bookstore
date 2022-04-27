@@ -3,13 +3,12 @@ package common
 import (
 	. "Jinshuzhai-Bookstore/handler"
 	"Jinshuzhai-Bookstore/handler/user"
+	"Jinshuzhai-Bookstore/log"
 	"Jinshuzhai-Bookstore/model"
 	"Jinshuzhai-Bookstore/pkg/auth"
 	"Jinshuzhai-Bookstore/pkg/berror"
 	"Jinshuzhai-Bookstore/pkg/token"
-	"Jinshuzhai-Bookstore/util"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 // Login a user account
@@ -23,11 +22,13 @@ import (
 // @Success 200 {object} user.SwaggerLoginResponse "{"code":0,"message":"OK","data":{"userId":7,"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTA0NTkzODEsImlkIjo3LCJuYmYiOjE2NTA0NTkzODEsInJvbGUiOiJnZW5lcmFsIiwidXNlcm5hbWUiOiLkuIHno4oifQ.0kA4whaE9bZjXu4bN3Sw0DgrKwYzJ7kZenaGDOcdFRQ"}}"
 // @Router /user/login [post]
 func Login(c *gin.Context) {
-	zap.L().Info("Login function called.", zap.String("X-Request-Id", util.GetReqID(c)))
-	// Binding the data with the user struct.
+	log.LoginCalled(c) // Binding the data with the user struct.
+
+	// bind request body
 	var r user.LoginRequest
 	//var u model.UserModel
 	if err := c.ShouldBindJSON(&r); err != nil {
+		log.ErrBind(err)
 		SendResponse(c, berror.ErrBind, nil)
 		return
 	}

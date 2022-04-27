@@ -1,6 +1,8 @@
 package book
 
-import "Jinshuzhai-Bookstore/model"
+import (
+	"Jinshuzhai-Bookstore/model"
+)
 
 //swagger struct
 
@@ -29,4 +31,18 @@ type ListRequest struct {
 type ListResponse struct {
 	TotalCount int64             `json:"totalCount"`
 	BookList   []*model.BookInfo `json:"bookList"`
+}
+
+type DeleteRequest struct{}
+
+type DeleteResponse struct {
+	BookID  uint64 `json:"bookId"`
+	Message string `json:"message"`
+}
+
+type UpdateRequest struct{}
+
+type UpdateResponse struct {
+	BookID  uint64 `json:"bookId"`
+	Message string `json:"message"`
 }

@@ -3,11 +3,12 @@ package admin
 import (
 	. "Jinshuzhai-Bookstore/handler"
 	"Jinshuzhai-Bookstore/handler/user"
+	"Jinshuzhai-Bookstore/log"
 	"Jinshuzhai-Bookstore/model"
 	"Jinshuzhai-Bookstore/pkg/berror"
+	"Jinshuzhai-Bookstore/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"strconv"
 )
 
 // Update updates a user account.
@@ -23,9 +24,14 @@ import (
 // @Router /user/admin/{id} [put]
 // @Security ApiKeyAuth
 func Update(c *gin.Context) {
-	zap.L().Info("update function called", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
+	log.UpdateUserCalled(c)
 	// Get the user id from the url parameter.
-	userId, _ := strconv.Atoi(c.Param("id"))
+	userId, err := service.GetIDByParam(c)
+	if err != nil {
+		log.ErrParseToken(err)
+		SendResponse(c, nil, err)
+		return
+	}
 
 	var u model.UserModel
 	// Binding the user data.
@@ -34,33 +40,36 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	u.ID = uint64(userId)
+	u.ID = userId
 
-	d, err := model.GetUserByID(u.ID)
+	m, err := model.GetUserByID(u.ID)
 	if err != nil {
-		zap.L().Error("GetUserByID error", zap.Error(err))
+		log.ErrGetUser(err)
 	}
-	if d.Role == "admin" && u.Role != "admin" {
+	if m.Role == "admin" && u.Role != "admin" {
 		zap.L().Error("admin user can't change role")
 		SendResponse(c, berror.ErrPermissionDenied, nil)
 		return
 	}
-	u.Role = d.Role
+	u.Role = m.Role
 
 	// Validate the data.
 	if err := u.Validate(); err != nil {
+		log.ErrValidate(err)
 		SendResponse(c, berror.ErrValidation, nil)
 		return
 	}
 
 	// Encrypt the user password.
 	if err := u.Encrypt(); err != nil {
+		log.ErrEncrypt(err)
 		SendResponse(c, berror.ErrEncrypt, nil)
 		return
 	}
 
 	// Save changed fields.
 	if err := u.UpdateUser(); err != nil {
+		log.ErrUpdateUser(err)
 		SendResponse(c, berror.ErrDatabase, nil)
 		return
 	}

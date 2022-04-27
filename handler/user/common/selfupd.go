@@ -3,11 +3,11 @@ package common
 import (
 	. "Jinshuzhai-Bookstore/handler"
 	"Jinshuzhai-Bookstore/handler/user"
+	"Jinshuzhai-Bookstore/log"
 	"Jinshuzhai-Bookstore/model"
 	"Jinshuzhai-Bookstore/pkg/berror"
-	"Jinshuzhai-Bookstore/pkg/token"
+	"Jinshuzhai-Bookstore/service"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 // SelfUpd updates the current user information
@@ -22,18 +22,22 @@ import (
 // @Router /user/common [put]
 // @Security ApiKeyAuth
 func SelfUpd(c *gin.Context) {
-	zap.L().Info("Update self function called.", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
-	ctx, _ := token.ParseRequest(c)
-	userId := ctx.ID
-	var r user.SelfUpdRequest
+	log.SelfUpdCalled(c)
+	userId, err := service.GetIDByToken(c)
+	if err != nil {
+		log.ErrParseToken(err)
+		SendResponse(c, berror.InternalServerError, nil)
+	}
 
-	if err := c.Bind(&r); err != nil {
+	var r user.SelfUpdRequest
+	if err := c.ShouldBindJSON(&r); err != nil {
+		log.ErrBind(err)
 		SendResponse(c, berror.ErrBind, nil)
 		return
 	}
 	u, err := model.GetUserByID(userId)
 	if err != nil {
-		zap.Error(err)
+		log.ErrGetUser(err)
 		SendResponse(c, berror.ErrDatabase, nil)
 	}
 	if r.Username != "" {

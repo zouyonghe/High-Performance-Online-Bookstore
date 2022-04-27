@@ -3,10 +3,11 @@ package admin
 import (
 	. "Jinshuzhai-Bookstore/handler"
 	"Jinshuzhai-Bookstore/handler/user"
+	"Jinshuzhai-Bookstore/log"
 	"Jinshuzhai-Bookstore/model"
+	"Jinshuzhai-Bookstore/pkg/berror"
+	"Jinshuzhai-Bookstore/service"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
-	"strconv"
 )
 
 // Delete deletes a user account.
@@ -21,18 +22,29 @@ import (
 // @Router /user/admin/{id} [delete]
 // @Security ApiKeyAuth
 func Delete(c *gin.Context) {
-	zap.L().Info("delete function called", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
-	userId, _ := strconv.Atoi(c.Param("id"))
-	if _, err := model.GetUserByID(uint64(userId)); err != nil {
-		SendResponse(c, err, nil)
+	log.DeleteUserCalled(c)
+
+	userId, err := service.GetIDByToken(c)
+	if err != nil {
+		log.ErrParseToken(err)
+		SendResponse(c, berror.InternalServerError, nil)
+	}
+	um, err := model.GetUserByID(userId)
+	if err != nil {
+		log.ErrUserNotFound(err)
+		c.JSON(400, gin.H{
+			"message": "User not found",
+		})
 		return
 	}
-	if err := model.DeleteUser(uint64(userId)); err != nil {
+	username := um.Username
+	if err := model.DeleteUser(userId); err != nil {
 		SendResponse(c, err, nil)
 		return
 	}
 	rsp := user.DeleteResponse{
-		UserId: uint64(userId),
+		UserId:  userId,
+		Message: "User " + username + " deleted",
 	}
 	SendResponse(c, nil, rsp)
 }

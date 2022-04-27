@@ -2,11 +2,11 @@ package admin
 
 import (
 	. "Jinshuzhai-Bookstore/handler"
+	"Jinshuzhai-Bookstore/log"
 	"Jinshuzhai-Bookstore/model"
 	"Jinshuzhai-Bookstore/pkg/berror"
+	"Jinshuzhai-Bookstore/service"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
-	"strconv"
 )
 
 // Get gets a user account.
@@ -20,10 +20,16 @@ import (
 // @Router /user/admin/{id} [get]
 // @Security ApiKeyAuth
 func Get(c *gin.Context) {
-	zap.L().Info("user get function called.", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
-	userId, _ := strconv.Atoi(c.Param("id"))
+	log.GetUserCalled(c)
+
+	userId, err := service.GetIDByParam(c)
+	if err != nil {
+		log.ErrParseToken(err)
+		SendResponse(c, nil, err)
+		return
+	}
 	// Get the user by the `username` from the database.
-	user, err := model.GetUserByID(uint64(userId))
+	user, err := model.GetUserByID(userId)
 	// if user is not found or deleted, send error
 	if err != nil {
 		SendResponse(c, berror.ErrUserNotFound, nil)

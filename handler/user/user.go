@@ -110,7 +110,8 @@ type GetResponse struct {
 type DeleteRequest struct{}
 
 type DeleteResponse struct {
-	UserId uint64 `json:"userId"`
+	UserId  uint64 `json:"userId"`
+	Message string `json:"message"`
 }
 
 type ListRequest struct {

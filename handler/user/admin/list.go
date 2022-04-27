@@ -2,11 +2,10 @@ package admin
 
 import (
 	"Jinshuzhai-Bookstore/handler/user"
+	"Jinshuzhai-Bookstore/log"
 	"Jinshuzhai-Bookstore/pkg/berror"
 	"Jinshuzhai-Bookstore/service"
-	"Jinshuzhai-Bookstore/util"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 import . "Jinshuzhai-Bookstore/handler"
 
@@ -20,16 +19,18 @@ import . "Jinshuzhai-Bookstore/handler"
 // @Router /user/admin [get]
 // @Security ApiKeyAuth
 func ListUser(c *gin.Context) {
-	zap.L().Info("List user function called", zap.String("X-Request-Id", util.GetReqID(c)))
+	log.ListUserCalled(c)
+
 	var r user.ListRequest
 	if err := c.ShouldBindJSON(&r); err != nil {
-		zap.L().Error("Bind error", zap.Error(err))
+		log.ErrBind(err)
 		SendResponse(c, berror.ErrBind, nil)
 		return
 	}
+
 	infos, count, err := service.ListUser(r.Username, r.PageNum, r.PageSize)
 	if err != nil {
-		zap.L().Error("List users error", zap.Error(err))
+		log.ErrListUsers(err)
 		SendResponse(c, err, nil)
 		return
 	}

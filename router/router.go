@@ -6,6 +6,7 @@ import (
 	"Jinshuzhai-Bookstore/handler/state"
 	"Jinshuzhai-Bookstore/handler/user/admin"
 	"Jinshuzhai-Bookstore/handler/user/common"
+	"Jinshuzhai-Bookstore/log"
 	"Jinshuzhai-Bookstore/router/middleware"
 	"errors"
 	"github.com/gin-contrib/pprof"
@@ -28,12 +29,10 @@ func InitRouter() {
 		// Cores
 		g,
 
-		// Global Middlewares
+		// External Middlewares
 		ginzap.Ginzap(zap.L(), time.RFC3339, false),
 		ginzap.RecoveryWithZap(zap.L(), true),
 		middleware.RequestId(),
-		//middleware.HasPermission(),
-		//authz.NewAuthorizer(E),
 	)
 
 	go testPing()
@@ -45,9 +44,9 @@ func InitRouter() {
 // normally by ping the server address.
 func testPing() {
 	if err := pingServer(); err != nil {
-		zap.L().Error("The router has no response, or it might took too long to start up.", zap.Error(err))
+		log.ErrNoResponse(err)
 	}
-	zap.L().Info("The router has been deployed successfully.")
+	log.RouterDeployed()
 }
 
 // startListen starts listening the
@@ -57,12 +56,18 @@ func startListen(g *gin.Engine) {
 	key := viper.GetString("tls.key")
 	if cert != "" && key != "" {
 		go func() {
-			zap.L().Info("Start to listening the incoming requests on https address", zap.String("tls.addr", viper.GetString("tls.addr")))
-			zap.L().Error(http.ListenAndServeTLS(viper.GetString("tls.addr"), cert, key, g).Error())
+			httpsAddr := viper.GetString("tls.addr")
+			log.StartListenHTTPS(httpsAddr)
+			if err := http.ListenAndServeTLS(httpsAddr, cert, key, g); err != nil {
+				log.ErrListenHTTPS(err)
+			}
 		}()
 	}
-	zap.L().Info("Start to listening the incoming requests on http address", zap.String("addr", viper.GetString("addr")))
-	zap.L().Error(http.ListenAndServe(viper.GetString("addr"), g).Error())
+	httpAddr := viper.GetString("addr")
+	log.StartListenHTTP(httpAddr)
+	if err := http.ListenAndServe(httpAddr, g); err != nil {
+		log.ErrListenHTTP(err)
+	}
 }
 
 // pingServer pings the http server
@@ -76,7 +81,7 @@ func pingServer() error {
 		}
 
 		// Sleep for a second to continue the next ping.
-		zap.L().Info("Waiting for the router, retry in 1 second.")
+		log.WaitForRouter()
 		time.Sleep(time.Second)
 	}
 	return errors.New("connect to the router failed")
@@ -84,11 +89,11 @@ func pingServer() error {
 
 // Load loads the middlewares, routes, handlers.
 func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
-	// Local Middlewares.
+	// Internal Middlewares.
 	g.Use(middleware.NoCache)
 	g.Use(middleware.Options)
 	g.Use(middleware.Secure)
-	g.Use(middleware.HasPermission())
+	g.Use(middleware.HasPermission)
 	g.Use(mw...)
 	// 404 Handler.
 	g.NoRoute(func(c *gin.Context) {
@@ -148,10 +153,12 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		// book manager router
 		b.POST("", book.AddBook)
 		b.GET("", book.ListBook)
+		b.DELETE("/:id", book.DelBook)
+		b.PUT("/:id", book.UpdBook)
 		/*		b.GET("/:id", book.Get)
 				b.POST("", book.Create)
-				b.PUT("/:id", book.Update)
-				b.DELETE("/:id", book.Delete)*/
+
+		*/
 	}
 
 	return g

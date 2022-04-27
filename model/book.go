@@ -8,22 +8,17 @@ import (
 	"gorm.io/gorm"
 )
 
-// BookBaseModel represents book base information.
-/*type BookBaseModel struct {
-
-}
-*/
 // BookModel represents a book information model.
 type BookModel struct {
 	BaseModel
 	/*	BookBaseModel*/
-	Title       string  `json:"title" gorm:"column:title;not null" binding:"required" validate:"min=1,max=32"`
-	Author      string  `json:"author" gorm:"column:author;not null" binding:"required" validate:"min=5,max=32"`
-	Price       float64 `json:"price" gorm:"column:price;not null" binding:"required" validate:"gte=0"`
-	PublishDate string  `json:"publish_date" gorm:"column:publishDate;not null" binding:"required" validate:"min=1,max=32,datetime=2006-01-02"`
-	Category    string  `json:"category" gorm:"column:category;not null" binding:"required" validate:"min=1,max=32"`
-	IsSell      bool    `json:"sell" gorm:"column:isSell;not null;default:false" binding:"required"`
-	Number      uint64  `json:"number" gorm:"column:number;not null;default:0" binding:"required" validate:"gte=0"`
+	Title       string  `json:"title" gorm:"column:title;not null"             binding:"required"  validate:"min=1,max=32"`
+	Author      string  `json:"author" gorm:"column:author;not null"           binding:"required"  validate:"min=5,max=32"`
+	Price       float64 `json:"price" gorm:"column:price;not null"             binding:"required"  validate:"gte=0"`
+	PublishDate string  `json:"publishDate" gorm:"column:publishDate;not null" binding:"required"  validate:"datetime=2006-01-02"`
+	Category    string  `json:"category" gorm:"column:category;not null"       binding:"required"  validate:"min=1,max=32"`
+	IsSell      bool    `json:"isSell" gorm:"column:isSell;not null;default:false"`
+	Number      uint64  `json:"number" gorm:"column:number;not null;default:0" binding:"required"  validate:"gte=0"`
 }
 
 // TableName returns the table name.
@@ -42,7 +37,7 @@ func (b *BookModel) CreateBook(deleted bool) error {
 }
 
 // DeleteBook deletes book information by the book ID.
-func DeleteBook(id uint) error {
+func DeleteBook(id uint64) error {
 	return DB.Self.Where("id = ?", id).Delete(&BookModel{}).Error
 }
 
@@ -73,7 +68,7 @@ func GetBook(title string) (bm *BookModel, deleted bool, err error) {
 }
 
 // GetBookByID gets a book by the book ID.
-func GetBookByID(id uint) (*BookModel, error) {
+func GetBookByID(id uint64) (*BookModel, error) {
 	bm := &BookModel{}
 	return bm, DB.Self.Where("id = ?", id).First(&bm).Error
 }
@@ -122,13 +117,13 @@ func ListBookByCategory(Category string, pageNum, pageSize int) ([]*BookModel, i
 }
 
 // ListBookBySell lists the books on sale.
-func ListBookBySell(pageNum, pageSize int) ([]*BookModel, int64, error) {
+func ListBookBySell(isSell bool, pageNum, pageSize int) ([]*BookModel, int64, error) {
 	if pageSize <= 0 {
 		pageSize = constvar.DefaultPageSize
 	}
 	var books []*BookModel
 	var count int64
-	if err := DB.Self.Where("sell = ?", true).Offset((pageNum - 1) * pageSize).Limit(pageSize).Find(&books).Error; err != nil {
+	if err := DB.Self.Where("sell = ?", isSell).Offset((pageNum - 1) * pageSize).Limit(pageSize).Find(&books).Error; err != nil {
 		return books, count, err
 	}
 	if err := DB.Self.Model(&BookModel{}).Where("on_sale = ?", true).Count(&count).Error; err != nil {

@@ -29,7 +29,7 @@ CREATE TABLE `tb_books`(
                            `category`    varchar(255)        NOT NULL,
                            `isSell`      tinyint(1)          NOT NULL DEFAULT 0,
                            `number`      int(11) unsigned    NOT NULL,
-                           `publishDate` timestamp           NOT NULL DEFAULT current_timestamp(),
+                           `publishDate` datetime            NOT NULL DEFAULT current_timestamp(),
                            `createdAt`   timestamp           NULL     DEFAULT NULL,
                            `updatedAt`   timestamp           NULL     DEFAULT NULL,
                            `deletedAt`   timestamp           NULL     DEFAULT NULL,
@@ -48,17 +48,18 @@ COMMIT;
 -- Table structure for tb_users
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_users`;
-CREATE TABLE `tb_users` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `role` varchar(255) NOT NULL,
-  `createdAt` timestamp NULL DEFAULT NULL,
-  `updatedAt` timestamp NULL DEFAULT NULL,
-  `deletedAt` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`),
-  KEY `idx_tb_users_deletedAt` (`deletedAt`)
+CREATE TABLE `tb_users`
+(
+    `id`        bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+    `username`  varchar(255)        NOT NULL,
+    `password`  varchar(255)        NOT NULL,
+    `role`      varchar(255)        NOT NULL,
+    `createdAt` timestamp           NULL DEFAULT NULL,
+    `updatedAt` timestamp           NULL DEFAULT NULL,
+    `deletedAt` timestamp           NULL DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `username` (`username`),
+    KEY `idx_tb_users_deletedAt` (`deletedAt`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 
 -- ----------------------------

@@ -3,10 +3,10 @@ package common
 import (
 	. "Jinshuzhai-Bookstore/handler"
 	"Jinshuzhai-Bookstore/handler/user"
+	"Jinshuzhai-Bookstore/log"
 	"Jinshuzhai-Bookstore/model"
 	"Jinshuzhai-Bookstore/pkg/berror"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 // Register registers a new user account.
@@ -20,10 +20,12 @@ import (
 // @Success 200 {object} user.SwaggerRegisterResponse "{"code":0,"message":"OK","data":{"userId":12,"username":"汤桂英","role":"business"}}"
 // @Router /user/register [post]
 func Register(c *gin.Context) {
-	zap.L().Info("User create function called.", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
+	log.RegisterCalled(c)
+
+	// bind request body
 	var r user.RegisterRequest
 	if err := c.ShouldBindJSON(&r); err != nil {
-		zap.L().Error("Bind error.", zap.Error(err))
+		log.ErrBind(err)
 		SendResponse(c, berror.ErrBind, nil)
 		return
 	}
@@ -34,7 +36,7 @@ func Register(c *gin.Context) {
 	}
 	// Validate the data.
 	if err := u.Validate(); err != nil {
-		zap.L().Error("Error validating user data.", zap.Error(err))
+		log.ErrValidate(err)
 		SendResponse(c, berror.ErrValidation, nil)
 		return
 	}
@@ -43,21 +45,21 @@ func Register(c *gin.Context) {
 	_, deleted, err := model.GetUser(r.Username)
 	// if user data exists and deleted is false, send an error
 	if deleted == false && err == nil {
-		zap.L().Error("User already exists.", zap.String("username", r.Username))
+		log.ErrUserExists()
 		SendResponse(c, berror.ErrUserExists, nil)
 		return
 	}
 
 	// Encrypt the user password.
 	if err := u.Encrypt(); err != nil {
-		zap.L().Error("Error encrypting user password.", zap.Error(err))
+		log.ErrEncrypt(err)
 		SendResponse(c, berror.ErrEncrypt, nil)
 		return
 	}
 
 	// Insert the user to the database.
 	if err := u.CreateUser(deleted); err != nil {
-		zap.L().Error("Error creating user.", zap.Error(err))
+		log.ErrCreateUser(err)
 		SendResponse(c, berror.ErrDatabase, nil)
 		return
 	}

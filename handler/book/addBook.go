@@ -2,6 +2,7 @@ package book
 
 import (
 	. "Jinshuzhai-Bookstore/handler"
+	"Jinshuzhai-Bookstore/log"
 	"Jinshuzhai-Bookstore/model"
 	"Jinshuzhai-Bookstore/pkg/berror"
 	"github.com/gin-gonic/gin"
@@ -9,13 +10,15 @@ import (
 )
 
 func AddBook(c *gin.Context) {
-	zap.L().Info("Add book function called", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
+	log.AddBookCalled(c)
+
 	var r AddRequest
-	if err := c.Bind(&r); err != nil {
+	if err := c.ShouldBindJSON(&r); err != nil {
 		zap.L().Error("AddBook Bind", zap.Error(err))
 		SendResponse(c, berror.ErrBind, nil)
 		return
 	}
+
 	b := model.BookModel{
 		Title:       r.Title,
 		Author:      r.Author,
@@ -25,9 +28,10 @@ func AddBook(c *gin.Context) {
 		IsSell:      r.IsSell,
 		Number:      r.Number,
 	}
+
 	// Validate the data.
 	if err := b.Validate(); err != nil {
-		zap.L().Error("Error Validating Book data", zap.Error(err))
+		log.ErrValidate(err)
 		SendResponse(c, err, nil)
 		return
 	}
@@ -36,14 +40,14 @@ func AddBook(c *gin.Context) {
 	_, deleted, err := model.GetBook(r.Title)
 	// If the book exists and deleted is false, send an error.
 	if deleted == false && err == nil {
-		zap.L().Error("Book already exists", zap.String("Title", r.Title))
+		log.ErrBookExists()
 		SendResponse(c, berror.ErrBookExists, nil)
 		return
 	}
 
 	// Insert the book into the database.
 	if err := b.CreateBook(deleted); err != nil {
-		zap.L().Error("Error Adding Book", zap.Error(err))
+		log.ErrCreateBook(err)
 		SendResponse(c, err, nil)
 		return
 	}
