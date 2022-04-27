@@ -1,10 +1,10 @@
 package service
 
 import (
-	"Jinshuzhai-Bookstore/log"
-	"Jinshuzhai-Bookstore/model"
-	"Jinshuzhai-Bookstore/pkg/token"
-	"Jinshuzhai-Bookstore/util"
+	"High-Performance-Online-Bookstore/log"
+	"High-Performance-Online-Bookstore/model"
+	"High-Performance-Online-Bookstore/pkg/token"
+	"High-Performance-Online-Bookstore/util"
 	"github.com/gin-gonic/gin"
 	"strconv"
 	"sync"
@@ -34,7 +34,7 @@ func ListUser(username string, pageNum, pageSize int) ([]*model.UserInfo, int64,
 	// Improve query efficiency in parallel
 	for _, u := range users {
 		wg.Add(1)
-		go func(u *model.UserModel) {
+		go func(u *model.User) {
 			defer wg.Done()
 
 			shortId, err := util.GenShortId()
@@ -96,7 +96,7 @@ func ListBook(title string, pageNum int, pageSize int) ([]*model.BookInfo, int64
 
 	for _, b := range books {
 		wg.Add(1)
-		go func(b *model.BookModel) {
+		go func(b *model.Book) {
 			defer wg.Done()
 
 			shortId, err := util.GenShortId()

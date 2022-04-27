@@ -1,12 +1,12 @@
 package admin
 
 import (
-	. "Jinshuzhai-Bookstore/handler"
-	"Jinshuzhai-Bookstore/handler/user"
-	"Jinshuzhai-Bookstore/log"
-	"Jinshuzhai-Bookstore/model"
-	"Jinshuzhai-Bookstore/pkg/berror"
-	"Jinshuzhai-Bookstore/service"
+	. "High-Performance-Online-Bookstore/handler"
+	"High-Performance-Online-Bookstore/handler/user"
+	"High-Performance-Online-Bookstore/log"
+	"High-Performance-Online-Bookstore/model"
+	"High-Performance-Online-Bookstore/pkg/berror"
+	"High-Performance-Online-Bookstore/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -33,7 +33,7 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	var u model.UserModel
+	var u model.User
 	// Binding the user data.
 	if err := c.ShouldBindJSON(&u); err != nil {
 		SendResponse(c, berror.ErrBind, nil)

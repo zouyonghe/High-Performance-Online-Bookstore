@@ -1,11 +1,12 @@
 package common
 
 import (
-	. "Jinshuzhai-Bookstore/handler"
-	"Jinshuzhai-Bookstore/handler/user"
-	"Jinshuzhai-Bookstore/log"
-	"Jinshuzhai-Bookstore/model"
-	"Jinshuzhai-Bookstore/pkg/berror"
+	. "High-Performance-Online-Bookstore/handler"
+	"High-Performance-Online-Bookstore/handler/user"
+	"High-Performance-Online-Bookstore/log"
+	"High-Performance-Online-Bookstore/model"
+	"High-Performance-Online-Bookstore/pkg/berror"
+	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
@@ -29,11 +30,12 @@ func Register(c *gin.Context) {
 		SendResponse(c, berror.ErrBind, nil)
 		return
 	}
-	u := model.UserModel{
+	u := model.User{
 		Username: r.Username,
 		Password: r.Password,
 		Role:     "general",
 	}
+
 	// Validate the data.
 	if err := u.Validate(); err != nil {
 		log.ErrValidate(err)
@@ -45,6 +47,7 @@ func Register(c *gin.Context) {
 	_, deleted, err := model.GetUser(r.Username)
 	// if user data exists and deleted is false, send an error
 	if deleted == false && err == nil {
+		fmt.Println(deleted, err)
 		log.ErrUserExists()
 		SendResponse(c, berror.ErrUserExists, nil)
 		return

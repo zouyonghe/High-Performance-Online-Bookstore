@@ -1,7 +1,7 @@
 package book
 
 import (
-	"Jinshuzhai-Bookstore/model"
+	"High-Performance-Online-Bookstore/model"
 )
 
 //swagger struct

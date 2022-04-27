@@ -1,6 +1,6 @@
-# Jinshuzhai-Bookstore 锦书斋网上书店
+# HPOB 高性能网上书店
 
-An online bookstore system.
+A high performance online bookstore system.
 
 ## Introduction 介绍
 
@@ -8,7 +8,7 @@ An online bookstore system.
 
 ### Summary 概要
 
-使用go语言编写的，基于gin、gorm、viper、zap等模块的在线书店商城后端服务。
+使用go语言编写的，基于gin、gorm、viper、zap等模块的在线书店商城服务。
 
 ### Features 特性
 
@@ -57,10 +57,10 @@ docker_db:
 
 ```bash
 #克隆存储库
-git clone https://github.com/zouyonghe/Jinshuzhai-Bookstore.git
+git clone https://github.com/zouyonghe/High-Performance-Online-Bookstore.git
 
 #进入项目目录
-cd Jinshuzhai-Bookstore
+cd High-Performance-Online-Bookstore
 
 #安装依赖库
 go mod tidy
@@ -73,7 +73,7 @@ go mod tidy
 
 cd database
 mysql -uroot -pPASSWORD -e "
-source bookstore_server.sql
+source bookstore.sql
 quit
 "
 cd ..
@@ -166,7 +166,7 @@ cd ..
 
 ## Support 支持
 
-如果需要反馈问题，可以直接提交 [Issues](https://github.com/zouyonghe/Jinshuzhai-Bookstore/issues) 或联系邮箱。
+如果需要反馈问题，可以直接提交 [Issues](https://github.com/zouyonghe/High-Performance-Online-Bookstore/issues) 或联系邮箱。
 
 ### Dos 文档
 
@@ -190,4 +190,4 @@ The [Go](https://github.com/golang/go) programming language
 
 ## License 版权信息
 
-本软件基于 [GPLv3](https://github.com/zouyonghe/Jinshuzhai-Bookstore/blob/main/LICENSE) 协议开源，使用者可以自由的使用、修改、再分发此软件源代码，但须遵守许可证相关条例。
+本软件基于 [GPLv3](https://github.com/zouyonghe/High-Performance-Online-Bookstore/blob/main/LICENSE) 协议开源，使用者可以自由的使用、修改、再分发此软件源代码，但须遵守许可证相关条例。

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SERVER="Jinshuzhai-Bookstore"
+SERVER="High-Performance-Online-Bookstore"
 BASE_DIR=$PWD
 INTERVAL=2
 

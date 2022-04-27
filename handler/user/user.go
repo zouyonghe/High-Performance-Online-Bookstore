@@ -1,8 +1,8 @@
 package user
 
 import (
-	"Jinshuzhai-Bookstore/handler"
-	"Jinshuzhai-Bookstore/model"
+	"High-Performance-Online-Bookstore/handler"
+	"High-Performance-Online-Bookstore/model"
 )
 
 type BaseResponse handler.BaseResponse

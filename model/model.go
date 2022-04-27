@@ -11,12 +11,12 @@ type Token struct {
 	Token string `json:"token"`
 }
 
-// BaseModel represents a base model.
-type BaseModel struct {
+// Base represents a base model.
+type Base struct {
 	ID        uint64         `gorm:"primary_key;AUTO_INCREMENT;column:id" json:"-"`
-	CreatedAt time.Time      `gorm:"column:createdAt" json:"-"`
-	UpdatedAt time.Time      `gorm:"column:updatedAt" json:"-"`
-	DeletedAt gorm.DeletedAt `gorm:"column:deletedAt" sql:"index" json:"-"`
+	CreatedAt time.Time      `gorm:"column:created_at" json:"-"`
+	UpdatedAt time.Time      `gorm:"column:updated_at" json:"-"`
+	DeletedAt gorm.DeletedAt `gorm:"column:deleted_at" sql:"index" json:"-"`
 }
 
 // User models

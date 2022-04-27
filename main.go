@@ -1,11 +1,11 @@
 package main
 
 import (
-	"Jinshuzhai-Bookstore/config"
-	"Jinshuzhai-Bookstore/database"
-	ver "Jinshuzhai-Bookstore/pkg/version"
-	"Jinshuzhai-Bookstore/policy"
-	"Jinshuzhai-Bookstore/router"
+	"High-Performance-Online-Bookstore/config"
+	"High-Performance-Online-Bookstore/database"
+	ver "High-Performance-Online-Bookstore/pkg/version"
+	"High-Performance-Online-Bookstore/policy"
+	"High-Performance-Online-Bookstore/router"
 	"github.com/spf13/pflag"
 	"go.uber.org/zap"
 )
@@ -16,7 +16,7 @@ var (
 	logger  *zap.Logger
 )
 
-// @title           Jinshuzhai-Bookstore
+// @title           High-Performance-Online-Bookstore
 // @version         0.3
 // @description     The jinshuzhai bookstore api server.
 // @termsOfService  https://github.com/zouyonghe
