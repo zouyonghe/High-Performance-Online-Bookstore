@@ -1,10 +1,10 @@
 package book
 
 import (
-	. "Jinshuzhai-Bookstore/handler"
-	"Jinshuzhai-Bookstore/log"
-	"Jinshuzhai-Bookstore/pkg/berror"
-	"Jinshuzhai-Bookstore/service"
+	. "High-Performance-Online-Bookstore/handler"
+	"High-Performance-Online-Bookstore/log"
+	"High-Performance-Online-Bookstore/pkg/berror"
+	"High-Performance-Online-Bookstore/service"
 	"github.com/gin-gonic/gin"
 )
 

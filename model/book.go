@@ -1,35 +1,36 @@
 package model
 
 import (
-	. "Jinshuzhai-Bookstore/database"
-	"Jinshuzhai-Bookstore/pkg/constvar"
+	. "High-Performance-Online-Bookstore/database"
+	"High-Performance-Online-Bookstore/pkg/constvar"
 	"errors"
 	"github.com/go-playground/validator/v10"
 	"gorm.io/gorm"
 )
 
-// BookModel represents a book information model.
-type BookModel struct {
-	BaseModel
-	/*	BookBaseModel*/
-	Title       string  `json:"title" gorm:"column:title;not null"             binding:"required"  validate:"min=1,max=32"`
-	Author      string  `json:"author" gorm:"column:author;not null"           binding:"required"  validate:"min=5,max=32"`
-	Price       float64 `json:"price" gorm:"column:price;not null"             binding:"required"  validate:"gte=0"`
-	PublishDate string  `json:"publishDate" gorm:"column:publishDate;not null" binding:"required"  validate:"datetime=2006-01-02"`
-	Category    string  `json:"category" gorm:"column:category;not null"       binding:"required"  validate:"min=1,max=32"`
-	IsSell      bool    `json:"isSell" gorm:"column:isSell;not null;default:false"`
-	Number      uint64  `json:"number" gorm:"column:number;not null;default:0" binding:"required"  validate:"gte=0"`
+// Book represents a book information model.
+type Book struct {
+	Base
+	Title       string   `json:"title" gorm:"column:title;not null"             binding:"required"  validate:"min=1,max=32"`
+	Price       float64  `json:"price" gorm:"column:price;not null"             binding:"required"  validate:"gte=0"`
+	IsSell      bool     `json:"isSell" gorm:"column:is_sell;not null;default:false"`
+	Number      uint64   `json:"number" gorm:"column:number;not null;default:0" binding:"required"  validate:"gte=0"`
+	Author      string   `json:"author" gorm:"column:author;not null"           binding:"required"  validate:"min=5,max=32"`
+	PublishDate string   `json:"publishDate" gorm:"column:publish_date;not null" binding:"required"  validate:"datetime=2006-01-02"`
+	Category    string   `json:"category" gorm:"column:category;not null"       binding:"required"  validate:"min=1,max=32"`
+	Orders      []*Order `gorm:"many2many:book_order"`
+	Carts       []*Cart  `gorm:"many2many:book_cart"`
 }
 
 // TableName returns the table name.
-func (b *BookModel) TableName() string {
+func (b *Book) TableName() string {
 	return "tb_books"
 }
 
 // CreateBook creates a book information.
-func (b *BookModel) CreateBook(deleted bool) error {
+func (b *Book) CreateBook(deleted bool) error {
 	if deleted == true {
-		bm := &BookModel{}
+		bm := &Book{}
 		DB.Self.Unscoped().Where("title = ?", b.Title).First(&bm)
 		DB.Self.Unscoped().Delete(&bm)
 	}
@@ -38,18 +39,18 @@ func (b *BookModel) CreateBook(deleted bool) error {
 
 // DeleteBook deletes book information by the book ID.
 func DeleteBook(id uint64) error {
-	return DB.Self.Where("id = ?", id).Delete(&BookModel{}).Error
+	return DB.Self.Where("id = ?", id).Delete(&Book{}).Error
 }
 
 // UpdateBook updates book information.
-func (b *BookModel) UpdateBook() error {
+func (b *Book) UpdateBook() error {
 	return DB.Self.Save(&b).Error
 }
 
 // GetBook gets a book by the book name
 // returns book model, deleted and error
-func GetBook(title string) (bm *BookModel, deleted bool, err error) {
-	bm = &BookModel{}
+func GetBook(title string) (bm *Book, deleted bool, err error) {
+	bm = &Book{}
 	d1 := DB.Self.Where("title = ?", title).First(&bm)
 
 	// found record
@@ -68,17 +69,17 @@ func GetBook(title string) (bm *BookModel, deleted bool, err error) {
 }
 
 // GetBookByID gets a book by the book ID.
-func GetBookByID(id uint64) (*BookModel, error) {
-	bm := &BookModel{}
+func GetBookByID(id uint64) (*Book, error) {
+	bm := &Book{}
 	return bm, DB.Self.Where("id = ?", id).First(&bm).Error
 }
 
 // ListBook lists books.
-func ListBook(title string, pageNum int, pageSize int) ([]*BookModel, int64, error) {
+func ListBook(title string, pageNum int, pageSize int) ([]*Book, int64, error) {
 	if pageSize <= 0 {
 		pageSize = constvar.DefaultPageSize
 	}
-	var bookList []*BookModel
+	var bookList []*Book
 	var count int64
 	var err error
 	// Check page number format.
@@ -92,7 +93,7 @@ func ListBook(title string, pageNum int, pageSize int) ([]*BookModel, int64, err
 		err = DB.Self.Where("title like ?", "%"+title+"%").Offset(offset).Limit(pageSize).Find(&bookList).Error
 	} else {
 		err = DB.Self.Offset(offset).Limit(pageSize).Find(&bookList).Error
-		DB.Self.Model(&BookModel{}).Count(&count)
+		DB.Self.Model(&Book{}).Count(&count)
 	}
 
 	return bookList, count, err
@@ -101,32 +102,32 @@ func ListBook(title string, pageNum int, pageSize int) ([]*BookModel, int64, err
 // ListBookByCategory lists all the books,
 // returns book model list,
 // count of books and error.
-func ListBookByCategory(Category string, pageNum, pageSize int) ([]*BookModel, int64, error) {
+func ListBookByCategory(Category string, pageNum, pageSize int) ([]*Book, int64, error) {
 	if pageSize <= 0 {
 		pageSize = constvar.DefaultPageSize
 	}
-	var books []*BookModel
+	var books []*Book
 	var count int64
 	if err := DB.Self.Where("Category = ?", Category).Offset((pageNum - 1) * pageSize).Limit(pageSize).Find(&books).Error; err != nil {
 		return books, count, err
 	}
-	if err := DB.Self.Model(&BookModel{}).Where("Category = ?", Category).Count(&count).Error; err != nil {
+	if err := DB.Self.Model(&Book{}).Where("Category = ?", Category).Count(&count).Error; err != nil {
 		return books, count, err
 	}
 	return books, count, nil
 }
 
 // ListBookBySell lists the books on sale.
-func ListBookBySell(isSell bool, pageNum, pageSize int) ([]*BookModel, int64, error) {
+func ListBookBySell(isSell bool, pageNum, pageSize int) ([]*Book, int64, error) {
 	if pageSize <= 0 {
 		pageSize = constvar.DefaultPageSize
 	}
-	var books []*BookModel
+	var books []*Book
 	var count int64
 	if err := DB.Self.Where("sell = ?", isSell).Offset((pageNum - 1) * pageSize).Limit(pageSize).Find(&books).Error; err != nil {
 		return books, count, err
 	}
-	if err := DB.Self.Model(&BookModel{}).Where("on_sale = ?", true).Count(&count).Error; err != nil {
+	if err := DB.Self.Model(&Book{}).Where("on_sale = ?", true).Count(&count).Error; err != nil {
 		return books, count, err
 	}
 	return books, count, nil
@@ -134,16 +135,16 @@ func ListBookBySell(isSell bool, pageNum, pageSize int) ([]*BookModel, int64, er
 
 // ListBookBySellAndCategory lists the books
 // on sale and specified category.
-func ListBookBySellAndCategory(category string, pageNum, pageSize int) ([]*BookModel, int64, error) {
+func ListBookBySellAndCategory(category string, pageNum, pageSize int) ([]*Book, int64, error) {
 	if pageSize <= 0 {
 		pageSize = constvar.DefaultPageSize
 	}
-	var books []*BookModel
+	var books []*Book
 	var count int64
 	if err := DB.Self.Where("category = ?", category).Where("sell = ?", true).Offset((pageNum - 1) * pageSize).Limit(pageSize).Find(&books).Error; err != nil {
 		return books, count, err
 	}
-	if err := DB.Self.Model(&BookModel{}).Where("category = ?", category).Where("on_sale = ?", true).Count(&count).Error; err != nil {
+	if err := DB.Self.Model(&Book{}).Where("category = ?", category).Where("on_sale = ?", true).Count(&count).Error; err != nil {
 		return books, count, err
 	}
 	return books, count, nil
@@ -151,52 +152,52 @@ func ListBookBySellAndCategory(category string, pageNum, pageSize int) ([]*BookM
 
 // SetBookName sets the book name
 // and returns error.
-func (b *BookModel) SetBookName(name string) error {
+func (b *Book) SetBookName(name string) error {
 	return DB.Self.Model(&b).Update("title", name).Error
 }
 
 // SetBookPrice sets the book price
 // and returns error.
-func (b *BookModel) SetBookPrice(price float64) error {
+func (b *Book) SetBookPrice(price float64) error {
 	return DB.Self.Model(&b).Update("price", price).Error
 }
 
 // SetBookCategory sets the book category
 // and returns error.
-func (b *BookModel) SetBookCategory(category string) error {
+func (b *Book) SetBookCategory(category string) error {
 	return DB.Self.Model(&b).Update("category", category).Error
 }
 
 // SetBookAuthor sets the book author
 // and returns error.
-func (b *BookModel) SetBookAuthor(author string) error {
+func (b *Book) SetBookAuthor(author string) error {
 	return DB.Self.Model(&b).Update("author", author).Error
 }
 
 //SetBookNum sets the book number
 //and returns error.
-func (b *BookModel) SetBookNum(num int) error {
+func (b *Book) SetBookNum(num int) error {
 	return DB.Self.Model(&b).Update("num", num).Error
 }
 
 // SetSell sets the book on sale.
-func (b *BookModel) SetSell() error {
+func (b *Book) SetSell() error {
 	return DB.Self.Model(&b).Update("isSale", true).Error
 }
 
 // SetUnSell sets the book off sale.
-func (b *BookModel) SetUnSell() error {
+func (b *Book) SetUnSell() error {
 	return DB.Self.Model(&b).Update("isSale", false).Error
 }
 
 // SetBookSell sets the book sale status
 // and returns error.
-func (b *BookModel) SetBookSell(sell bool) error {
+func (b *Book) SetBookSell(sell bool) error {
 	return DB.Self.Model(&b).Update("isSell", sell).Error
 }
 
 // Validate the fields.
-func (b *BookModel) Validate() error {
+func (b *Book) Validate() error {
 	validate := validator.New()
 	return validate.Struct(b)
 }

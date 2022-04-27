@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"Jinshuzhai-Bookstore/pkg/berror"
+	"High-Performance-Online-Bookstore/pkg/berror"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

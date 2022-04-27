@@ -42,7 +42,7 @@ func openDB(username, password, addr, name string) *gorm.DB {
 			TablePrefix:   "tb_", //表名前缀
 			SingularTable: true,  //是否复数表名
 		},
-		DisableForeignKeyConstraintWhenMigrating: true,
+		//DisableForeignKeyConstraintWhenMigrating: true,	//是否外键自动关联
 	}
 
 	db, err := gorm.Open(sql, cfg)
@@ -88,4 +88,5 @@ func (db *Database) InitDatabase() {
 		Docker: GetDockerDB(),
 	}
 	zap.L().Info("Database connection established.")
+
 }

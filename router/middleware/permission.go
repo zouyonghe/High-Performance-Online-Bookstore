@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"Jinshuzhai-Bookstore/pkg/token"
-	"Jinshuzhai-Bookstore/policy"
+	"High-Performance-Online-Bookstore/pkg/token"
+	"High-Performance-Online-Bookstore/policy"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )

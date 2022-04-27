@@ -1,7 +1,7 @@
 package log
 
 import (
-	"Jinshuzhai-Bookstore/util"
+	"High-Performance-Online-Bookstore/util"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -40,6 +40,10 @@ func SelfDelCalled(c *gin.Context) {
 
 func SelfUpdCalled(c *gin.Context) {
 	zap.L().Info("update self account function called", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
+}
+
+func SelfCheckCalled(c *gin.Context) {
+	zap.L().Info("check self account function called", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
 }
 
 func DeleteUserCalled(c *gin.Context) {

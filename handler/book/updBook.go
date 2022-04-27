@@ -1,11 +1,11 @@
 package book
 
 import (
-	. "Jinshuzhai-Bookstore/handler"
-	"Jinshuzhai-Bookstore/log"
-	"Jinshuzhai-Bookstore/model"
-	"Jinshuzhai-Bookstore/pkg/berror"
-	"Jinshuzhai-Bookstore/service"
+	. "High-Performance-Online-Bookstore/handler"
+	"High-Performance-Online-Bookstore/log"
+	"High-Performance-Online-Bookstore/model"
+	"High-Performance-Online-Bookstore/pkg/berror"
+	"High-Performance-Online-Bookstore/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -19,7 +19,7 @@ func UpdBook(c *gin.Context) {
 		return
 	}
 
-	var b model.BookModel
+	var b model.Book
 
 	if err := c.ShouldBindJSON(&b); err != nil {
 		log.ErrBind(err)

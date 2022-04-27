@@ -1,10 +1,11 @@
 package book
 
 import (
-	. "Jinshuzhai-Bookstore/handler"
-	"Jinshuzhai-Bookstore/log"
-	"Jinshuzhai-Bookstore/model"
-	"Jinshuzhai-Bookstore/pkg/berror"
+	. "High-Performance-Online-Bookstore/handler"
+	"High-Performance-Online-Bookstore/log"
+	"High-Performance-Online-Bookstore/model"
+	"High-Performance-Online-Bookstore/pkg/berror"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -18,17 +19,17 @@ func AddBook(c *gin.Context) {
 		SendResponse(c, berror.ErrBind, nil)
 		return
 	}
-
-	b := model.BookModel{
+	fmt.Println(r)
+	b := model.Book{
 		Title:       r.Title,
 		Author:      r.Author,
-		Price:       r.Price,
 		PublishDate: r.PublishDate,
 		Category:    r.Category,
+		Price:       r.Price,
 		IsSell:      r.IsSell,
 		Number:      r.Number,
 	}
-
+	fmt.Println(b)
 	// Validate the data.
 	if err := b.Validate(); err != nil {
 		log.ErrValidate(err)

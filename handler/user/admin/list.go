@@ -1,13 +1,13 @@
 package admin
 
 import (
-	"Jinshuzhai-Bookstore/handler/user"
-	"Jinshuzhai-Bookstore/log"
-	"Jinshuzhai-Bookstore/pkg/berror"
-	"Jinshuzhai-Bookstore/service"
+	"High-Performance-Online-Bookstore/handler/user"
+	"High-Performance-Online-Bookstore/log"
+	"High-Performance-Online-Bookstore/pkg/berror"
+	"High-Performance-Online-Bookstore/service"
 	"github.com/gin-gonic/gin"
 )
-import . "Jinshuzhai-Bookstore/handler"
+import . "High-Performance-Online-Bookstore/handler"
 
 // ListUser lists users account by specified username format.
 //

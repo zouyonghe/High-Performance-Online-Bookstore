@@ -1,4 +1,4 @@
-module Jinshuzhai-Bookstore
+module High-Performance-Online-Bookstore
 
 go 1.18
 

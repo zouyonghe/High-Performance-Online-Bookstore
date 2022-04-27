@@ -1,11 +1,11 @@
 package admin
 
 import (
-	. "Jinshuzhai-Bookstore/handler"
-	"Jinshuzhai-Bookstore/handler/user"
-	"Jinshuzhai-Bookstore/log"
-	"Jinshuzhai-Bookstore/model"
-	"Jinshuzhai-Bookstore/pkg/berror"
+	. "High-Performance-Online-Bookstore/handler"
+	"High-Performance-Online-Bookstore/handler/user"
+	"High-Performance-Online-Bookstore/log"
+	"High-Performance-Online-Bookstore/model"
+	"High-Performance-Online-Bookstore/pkg/berror"
 	"github.com/gin-gonic/gin"
 )
 
@@ -28,7 +28,7 @@ func RegisterSeller(c *gin.Context) {
 		SendResponse(c, berror.ErrBind, nil)
 		return
 	}
-	u := model.UserModel{
+	u := model.User{
 		Username: r.Username,
 		Password: r.Password,
 		Role:     "seller",

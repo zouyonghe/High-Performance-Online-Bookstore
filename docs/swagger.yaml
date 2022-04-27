@@ -177,7 +177,7 @@ info:
     name: GPLv3
     url: https://www.gnu.org/licenses/gpl-3.0.html
   termsOfService: https://github.com/zouyonghe
-  title: Jinshuzhai-Bookstore
+  title: High-Performance-Online-Bookstore
   version: "0.3"
 paths:
   /user/admin:

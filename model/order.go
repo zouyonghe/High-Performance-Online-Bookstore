@@ -1,14 +1,8 @@
 package model
 
-type BaseOrderModel struct {
-	BaseModel
-	UserID     uint64    `json:"userId" gorm:"column:userId;not null" binding:"required" validate:"min=1,max=32"`
-	BookID     BookModel `json:"bookList" gorm:"not null" binding:"required"`
-	Number     uint      `json:"number" gorm:"not null" binding:"required" validate:"gte=1"`
-	TotalPrice float64   `json:"totalPrice" gorm:"not null"`
-}
-
-type OrderModel struct {
-	Orders  []BaseOrderModel `json:"orders" gorm:"not null"`
-	OrderID uint64           `json:"orderId" gorm:"column:orderId;primary_key"`
+type Order struct {
+	Base
+	UserID     uint64  `json:"user_id" gorm:"not null" binding:"required" validate:"gte=2"`
+	Books      []*Book `json:"books" gorm:"many2many:book_order"`
+	OrderPrice float64 `json:"order_price"`
 }

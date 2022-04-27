@@ -1,11 +1,11 @@
 package admin
 
 import (
-	. "Jinshuzhai-Bookstore/handler"
-	"Jinshuzhai-Bookstore/log"
-	"Jinshuzhai-Bookstore/model"
-	"Jinshuzhai-Bookstore/pkg/berror"
-	"Jinshuzhai-Bookstore/service"
+	. "High-Performance-Online-Bookstore/handler"
+	"High-Performance-Online-Bookstore/log"
+	"High-Performance-Online-Bookstore/model"
+	"High-Performance-Online-Bookstore/pkg/berror"
+	"High-Performance-Online-Bookstore/service"
 	"github.com/gin-gonic/gin"
 )
 

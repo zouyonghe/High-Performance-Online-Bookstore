@@ -1,7 +1,7 @@
 package config
 
 import (
-	"Jinshuzhai-Bookstore/log"
+	"High-Performance-Online-Bookstore/log"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"

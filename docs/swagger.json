@@ -6,7 +6,7 @@
     "swagger": "2.0",
     "info": {
         "description": "The jinshuzhai bookstore api server.",
-        "title": "Jinshuzhai-Bookstore",
+        "title": "High-Performance-Online-Bookstore",
         "termsOfService": "https://github.com/zouyonghe",
         "contact": {
             "name": "API Support",
