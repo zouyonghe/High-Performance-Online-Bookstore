@@ -88,3 +88,50 @@ func ErrListBooks(err error) {
 func ErrUpdateBook(err error) {
 	zap.L().Error("error updating book", zap.Error(err))
 }
+
+func ErrCreateCart(err error) {
+	zap.L().Error("error creating cart", zap.Error(err))
+}
+
+func ErrAddCart(err error) {
+	zap.L().Error("error adding book to cart", zap.Error(err))
+}
+
+func ErrCreateCartBook(err error) {
+	zap.L().Error("error creating cartBook", zap.Error(err))
+}
+
+func ErrGetCart(err error) {
+	zap.L().Error("error getting cart", zap.Error(err))
+}
+
+func ErrDeleteCart(err error) {
+	zap.L().Error("error deleting cart", zap.Error(err))
+}
+
+func ErrClearCart(err error) {
+	zap.L().Error("error clearing cart", zap.Error(err))
+}
+
+func ErrGetCartBookList(err error) {
+	zap.L().Error("error getting cartBookList", zap.Error(err))
+}
+func ErrCreateOrder(err error) {
+	zap.L().Error("error creating order", zap.Error(err))
+}
+
+func ErrGetOrder(err error) {
+	zap.L().Error("error getting order", zap.Error(err))
+}
+
+func ErrGetOrderBook(err error) {
+	zap.L().Error("error getting orderBook", zap.Error(err))
+}
+
+func ErrAddOrder(err error) {
+	zap.L().Error("error adding book to order", zap.Error(err))
+}
+
+func ErrUpdateOrderPrice(err error) {
+	zap.L().Error("error updating order price", zap.Error(err))
+}

@@ -25,6 +25,13 @@ p, manager, /v1/book/:id, GET
 p, manager, /v1/book/:id, PUT
 p, manager, /v1/book/:id, DELETE
 
+p, general, /v1/cart, GET
+p, general, /v1/cart, PUT
+p, general, /v1/cart, DELETE
+p, general, /v1/cart/all, DELETE
+
+p, general, /v1/order, POST
+
 p, manager, /v1/order, GET
 p, manager, /v1/order/:id, GET
 p, manager, /v1/order/:id, POST
@@ -36,6 +43,10 @@ g, seller, normal
 
 g, general, register
 g, seller, register
+
+g, general, common
+g, seller, common
+g, admin, common
 
 g, seller, manager
 g, admin, manager

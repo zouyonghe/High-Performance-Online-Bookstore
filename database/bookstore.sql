@@ -11,7 +11,7 @@
  Target Server Version : 100703
  File Encoding         : 65001
 
- Date: 28/04/2022 01:08:29
+ Date: 30/04/2022 01:57:41
 */
 
 CREATE DATABASE IF NOT EXISTS `bookstore_server`;
@@ -19,44 +19,6 @@ USE `bookstore_server`;
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for tb_book_cart
--- ----------------------------
-DROP TABLE IF EXISTS `tb_book_cart`;
-CREATE TABLE `tb_book_cart` (
-  `cart_id` bigint(20) unsigned NOT NULL,
-  `book_id` bigint(20) unsigned NOT NULL,
-  PRIMARY KEY (`cart_id`,`book_id`),
-  KEY `fk_tb_book_cart_book` (`book_id`),
-  CONSTRAINT `fk_tb_book_cart_book` FOREIGN KEY (`book_id`) REFERENCES `tb_books` (`id`),
-  CONSTRAINT `fk_tb_book_cart_cart` FOREIGN KEY (`cart_id`) REFERENCES `tb_carts` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- ----------------------------
--- Records of tb_book_cart
--- ----------------------------
-BEGIN;
-COMMIT;
-
--- ----------------------------
--- Table structure for tb_book_order
--- ----------------------------
-DROP TABLE IF EXISTS `tb_book_order`;
-CREATE TABLE `tb_book_order` (
-  `order_id` bigint(20) unsigned NOT NULL,
-  `book_id` bigint(20) unsigned NOT NULL,
-  PRIMARY KEY (`order_id`,`book_id`),
-  KEY `fk_tb_book_order_book` (`book_id`),
-  CONSTRAINT `fk_tb_book_order_book` FOREIGN KEY (`book_id`) REFERENCES `tb_books` (`id`),
-  CONSTRAINT `fk_tb_book_order_order` FOREIGN KEY (`order_id`) REFERENCES `tb_orders` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- ----------------------------
--- Records of tb_book_order
--- ----------------------------
-BEGIN;
-COMMIT;
 
 -- ----------------------------
 -- Table structure for tb_books
@@ -78,10 +40,23 @@ CREATE TABLE `tb_books` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of tb_books
+-- Table structure for tb_cart_books
 -- ----------------------------
-BEGIN;
-COMMIT;
+DROP TABLE IF EXISTS `tb_cart_books`;
+CREATE TABLE `tb_cart_books` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(3) DEFAULT NULL,
+  `updated_at` datetime(3) DEFAULT NULL,
+  `deleted_at` datetime(3) DEFAULT NULL,
+  `cart_id` bigint(20) unsigned DEFAULT NULL,
+  `book_id` bigint(20) unsigned NOT NULL,
+  `price` double DEFAULT NULL,
+  `number` bigint(20) unsigned DEFAULT NULL,
+  `unit_price` double DEFAULT NULL,
+  PRIMARY KEY (`id`,`book_id`),
+  KEY `fk_tb_carts_books` (`cart_id`),
+  CONSTRAINT `fk_tb_carts_books` FOREIGN KEY (`cart_id`) REFERENCES `tb_carts` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Table structure for tb_carts
@@ -92,16 +67,30 @@ CREATE TABLE `tb_carts` (
   `created_at` datetime(3) DEFAULT NULL,
   `updated_at` datetime(3) DEFAULT NULL,
   `deleted_at` datetime(3) DEFAULT NULL,
-  `user_id` bigint(20) DEFAULT NULL,
-  `cart_price` double NOT NULL,
-  PRIMARY KEY (`id`)
+  `user_id` bigint(20) unsigned DEFAULT NULL,
+  `cart_price` double DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_tb_users_cart` (`user_id`),
+  CONSTRAINT `fk_tb_users_cart` FOREIGN KEY (`user_id`) REFERENCES `tb_users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of tb_carts
+-- Table structure for tb_order_books
 -- ----------------------------
-BEGIN;
-COMMIT;
+DROP TABLE IF EXISTS `tb_order_books`;
+CREATE TABLE `tb_order_books` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(3) DEFAULT NULL,
+  `updated_at` datetime(3) DEFAULT NULL,
+  `deleted_at` datetime(3) DEFAULT NULL,
+  `order_id` bigint(20) unsigned DEFAULT NULL,
+  `book_id` bigint(20) unsigned NOT NULL,
+  `number` bigint(20) unsigned DEFAULT NULL,
+  `unit_price` double DEFAULT NULL,
+  PRIMARY KEY (`id`,`book_id`),
+  KEY `fk_tb_orders_books` (`order_id`),
+  CONSTRAINT `fk_tb_orders_books` FOREIGN KEY (`order_id`) REFERENCES `tb_orders` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Table structure for tb_orders
@@ -113,17 +102,12 @@ CREATE TABLE `tb_orders` (
   `updated_at` datetime(3) DEFAULT NULL,
   `deleted_at` datetime(3) DEFAULT NULL,
   `user_id` bigint(20) unsigned NOT NULL,
-  `order_price` double NOT NULL,
+  `order_price` double DEFAULT NULL,
+  `is_approved` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `fk_tb_users_orders` (`user_id`),
   CONSTRAINT `fk_tb_users_orders` FOREIGN KEY (`user_id`) REFERENCES `tb_users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- ----------------------------
--- Records of tb_orders
--- ----------------------------
-BEGIN;
-COMMIT;
 
 -- ----------------------------
 -- Table structure for tb_users
@@ -141,7 +125,7 @@ CREATE TABLE `tb_users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of tb_users
+-- Records of tb_user
 -- ----------------------------
 BEGIN;
 INSERT INTO `tb_users` (`id`, `username`, `password`, `role`, `created_at`, `updated_at`, `deleted_at`) VALUES (1, 'admin', '$2a$10$Fv9BWzqsiQ.JuuGdcXdvN.Fx3ml.dVR47W22GoJMWQAlm9wHQIMVe', 'admin', '2021-04-18 15:40:33', '2021-04-18 15:40:33', NULL);

@@ -23,7 +23,7 @@ type Base struct {
 
 // UserInfo represents user information.
 type UserInfo struct {
-	Id        uint64 `json:"userId"`
+	Id        uint64 `json:"UserID"`
 	Username  string `json:"username"`
 	ShortId   string `json:"ShortId"`
 	Password  string `json:"password"`
@@ -42,7 +42,7 @@ type UserList struct {
 
 // BookInfo represents book information.
 type BookInfo struct {
-	Id          uint64  `json:"bookId"`
+	Id          uint64  `json:"BookID"`
 	Title       string  `json:"title"`
 	ShortId     string  `json:"shortId"`
 	Author      string  `json:"author"`
@@ -50,7 +50,7 @@ type BookInfo struct {
 	PublishDate string  `json:"publishDate"`
 	Category    string  `json:"category"`
 	IsSell      bool    `json:"isSell"`
-	Number      uint64  `json:"number"`
+	Number      uint    `json:"number"`
 	CreatedAt   string  `json:"createdAt"`
 	UpdatedAt   string  `json:"updatedAt"`
 }
@@ -68,6 +68,7 @@ type BookList struct {
 }
 
 type CartInfo struct {
+	UserID uint64 `json:"user_id"`
 }
 
 type OrderInfo struct {

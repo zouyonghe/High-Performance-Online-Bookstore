@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// RegisterSeller registers a new seller account.
+// Register registers a new seller account.
 //
 // @Summary Register a new seller account.
 // @Description Register a new seller account by username and password
@@ -17,9 +17,9 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param user body user.RegisterRequest true "user information include username and password"
-// @Success 200 {object} user.SwaggerRegisterResponse "{"code":0,"message":"OK","data":{"userId":12,"username":"汤桂英","role":"business"}}"
+// @Success 200 {object} user.SwaggerRegisterResponse "{"code":0,"message":"OK","data":{"UserID":12,"username":"汤桂英","role":"business"}}"
 // @Router /user/register [post]
-func RegisterSeller(c *gin.Context) {
+func Register(c *gin.Context) {
 	log.RegisterSellerCalled(c)
 
 	var r user.RegisterRequest
@@ -50,21 +50,21 @@ func RegisterSeller(c *gin.Context) {
 	}
 
 	// Encrypt the user password.
-	if err := u.Encrypt(); err != nil {
+	if err = u.Encrypt(); err != nil {
 		log.ErrValidate(err)
 		SendResponse(c, berror.ErrEncrypt, nil)
 		return
 	}
 
 	// Insert the user to the database.
-	if err := u.CreateUser(deleted); err != nil {
+	if err = u.CreateUser(deleted); err != nil {
 		log.ErrCreateUser(err)
 		SendResponse(c, berror.ErrDatabase, nil)
 		return
 	}
 
 	rsp := user.RegisterResponse{
-		UserId:   u.ID,
+		UserID:   u.ID,
 		Username: u.Username,
 	}
 

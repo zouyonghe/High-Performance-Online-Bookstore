@@ -1,0 +1,103 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+/'
+:Main Admin: as Admin
+(Use the application) as (Use)
+
+User -> (Start)
+User --> (Use)
+
+Admin ---> (Use)
+
+note right of Admin : This is an example.
+
+note right of (Use)
+A note can also
+be on several lines
+end note
+
+note "This note is connected\nto several objects." as N2
+(Start) .. N2
+N2 .. (Use)
+'/
+
+
+skinparam dpi 800
+
+scale 1920 width
+scale 1080 height
+
+匿名用户 as guest
+注册用户 as general
+guest <|-- general
+销售员 as seller
+general <|--- seller
+管理员 as admin
+general <|-- admin
+seller <|-- admin
+
+rectangle 基本功能 {
+usecase "访问主页" as V
+}
+
+rectangle 用户 as U {
+usecase "注册" as Rg
+usecase "登录" as Lg
+usecase "修改账户" as Mu
+usecase "删除账户" as Du
+}
+
+rectangle 图书 as B {
+usecase "查询图书" as Sb
+usecase "查看详情" as Vb
+usecase "上架图书" as Ab
+usecase "修改图书" as Mb
+usecase "下架图书" as Db
+}
+
+rectangle 购物车 as C {
+usecase "添加购物车" as Ac
+usecase "删除购物车" as Dc
+usecase "查看购物车" as Vc
+usecase "结算购物车" as Cc
+}
+
+rectangle 订单 as O {
+usecase "创建订单" as Co
+usecase "支付订单" as P
+usecase "修改订单" as Mo
+usecase "删除订单" as Do
+usecase "处理订单" as So
+}
+
+guest ---> Rg
+guest ---> Lg
+guest ---> V
+guest ---> Sb
+guest ---> Vb
+
+general ---> Mu
+general ---> Du
+general ---> V
+general ---> Sb
+general ---> Vb
+general ---> Ac
+general ---> Vc
+general ---> Dc
+general ----> Cc
+general ---> Co
+general ---> P
+
+seller ---> Ab
+seller ---> Mb
+seller ---> Db
+seller ---> Do
+seller ---> Mo
+
+
+admin ---> V
+admin ---> B
+admin ---> C
+admin ---> O
+@enduml

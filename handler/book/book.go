@@ -14,11 +14,11 @@ type AddRequest struct {
 	PublishDate string  `json:"publishDate"`
 	Category    string  `json:"category"`
 	IsSell      bool    `json:"isSell"`
-	Number      uint64  `json:"number"`
+	Number      uint    `json:"number"`
 }
 
 type AddResponse struct {
-	BookID uint64 `json:"bookId"`
+	BookID uint64 `json:"BookID"`
 	Title  string `json:"title"`
 }
 
@@ -36,13 +36,15 @@ type ListResponse struct {
 type DeleteRequest struct{}
 
 type DeleteResponse struct {
-	BookID  uint64 `json:"bookId"`
+	BookID  uint64 `json:"BookID"`
 	Message string `json:"message"`
 }
 
 type UpdateRequest struct{}
 
 type UpdateResponse struct {
-	BookID  uint64 `json:"bookId"`
+	BookID  uint64 `json:"BookID"`
 	Message string `json:"message"`
 }
+
+type GetRequest struct{}

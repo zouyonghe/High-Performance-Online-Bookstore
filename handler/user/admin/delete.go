@@ -18,18 +18,18 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param id path uint64 true "the ID of the specified user to delete"
-// @Success 200 {object} user.SwaggerDeleteResponse "{"code":0,"message":"OK","data":{"userId":5}}"
+// @Success 200 {object} user.SwaggerDeleteResponse "{"code":0,"message":"OK","data":{"UserID":5}}"
 // @Router /user/admin/{id} [delete]
 // @Security ApiKeyAuth
 func Delete(c *gin.Context) {
 	log.DeleteUserCalled(c)
 
-	userId, err := service.GetIDByToken(c)
+	UserID, err := service.GetIDByParam(c)
 	if err != nil {
 		log.ErrParseToken(err)
 		SendResponse(c, berror.InternalServerError, nil)
 	}
-	um, err := model.GetUserByID(userId)
+	u, err := model.GetUserByID(UserID)
 	if err != nil {
 		log.ErrUserNotFound(err)
 		c.JSON(400, gin.H{
@@ -37,13 +37,13 @@ func Delete(c *gin.Context) {
 		})
 		return
 	}
-	username := um.Username
-	if err := model.DeleteUser(userId); err != nil {
+	username := u.Username
+	if err := model.DeleteUser(UserID); err != nil {
 		SendResponse(c, err, nil)
 		return
 	}
 	rsp := user.DeleteResponse{
-		UserId:  userId,
+		UserID:  UserID,
 		Message: "User " + username + " deleted",
 	}
 	SendResponse(c, nil, rsp)

@@ -22,14 +22,14 @@ import (
 func Get(c *gin.Context) {
 	log.GetUserCalled(c)
 
-	userId, err := service.GetIDByParam(c)
+	UserID, err := service.GetIDByParam(c)
 	if err != nil {
 		log.ErrParseToken(err)
 		SendResponse(c, nil, err)
 		return
 	}
 	// Get the user by the `username` from the database.
-	user, err := model.GetUserByID(userId)
+	user, err := model.GetUserByID(UserID)
 	// if user is not found or deleted, send error
 	if err != nil {
 		SendResponse(c, berror.ErrUserNotFound, nil)

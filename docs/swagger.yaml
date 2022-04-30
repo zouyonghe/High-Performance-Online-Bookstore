@@ -26,14 +26,14 @@ definitions:
     type: object
   user.CreateResponse:
     properties:
-      userId:
+      UserID:
         type: integer
       username:
         type: string
     type: object
   user.DeleteResponse:
     properties:
-      userId:
+      UserID:
         type: integer
     type: object
   user.GetResponse:
@@ -42,7 +42,7 @@ definitions:
         type: string
       role:
         type: string
-      userId:
+      UserID:
         type: integer
       username:
         type: string
@@ -58,12 +58,12 @@ definitions:
     properties:
       token:
         type: string
-      userId:
+      UserID:
         type: integer
     type: object
   user.SelfDelResponse:
     properties:
-      userId:
+      UserID:
         type: integer
     type: object
   user.SelfUpdRequest:
@@ -75,7 +75,7 @@ definitions:
     type: object
   user.SelfUpdResponse:
     properties:
-      userId:
+      UserID:
         type: integer
       username:
         type: string
@@ -161,7 +161,7 @@ definitions:
     type: object
   user.UpdateResponse:
     properties:
-      userId:
+      UserID:
         type: integer
       username:
         type: string
@@ -212,7 +212,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{"code":0,"message":"OK","data":{"userId":5}}'
+          description: '{"code":0,"message":"OK","data":{"UserID":5}}'
           schema:
             $ref: '#/definitions/user.SwaggerDeleteResponse'
       security:
@@ -260,7 +260,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{"code":0,"message":"OK","data":{"userId":5}}'
+          description: '{"code":0,"message":"OK","data":{"UserID":5}}'
           schema:
             $ref: '#/definitions/user.SwaggerUpdateResponse'
       security:
@@ -284,7 +284,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{"code":0,"message":"OK","data":{"userId":6,"username":"夏秀兰"}}'
+          description: '{"code":0,"message":"OK","data":{"UserID":6,"username":"夏秀兰"}}'
           schema:
             $ref: '#/definitions/user.SwaggerSelfUpdResponse'
       security:
@@ -299,7 +299,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{"code":0,"message":"OK","data":{"userId":8}}'
+          description: '{"code":0,"message":"OK","data":{"UserID":8}}'
           schema:
             $ref: '#/definitions/user.SwaggerSelfDelResponse'
       security:
@@ -323,7 +323,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{"code":0,"message":"OK","data":{"userId":7,"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTA0NTkzODEsImlkIjo3LCJuYmYiOjE2NTA0NTkzODEsInJvbGUiOiJnZW5lcmFsIiwidXNlcm5hbWUiOiLkuIHno4oifQ.0kA4whaE9bZjXu4bN3Sw0DgrKwYzJ7kZenaGDOcdFRQ"}}'
+          description: '{"code":0,"message":"OK","data":{"UserID":7,"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTA0NTkzODEsImlkIjo3LCJuYmYiOjE2NTA0NTkzODEsInJvbGUiOiJnZW5lcmFsIiwidXNlcm5hbWUiOiLkuIHno4oifQ.0kA4whaE9bZjXu4bN3Sw0DgrKwYzJ7kZenaGDOcdFRQ"}}'
           schema:
             $ref: '#/definitions/user.SwaggerLoginResponse'
       summary: Login  a user account
@@ -345,7 +345,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{"code":0,"message":"OK","data":{"userId":"7","username":"顾磊"}}'
+          description: '{"code":0,"message":"OK","data":{"UserID":"7","username":"顾磊"}}'
           schema:
             $ref: '#/definitions/user.SwaggerCreateResponse'
       summary: Create a new user

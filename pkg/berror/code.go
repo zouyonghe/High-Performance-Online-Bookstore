@@ -31,8 +31,18 @@ var (
 	// ErrPasswordIncorrect user password was incorrect
 	ErrPasswordIncorrect = &Berror{Code: 20105, Message: "The password was incorrect."}
 	// ErrDeleteUser deletes the user failed
-	ErrDeleteUser = &Berror{Code: 20106, Message: "Error occurred while deleting the user"}
+	ErrDeleteUser = &Berror{Code: 20106, Message: "Error occurred while deleting the user."}
 
-	// ErrBookExists Book exists error
+	// ErrBookExists book exists error
 	ErrBookExists = &Berror{Code: 20201, Message: "The book was already exists."}
+	// ErrGetBook book was not found
+	ErrGetBook = &Berror{Code: 20202, Message: "The book was not found."}
+	// ErrGetBookList get book list failed
+	ErrGetBookList = &Berror{Code: 20203, Message: "Error occurred while getting book list."}
+	// ErrBookNotExist book was not found
+	ErrBookNotExist = &Berror{Code: 20204, Message: "The book is not exist."}
+	// ErrClearCart clear cart failed
+	ErrClearCart = &Berror{Code: 20205, Message: "Error occurred while clearing the cart."}
+	// ErrNothingInCart nothing in cart
+	ErrNothingInCart = &Berror{Code: 20206, Message: "Nothing in cart."}
 )

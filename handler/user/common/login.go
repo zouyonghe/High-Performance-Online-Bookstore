@@ -19,7 +19,7 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param user body user.LoginRequest true "Login account"
-// @Success 200 {object} user.SwaggerLoginResponse "{"code":0,"message":"OK","data":{"userId":7,"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTA0NTkzODEsImlkIjo3LCJuYmYiOjE2NTA0NTkzODEsInJvbGUiOiJnZW5lcmFsIiwidXNlcm5hbWUiOiLkuIHno4oifQ.0kA4whaE9bZjXu4bN3Sw0DgrKwYzJ7kZenaGDOcdFRQ"}}"
+// @Success 200 {object} user.SwaggerLoginResponse "{"code":0,"message":"OK","data":{"UserID":7,"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTA0NTkzODEsImlkIjo3LCJuYmYiOjE2NTA0NTkzODEsInJvbGUiOiJnZW5lcmFsIiwidXNlcm5hbWUiOiLkuIHno4oifQ.0kA4whaE9bZjXu4bN3Sw0DgrKwYzJ7kZenaGDOcdFRQ"}}"
 // @Router /user/login [post]
 func Login(c *gin.Context) {
 	log.LoginCalled(c) // Binding the data with the user struct.
@@ -55,7 +55,7 @@ func Login(c *gin.Context) {
 
 	//SendResponse(c, nil, model.Token{Token: t})
 	rsp := user.LoginResponse{
-		UserId: d.ID,
+		UserID: d.ID,
 		Token:  t,
 	}
 

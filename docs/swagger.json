@@ -117,7 +117,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"userId\":5}}",
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"UserID\":5}}",
                         "schema": {
                             "$ref": "#/definitions/user.SwaggerUpdateResponse"
                         }
@@ -152,7 +152,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"userId\":5}}",
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"UserID\":5}}",
                         "schema": {
                             "$ref": "#/definitions/user.SwaggerDeleteResponse"
                         }
@@ -191,7 +191,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"userId\":6,\"username\":\"夏秀兰\"}}",
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"UserID\":6,\"username\":\"夏秀兰\"}}",
                         "schema": {
                             "$ref": "#/definitions/user.SwaggerSelfUpdResponse"
                         }
@@ -216,7 +216,7 @@
                 "summary": "SelfDel deletes the user of token specified",
                 "responses": {
                     "200": {
-                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"userId\":8}}",
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"UserID\":8}}",
                         "schema": {
                             "$ref": "#/definitions/user.SwaggerSelfDelResponse"
                         }
@@ -250,7 +250,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"userId\":7,\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTA0NTkzODEsImlkIjo3LCJuYmYiOjE2NTA0NTkzODEsInJvbGUiOiJnZW5lcmFsIiwidXNlcm5hbWUiOiLkuIHno4oifQ.0kA4whaE9bZjXu4bN3Sw0DgrKwYzJ7kZenaGDOcdFRQ\"}}",
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"UserID\":7,\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTA0NTkzODEsImlkIjo3LCJuYmYiOjE2NTA0NTkzODEsInJvbGUiOiJnZW5lcmFsIiwidXNlcm5hbWUiOiLkuIHno4oifQ.0kA4whaE9bZjXu4bN3Sw0DgrKwYzJ7kZenaGDOcdFRQ\"}}",
                         "schema": {
                             "$ref": "#/definitions/user.SwaggerLoginResponse"
                         }
@@ -284,7 +284,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"userId\":\"7\",\"username\":\"顾磊\"}}",
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"UserID\":\"7\",\"username\":\"顾磊\"}}",
                         "schema": {
                             "$ref": "#/definitions/user.SwaggerCreateResponse"
                         }
@@ -334,7 +334,7 @@
         "user.CreateResponse": {
             "type": "object",
             "properties": {
-                "userId": {
+                "UserID": {
                     "type": "integer"
                 },
                 "username": {
@@ -345,7 +345,7 @@
         "user.DeleteResponse": {
             "type": "object",
             "properties": {
-                "userId": {
+                "UserID": {
                     "type": "integer"
                 }
             }
@@ -359,7 +359,7 @@
                 "role": {
                     "type": "string"
                 },
-                "userId": {
+                "UserID": {
                     "type": "integer"
                 },
                 "username": {
@@ -384,7 +384,7 @@
                 "token": {
                     "type": "string"
                 },
-                "userId": {
+                "UserID": {
                     "type": "integer"
                 }
             }
@@ -392,7 +392,7 @@
         "user.SelfDelResponse": {
             "type": "object",
             "properties": {
-                "userId": {
+                "UserID": {
                     "type": "integer"
                 }
             }
@@ -411,7 +411,7 @@
         "user.SelfUpdResponse": {
             "type": "object",
             "properties": {
-                "userId": {
+                "UserID": {
                     "type": "integer"
                 },
                 "username": {
@@ -545,7 +545,7 @@
         "user.UpdateResponse": {
             "type": "object",
             "properties": {
-                "userId": {
+                "UserID": {
                     "type": "integer"
                 },
                 "username": {

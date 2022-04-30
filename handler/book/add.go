@@ -5,12 +5,11 @@ import (
 	"High-Performance-Online-Bookstore/log"
 	"High-Performance-Online-Bookstore/model"
 	"High-Performance-Online-Bookstore/pkg/berror"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
-func AddBook(c *gin.Context) {
+func Add(c *gin.Context) {
 	log.AddBookCalled(c)
 
 	var r AddRequest
@@ -19,7 +18,6 @@ func AddBook(c *gin.Context) {
 		SendResponse(c, berror.ErrBind, nil)
 		return
 	}
-	fmt.Println(r)
 	b := model.Book{
 		Title:       r.Title,
 		Author:      r.Author,
@@ -29,7 +27,6 @@ func AddBook(c *gin.Context) {
 		IsSell:      r.IsSell,
 		Number:      r.Number,
 	}
-	fmt.Println(b)
 	// Validate the data.
 	if err := b.Validate(); err != nil {
 		log.ErrValidate(err)

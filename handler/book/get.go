@@ -8,16 +8,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func DelBook(c *gin.Context) {
-	log.DelBookCalled(c)
-	bookId, err := service.GetIDByParam(c)
+func Get(c *gin.Context) {
+	log.GetBookCalled(c)
+	BookID, err := service.GetIDByParam(c)
 	if err != nil {
 		log.ErrParseToken(err)
 		SendResponse(c, nil, err)
 		return
 	}
 
-	bm, err := model.GetBookByID(bookId)
+	book, err := model.GetBookByID(BookID)
 	if err != nil {
 		log.ErrGetBook(err)
 		c.JSON(400, gin.H{
@@ -25,19 +25,6 @@ func DelBook(c *gin.Context) {
 		})
 		return
 	}
-
-	title := bm.Title
-
-	if err := model.DeleteBook(bookId); err != nil {
-		log.ErrDelBook(err)
-		SendResponse(c, err, nil)
-		return
-	}
-
-	rsp := DeleteResponse{
-		BookID:  bookId,
-		Message: "Book <" + title + "> delete",
-	}
-	SendResponse(c, nil, rsp)
+	SendResponse(c, nil, book)
 	return
 }

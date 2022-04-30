@@ -18,7 +18,7 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param user body user.RegisterRequest true "user information include username and password"
-// @Success 200 {object} user.SwaggerRegisterResponse "{"code":0,"message":"OK","data":{"userId":12,"username":"汤桂英","role":"business"}}"
+// @Success 200 {object} user.SwaggerRegisterResponse "{"code":0,"message":"OK","data":{"UserID":12,"username":"汤桂英","role":"business"}}"
 // @Router /user/register [post]
 func Register(c *gin.Context) {
 	log.RegisterCalled(c)
@@ -67,8 +67,16 @@ func Register(c *gin.Context) {
 		return
 	}
 
+	// Create the cart for the user.
+	err = model.CreateCartByName(r.Username)
+	if err != nil {
+		log.ErrCreateCart(err)
+		SendResponse(c, berror.InternalServerError, nil)
+		return
+	}
+
 	rsp := user.RegisterResponse{
-		UserId:   u.ID,
+		UserID:   u.ID,
 		Username: u.Username,
 	}
 

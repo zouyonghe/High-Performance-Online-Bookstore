@@ -120,7 +120,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"userId\":5}}",
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"UserID\":5}}",
                         "schema": {
                             "$ref": "#/definitions/user.SwaggerUpdateResponse"
                         }
@@ -155,7 +155,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"userId\":5}}",
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"UserID\":5}}",
                         "schema": {
                             "$ref": "#/definitions/user.SwaggerDeleteResponse"
                         }
@@ -194,7 +194,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"userId\":6,\"username\":\"夏秀兰\"}}",
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"UserID\":6,\"username\":\"夏秀兰\"}}",
                         "schema": {
                             "$ref": "#/definitions/user.SwaggerSelfUpdResponse"
                         }
@@ -219,7 +219,7 @@ const docTemplate = `{
                 "summary": "SelfDel deletes the user of token specified",
                 "responses": {
                     "200": {
-                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"userId\":8}}",
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"UserID\":8}}",
                         "schema": {
                             "$ref": "#/definitions/user.SwaggerSelfDelResponse"
                         }
@@ -253,7 +253,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"userId\":7,\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTA0NTkzODEsImlkIjo3LCJuYmYiOjE2NTA0NTkzODEsInJvbGUiOiJnZW5lcmFsIiwidXNlcm5hbWUiOiLkuIHno4oifQ.0kA4whaE9bZjXu4bN3Sw0DgrKwYzJ7kZenaGDOcdFRQ\"}}",
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"UserID\":7,\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTA0NTkzODEsImlkIjo3LCJuYmYiOjE2NTA0NTkzODEsInJvbGUiOiJnZW5lcmFsIiwidXNlcm5hbWUiOiLkuIHno4oifQ.0kA4whaE9bZjXu4bN3Sw0DgrKwYzJ7kZenaGDOcdFRQ\"}}",
                         "schema": {
                             "$ref": "#/definitions/user.SwaggerLoginResponse"
                         }
@@ -287,7 +287,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"userId\":\"7\",\"username\":\"顾磊\"}}",
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"UserID\":\"7\",\"username\":\"顾磊\"}}",
                         "schema": {
                             "$ref": "#/definitions/user.SwaggerCreateResponse"
                         }
@@ -337,7 +337,7 @@ const docTemplate = `{
         "user.CreateResponse": {
             "type": "object",
             "properties": {
-                "userId": {
+                "UserID": {
                     "type": "integer"
                 },
                 "username": {
@@ -348,7 +348,7 @@ const docTemplate = `{
         "user.DeleteResponse": {
             "type": "object",
             "properties": {
-                "userId": {
+                "UserID": {
                     "type": "integer"
                 }
             }
@@ -362,7 +362,7 @@ const docTemplate = `{
                 "role": {
                     "type": "string"
                 },
-                "userId": {
+                "UserID": {
                     "type": "integer"
                 },
                 "username": {
@@ -387,7 +387,7 @@ const docTemplate = `{
                 "token": {
                     "type": "string"
                 },
-                "userId": {
+                "UserID": {
                     "type": "integer"
                 }
             }
@@ -395,7 +395,7 @@ const docTemplate = `{
         "user.SelfDelResponse": {
             "type": "object",
             "properties": {
-                "userId": {
+                "UserID": {
                     "type": "integer"
                 }
             }
@@ -414,7 +414,7 @@ const docTemplate = `{
         "user.SelfUpdResponse": {
             "type": "object",
             "properties": {
-                "userId": {
+                "UserID": {
                     "type": "integer"
                 },
                 "username": {
@@ -548,7 +548,7 @@ const docTemplate = `{
         "user.UpdateResponse": {
             "type": "object",
             "properties": {
-                "userId": {
+                "UserID": {
                     "type": "integer"
                 },
                 "username": {

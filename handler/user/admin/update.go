@@ -20,13 +20,13 @@ import (
 // @Produce  json
 // @Param id path uint64 true "the ID of the specified user to update"
 // @Param user body user.UpdateRequest true "user information include username and password"
-// @Success 200 {object} user.SwaggerUpdateResponse "{"code":0,"message":"OK","data":{"userId":5}}"
+// @Success 200 {object} user.SwaggerUpdateResponse "{"code":0,"message":"OK","data":{"UserID":5}}"
 // @Router /user/admin/{id} [put]
 // @Security ApiKeyAuth
 func Update(c *gin.Context) {
 	log.UpdateUserCalled(c)
 	// Get the user id from the url parameter.
-	userId, err := service.GetIDByParam(c)
+	UserID, err := service.GetIDByParam(c)
 	if err != nil {
 		log.ErrParseToken(err)
 		SendResponse(c, nil, err)
@@ -40,7 +40,7 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	u.ID = userId
+	u.ID = UserID
 
 	m, err := model.GetUserByID(u.ID)
 	if err != nil {
@@ -74,7 +74,7 @@ func Update(c *gin.Context) {
 		return
 	}
 	rsp := user.UpdateResponse{
-		UserId:   u.ID,
+		UserID:   u.ID,
 		Username: u.Username,
 	}
 	SendResponse(c, nil, rsp)

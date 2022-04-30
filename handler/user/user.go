@@ -57,9 +57,9 @@ type RegisterRequest struct {
 	Password string `json:"password"`
 }
 
-// RegisterResponse includes userId and username
+// RegisterResponse includes UserID and username
 type RegisterResponse struct {
-	UserId   uint64 `json:"userId"`
+	UserID   uint64 `json:"UserID"`
 	Username string `json:"username"`
 }
 
@@ -70,7 +70,7 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	UserId uint64 `json:"userId"`
+	UserID uint64 `json:"UserID"`
 	Token  string `json:"token"`
 }
 
@@ -81,7 +81,7 @@ type SelfUpdResponse UpdateResponse
 type SelfDelRequest struct{}
 
 type SelfDelResponse struct {
-	UserId uint64 `json:"userId"`
+	UserID uint64 `json:"UserID"`
 }
 
 //--- admin user struct ---
@@ -92,16 +92,16 @@ type UpdateRequest struct {
 	Password string `json:"password"`
 }
 
-// UpdateResponse include userId and username
+// UpdateResponse include UserID and username
 type UpdateResponse struct {
-	UserId   uint64 `json:"userId"`
+	UserID   uint64 `json:"UserID"`
 	Username string `json:"username"`
 }
 
 type GetRequest struct{}
 
 type GetResponse struct {
-	UserId   uint64 `json:"userId"`
+	UserID   uint64 `json:"UserID"`
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Role     string `json:"role"`
@@ -110,7 +110,7 @@ type GetResponse struct {
 type DeleteRequest struct{}
 
 type DeleteResponse struct {
-	UserId  uint64 `json:"userId"`
+	UserID  uint64 `json:"UserID"`
 	Message string `json:"message"`
 }
 

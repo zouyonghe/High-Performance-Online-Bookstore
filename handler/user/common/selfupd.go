@@ -18,12 +18,12 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param user body user.SelfUpdRequest true "Create a new user"
-// @Success 200 {object} user.SwaggerSelfUpdResponse "{"code":0,"message":"OK","data":{"userId":6,"username":"夏秀兰"}}"
+// @Success 200 {object} user.SwaggerSelfUpdResponse "{"code":0,"message":"OK","data":{"UserID":6,"username":"夏秀兰"}}"
 // @Router /user/common [put]
 // @Security ApiKeyAuth
 func SelfUpd(c *gin.Context) {
 	log.SelfUpdCalled(c)
-	userId, err := service.GetIDByToken(c)
+	UserID, err := service.GetIDByToken(c)
 	if err != nil {
 		log.ErrParseToken(err)
 		SendResponse(c, berror.InternalServerError, nil)
@@ -35,7 +35,7 @@ func SelfUpd(c *gin.Context) {
 		SendResponse(c, berror.ErrBind, nil)
 		return
 	}
-	u, err := model.GetUserByID(userId)
+	u, err := model.GetUserByID(UserID)
 	if err != nil {
 		log.ErrGetUser(err)
 		SendResponse(c, berror.ErrDatabase, nil)
@@ -65,7 +65,7 @@ func SelfUpd(c *gin.Context) {
 		return
 	}
 	rsp := user.SelfUpdResponse{
-		UserId:   userId,
+		UserID:   UserID,
 		Username: u.Username,
 	}
 	//SendResponse(c, nil, nil)

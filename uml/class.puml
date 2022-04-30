@@ -1,0 +1,137 @@
+@startuml
+package model{
+annotation model {
+
+
++DeleteBook(id uint64): error
++GetBook(title string): *Book, bool, error
++GetBookByID(id uint64): *Book, error
++DeleteUser(id uint64): error
++GetUser(username string): *User, bool, error
++GetUserByID(id uint64): *User, error
+}
+class Book {
++: Base
++Title: string
++Price: float64
++IsSell: bool
++Number: uint64
++Author: string
++PublishDate: string
++Category: string
++Orders: []*Order
++Carts: []*Cart
++TableName(): string
++CreateBook(deleted bool): error
++UpdateBook(): error
++SetBookName(name string): error
++SetBookPrice(price float64): error
++SetBookCategory(category string): error
++SetBookAuthor(author string): error
++SetBookNum(num int): error
++SetSell(): error
++SetUnSell(): error
++SetBookSell(sell bool): error
++Validate(): error
+}
+class Cart {
++: Base
++UserID: uint64
++Books: []*Book
++CartPrice: float64
++GetCartPrice(): float64
+}
+class Base {
++ID: uint64
++CreatedAt: Time
++UpdatedAt: Time
++DeletedAt: DeletedAt
+
+}
+class CartInfo {
+
+
+}
+class BookInfo {
++Id: uint64
++Title: string
++ShortId: string
++Author: string
++Price: float64
++PublishDate: string
++Category: string
++IsSell: bool
++Number: uint64
++CreatedAt: string
++UpdatedAt: string
+
+}
+class BookClass {
++ClassId: uint64
++ClassName: string
+
+}
+class BookList {
++Lock: *Mutex
++IdMap: map[uint64]*BookInfo
+
+}
+class OrderInfo {
+
+
+}
+class Token {
++Token: string
+
+}
+class UserInfo {
++Id: uint64
++Username: string
++ShortId: string
++Password: string
++Role: string
++CreatedAt: string
++UpdatedAt: string
+
+}
+class UserList {
++Lock: *Mutex
++IdMap: map[uint64]*UserInfo
+
+}
+class Order {
++: Base
++UserID: uint64
++Books: []*Book
++OrderPrice: float64
+
+}
+class UserBaseModel {
++Phone: string
++Address: string
+
+}
+class User {
++: Base
++Username: string
++Password: string
++Role: string
++Orders: []Order
++TableName(): string
++CreateUser(deleted bool): error
++UpdateUser(): error
++Compare(pwd string): error
++Encrypt(): error
++Validate(): error
++GetRole(): string
++SetRole(role string)
++CreateCart(): error
++GetCart(): *Cart
+}
+}
+Book --> Base
+Cart --> Base
+Order --> Base
+User --> Base
+
+@enduml

@@ -40,7 +40,7 @@ func openDB(username, password, addr, name string) *gorm.DB {
 		Logger:                 gormLogger,
 		NamingStrategy: schema.NamingStrategy{
 			TablePrefix:   "tb_", //表名前缀
-			SingularTable: true,  //是否复数表名
+			SingularTable: false, //是否单数表名
 		},
 		//DisableForeignKeyConstraintWhenMigrating: true,	//是否外键自动关联
 	}

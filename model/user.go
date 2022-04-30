@@ -3,7 +3,6 @@ package model
 import (
 	. "High-Performance-Online-Bookstore/database"
 	"High-Performance-Online-Bookstore/pkg/auth"
-	"High-Performance-Online-Bookstore/pkg/constvar"
 	"errors"
 	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
@@ -22,7 +21,8 @@ type User struct {
 	Username string  `json:"username" gorm:"column:username;not null" binding:"required" validate:"min=2,max=32"`
 	Password string  `json:"password" gorm:"column:password;not null" binding:"required" validate:"min=5,max=32"`
 	Role     string  `json:"role"     gorm:"column:role;not null;default:general"        validate:"oneof=general seller admin"`
-	Orders   []Order `json:"orders"`
+	Cart     Cart    `json:"-"`
+	Orders   []Order `json:"-"`
 }
 
 // TableName returns the table name.
@@ -56,59 +56,35 @@ func (u *User) UpdateUser() error {
 
 // GetUser gets a user by the user name
 // returns user model, deleted and error.
-func GetUser(username string) (um *User, deleted bool, err error) {
-	um = &User{}
-	d1 := DB.Self.Where("username = ?", username).First(&um)
+func GetUser(username string) (u *User, deleted bool, err error) {
+	u = &User{}
+	r1 := DB.Self.Where("username = ?", username).First(&u)
 
 	// found record
-	if err := d1.Error; err == nil {
-		return um, false, nil
+	if err := r1.Error; err == nil {
+		return u, false, nil
 	}
-	d2 := DB.Self.Unscoped().Where("username = ?", username).First(&um)
+	r2 := DB.Self.Unscoped().Where("username = ?", username).First(&u)
 	// not found record
-	if errors.Is(d2.Error, gorm.ErrRecordNotFound) {
-		return um, false, gorm.ErrRecordNotFound
+	if errors.Is(r2.Error, gorm.ErrRecordNotFound) {
+		return u, false, gorm.ErrRecordNotFound
 	}
 	// found record but deleted
-	if errors.Is(d1.Error, gorm.ErrRecordNotFound) && d2.Error == nil {
-		return um, true, nil
+	if errors.Is(r1.Error, gorm.ErrRecordNotFound) && r2.Error == nil {
+		return u, true, nil
 	}
-	return um, false, nil
+	return u, false, nil
 }
 
 // GetUserByID gets a user model by ID
-func GetUserByID(id uint64) (um *User, err error) {
-	um = &User{}
-	return um, DB.Self.Where("id = ?", id).First(&um).Error
-}
-
-// ListUser lists all users.
-func ListUser(username string, pageNum, pageSize int) ([]*User, int64, error) {
-	if pageSize <= 0 {
-		pageSize = constvar.DefaultPageSize
-	}
-	offset := (pageNum - 1) * pageSize
-
-	userList := make([]*User, 0)
-	var count int64
-	if len(username) > 0 {
-		DB.Self.Where("username like ?", "%"+username+"%").Count(&count)
-		if err := DB.Self.Where("username like ?", "%"+username+"%").Offset(offset).Limit(pageSize).Find(&userList).Error; err != nil {
-			return userList, count, err
-		}
-	} else {
-		DB.Self.Model(&User{}).Count(&count)
-		if err := DB.Self.Offset(offset).Limit(pageSize).Find(&userList).Error; err != nil {
-			return userList, count, err
-		}
-	}
-	return userList, count, nil
+func GetUserByID(id uint64) (u *User, err error) {
+	u = &User{}
+	return u, DB.Self.Where("id = ?", id).First(&u).Error
 }
 
 // Compare with the plain text password. Returns true if it's the same as the encrypted one (in the `User` struct).
-func (u *User) Compare(pwd string) (err error) {
-	err = auth.Compare(u.Password, pwd)
-	return
+func (u *User) Compare(pwd string) error {
+	return auth.Compare(u.Password, pwd)
 }
 
 // Encrypt the user password.
@@ -125,4 +101,8 @@ func (u *User) Validate() error {
 
 func (u *User) GetRole() string {
 	return u.Role
+}
+
+func (u *User) SetRole(role string) {
+	u.Role = role
 }

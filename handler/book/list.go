@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ListBook(c *gin.Context) {
+func List(c *gin.Context) {
 	log.ListBookCalled(c)
 
 	var r ListRequest
@@ -17,7 +17,7 @@ func ListBook(c *gin.Context) {
 		SendResponse(c, berror.ErrBind, nil)
 		return
 	}
-	infos, count, err := service.ListBook(r.Title, r.PageNum, r.PageSize)
+	infos, count, err := service.ListBookInfo(r.Title, r.PageNum, r.PageSize)
 	if err != nil {
 		log.ErrListBooks(err)
 		SendResponse(c, err, nil)

@@ -13,14 +13,14 @@ import (
 func SelfCheck(c *gin.Context) {
 	log.SelfCheckCalled(c)
 
-	userId, err := service.GetIDByToken(c)
+	UserID, err := service.GetIDByToken(c)
 	if err != nil {
 		log.ErrParseToken(err)
 		SendResponse(c, berror.InternalServerError, nil)
 		return
 	}
 
-	user, err := model.GetUserByID(userId)
+	user, err := model.GetUserByID(UserID)
 	if err != nil {
 		SendResponse(c, berror.ErrUserNotFound, nil)
 		return

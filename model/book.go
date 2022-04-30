@@ -2,24 +2,28 @@ package model
 
 import (
 	. "High-Performance-Online-Bookstore/database"
-	"High-Performance-Online-Bookstore/pkg/constvar"
 	"errors"
 	"github.com/go-playground/validator/v10"
 	"gorm.io/gorm"
 )
 
+type BookBase struct {
+	Index  int     `json:"index"`
+	Title  string  `json:"title"`
+	Price  float64 `json:"price"`
+	Number uint    `json:"number"`
+}
+
 // Book represents a book information model.
 type Book struct {
 	Base
-	Title       string   `json:"title" gorm:"column:title;not null"             binding:"required"  validate:"min=1,max=32"`
-	Price       float64  `json:"price" gorm:"column:price;not null"             binding:"required"  validate:"gte=0"`
-	IsSell      bool     `json:"isSell" gorm:"column:is_sell;not null;default:false"`
-	Number      uint64   `json:"number" gorm:"column:number;not null;default:0" binding:"required"  validate:"gte=0"`
-	Author      string   `json:"author" gorm:"column:author;not null"           binding:"required"  validate:"min=5,max=32"`
-	PublishDate string   `json:"publishDate" gorm:"column:publish_date;not null" binding:"required"  validate:"datetime=2006-01-02"`
-	Category    string   `json:"category" gorm:"column:category;not null"       binding:"required"  validate:"min=1,max=32"`
-	Orders      []*Order `gorm:"many2many:book_order"`
-	Carts       []*Cart  `gorm:"many2many:book_cart"`
+	Title       string  `json:"title" gorm:"column:title;not null"             binding:"required"  validate:"min=1,max=32"`
+	Price       float64 `json:"price" gorm:"column:price;not null"             binding:"required"  validate:"gte=0"`
+	IsSell      bool    `json:"isSell" gorm:"column:is_sell;not null;default:false"`
+	Number      uint    `json:"number" gorm:"column:number;not null;default:0" binding:"required"  validate:"gte=0"`
+	Author      string  `json:"author" gorm:"column:author;not null"           binding:"required"  validate:"min=5,max=32"`
+	PublishDate string  `json:"publishDate" gorm:"column:publish_date;not null" binding:"required"  validate:"datetime=2006-01-02"`
+	Category    string  `json:"category" gorm:"column:category;not null"       binding:"required"  validate:"min=1,max=32"`
 }
 
 // TableName returns the table name.
@@ -72,82 +76,6 @@ func GetBook(title string) (bm *Book, deleted bool, err error) {
 func GetBookByID(id uint64) (*Book, error) {
 	bm := &Book{}
 	return bm, DB.Self.Where("id = ?", id).First(&bm).Error
-}
-
-// ListBook lists books.
-func ListBook(title string, pageNum int, pageSize int) ([]*Book, int64, error) {
-	if pageSize <= 0 {
-		pageSize = constvar.DefaultPageSize
-	}
-	var bookList []*Book
-	var count int64
-	var err error
-	// Check page number format.
-	if pageNum <= 0 {
-		pageNum = 1
-	}
-
-	offset := (pageNum - 1) * pageSize
-	if len(title) > 0 {
-		DB.Self.Where("title like ?", "%"+title+"%").Count(&count)
-		err = DB.Self.Where("title like ?", "%"+title+"%").Offset(offset).Limit(pageSize).Find(&bookList).Error
-	} else {
-		err = DB.Self.Offset(offset).Limit(pageSize).Find(&bookList).Error
-		DB.Self.Model(&Book{}).Count(&count)
-	}
-
-	return bookList, count, err
-}
-
-// ListBookByCategory lists all the books,
-// returns book model list,
-// count of books and error.
-func ListBookByCategory(Category string, pageNum, pageSize int) ([]*Book, int64, error) {
-	if pageSize <= 0 {
-		pageSize = constvar.DefaultPageSize
-	}
-	var books []*Book
-	var count int64
-	if err := DB.Self.Where("Category = ?", Category).Offset((pageNum - 1) * pageSize).Limit(pageSize).Find(&books).Error; err != nil {
-		return books, count, err
-	}
-	if err := DB.Self.Model(&Book{}).Where("Category = ?", Category).Count(&count).Error; err != nil {
-		return books, count, err
-	}
-	return books, count, nil
-}
-
-// ListBookBySell lists the books on sale.
-func ListBookBySell(isSell bool, pageNum, pageSize int) ([]*Book, int64, error) {
-	if pageSize <= 0 {
-		pageSize = constvar.DefaultPageSize
-	}
-	var books []*Book
-	var count int64
-	if err := DB.Self.Where("sell = ?", isSell).Offset((pageNum - 1) * pageSize).Limit(pageSize).Find(&books).Error; err != nil {
-		return books, count, err
-	}
-	if err := DB.Self.Model(&Book{}).Where("on_sale = ?", true).Count(&count).Error; err != nil {
-		return books, count, err
-	}
-	return books, count, nil
-}
-
-// ListBookBySellAndCategory lists the books
-// on sale and specified category.
-func ListBookBySellAndCategory(category string, pageNum, pageSize int) ([]*Book, int64, error) {
-	if pageSize <= 0 {
-		pageSize = constvar.DefaultPageSize
-	}
-	var books []*Book
-	var count int64
-	if err := DB.Self.Where("category = ?", category).Where("sell = ?", true).Offset((pageNum - 1) * pageSize).Limit(pageSize).Find(&books).Error; err != nil {
-		return books, count, err
-	}
-	if err := DB.Self.Model(&Book{}).Where("category = ?", category).Where("on_sale = ?", true).Count(&count).Error; err != nil {
-		return books, count, err
-	}
-	return books, count, nil
 }
 
 // SetBookName sets the book name

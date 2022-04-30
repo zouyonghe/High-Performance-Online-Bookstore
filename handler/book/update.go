@@ -10,9 +10,9 @@ import (
 	"go.uber.org/zap"
 )
 
-func UpdBook(c *gin.Context) {
+func Update(c *gin.Context) {
 	zap.L().Info("update book information function called", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
-	bookId, err := service.GetIDByParam(c)
+	BookID, err := service.GetIDByParam(c)
 	if err != nil {
 		log.ErrParseToken(err)
 		SendResponse(c, nil, err)
@@ -26,7 +26,7 @@ func UpdBook(c *gin.Context) {
 		SendResponse(c, berror.ErrBind, nil)
 		return
 	}
-	b.ID = bookId
+	b.ID = BookID
 
 	if err := b.Validate(); err != nil {
 		log.ErrValidate(err)
