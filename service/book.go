@@ -2,21 +2,18 @@ package service
 
 import (
 	. "High-Performance-Online-Bookstore/database"
-	"High-Performance-Online-Bookstore/log"
 	"High-Performance-Online-Bookstore/model"
 	"High-Performance-Online-Bookstore/pkg/constvar"
-	"High-Performance-Online-Bookstore/pkg/token"
 	"High-Performance-Online-Bookstore/util"
-	"github.com/gin-gonic/gin"
-	"strconv"
 	"sync"
 )
 
-func ListBookInfo(title string, pageNum int, pageSize int) ([]*model.BookInfo, int64, error) {
+func ListBookInfo(title string, pageNum int, pageSize int) ([]*model.BookInfo, error) {
 	infos := make([]*model.BookInfo, 0)
-	books, count, err := ListBook(title, pageNum, pageSize)
+	books, err := ListBook(title, pageNum, pageSize)
+
 	if err != nil {
-		return nil, count, err
+		return nil, err
 	}
 	var ids []uint64
 	for _, b := range books {
@@ -67,40 +64,22 @@ func ListBookInfo(title string, pageNum int, pageSize int) ([]*model.BookInfo, i
 	select {
 	case <-finished:
 	case err := <-errChan:
-		return nil, count, err
+		return nil, err
 	}
 
 	for _, id := range ids {
 		infos = append(infos, bookList.IdMap[id])
 	}
 
-	return infos, count, nil
-}
-
-func GetIDByParam(c *gin.Context) (uint64, error) {
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		log.ErrConv(err)
-		return 0, err
-	}
-	return uint64(id), nil
-}
-
-func GetIDByToken(c *gin.Context) (uint64, error) {
-	ctx, err := token.ParseRequest(c)
-	if err != nil {
-		return 0, err
-	}
-	return ctx.ID, nil
+	return infos, nil
 }
 
 // ListBook lists books.
-func ListBook(title string, pageNum int, pageSize int) ([]*model.Book, int64, error) {
+func ListBook(title string, pageNum int, pageSize int) ([]*model.Book, error) {
 	if pageSize <= 0 {
 		pageSize = constvar.DefaultPageSize
 	}
 	var bookList []*model.Book
-	var count int64
 	var err error
 	// Check page number format.
 	if pageNum <= 0 {
@@ -109,63 +88,61 @@ func ListBook(title string, pageNum int, pageSize int) ([]*model.Book, int64, er
 
 	offset := (pageNum - 1) * pageSize
 	if len(title) > 0 {
-		DB.Self.Where("title like ?", "%"+title+"%").Count(&count)
 		err = DB.Self.Where("title like ?", "%"+title+"%").Offset(offset).Limit(pageSize).Find(&bookList).Error
 	} else {
 		err = DB.Self.Offset(offset).Limit(pageSize).Find(&bookList).Error
-		DB.Self.Model(&model.Book{}).Count(&count)
 	}
 
-	return bookList, count, err
+	return bookList, err
 }
 
 // ListBookByCategory lists all the books,
 // returns book model list,
 // count of books and error.
-func ListBookByCategory(Category string, pageNum, pageSize int) ([]*model.Book, int64, error) {
+func ListBookByCategory(Category string, pageNum, pageSize int) ([]*model.Book, error) {
 	if pageSize <= 0 {
 		pageSize = constvar.DefaultPageSize
 	}
 	var books []*model.Book
 	var count int64
 	if err := DB.Self.Where("Category = ?", Category).Offset((pageNum - 1) * pageSize).Limit(pageSize).Find(&books).Error; err != nil {
-		return books, count, err
+		return books, err
 	}
 	if err := DB.Self.Model(&model.Book{}).Where("Category = ?", Category).Count(&count).Error; err != nil {
-		return books, count, err
+		return books, err
 	}
-	return books, count, nil
+	return books, nil
 }
 
 // ListBookBySell lists the books on sale.
-func ListBookBySell(isSell bool, pageNum, pageSize int) ([]*model.Book, int64, error) {
+func ListBookBySell(isSell bool, pageNum, pageSize int) ([]*model.Book, error) {
 	if pageSize <= 0 {
 		pageSize = constvar.DefaultPageSize
 	}
 	var books []*model.Book
 	var count int64
 	if err := DB.Self.Where("sell = ?", isSell).Offset((pageNum - 1) * pageSize).Limit(pageSize).Find(&books).Error; err != nil {
-		return books, count, err
+		return books, err
 	}
 	if err := DB.Self.Model(&model.Book{}).Where("on_sale = ?", true).Count(&count).Error; err != nil {
-		return books, count, err
+		return books, err
 	}
-	return books, count, nil
+	return books, nil
 }
 
 // ListBookBySellAndCategory lists the books
 // on sale and specified category.
-func ListBookBySellAndCategory(category string, pageNum, pageSize int) ([]*model.Book, int64, error) {
+func ListBookBySellAndCategory(category string, pageNum, pageSize int) ([]*model.Book, error) {
 	if pageSize <= 0 {
 		pageSize = constvar.DefaultPageSize
 	}
 	var books []*model.Book
 	var count int64
 	if err := DB.Self.Where("category = ?", category).Where("sell = ?", true).Offset((pageNum - 1) * pageSize).Limit(pageSize).Find(&books).Error; err != nil {
-		return books, count, err
+		return books, err
 	}
 	if err := DB.Self.Model(&model.Book{}).Where("category = ?", category).Where("on_sale = ?", true).Count(&count).Error; err != nil {
-		return books, count, err
+		return books, err
 	}
-	return books, count, nil
+	return books, nil
 }

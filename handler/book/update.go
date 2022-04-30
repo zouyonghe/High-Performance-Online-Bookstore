@@ -20,7 +20,6 @@ func Update(c *gin.Context) {
 	}
 
 	var b model.Book
-
 	if err = c.ShouldBindJSON(&b); err != nil {
 		log.ErrBind(err)
 		SendResponse(c, berror.ErrBindRequest, nil)
@@ -28,13 +27,13 @@ func Update(c *gin.Context) {
 	}
 	b.ID = BookID
 
-	if err := b.Validate(); err != nil {
+	if err = b.Validate(); err != nil {
 		log.ErrValidate(err)
 		SendResponse(c, berror.ErrValidation, nil)
 		return
 	}
 
-	if err := b.UpdateBook(); err != nil {
+	if err = b.UpdateBook(); err != nil {
 		log.ErrUpdateBook(err)
 		SendResponse(c, berror.ErrDatabase, nil)
 		return

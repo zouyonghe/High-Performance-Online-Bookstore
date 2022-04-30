@@ -114,3 +114,7 @@ func CreateOrderCalled(c *gin.Context) {
 func DealOrderCalled(c *gin.Context) {
 	zap.L().Info("deal order function called", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
 }
+
+func ListOrderCalled(c *gin.Context) {
+	zap.L().Info("list order function called", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
+}

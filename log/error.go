@@ -81,7 +81,7 @@ func ErrDelBook(err error) {
 	zap.L().Error("error deleting book", zap.Error(err))
 }
 
-func ErrListBooks(err error) {
+func ErrListBook(err error) {
 	zap.L().Error("error listing books", zap.Error(err))
 }
 
@@ -146,4 +146,12 @@ func ErrDeleteOrder(err error) {
 
 func ErrDealOrder(err error) {
 	zap.L().Error("error dealing order", zap.Error(err))
+}
+
+func ErrGetBookNumber(err error) {
+	zap.L().Error("error getting book number", zap.Error(err))
+}
+
+func ErrListOrder(err error) {
+	zap.L().Error("error listing orders", zap.Error(err))
 }

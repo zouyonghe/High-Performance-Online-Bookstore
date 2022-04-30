@@ -1,4 +1,4 @@
-package book
+package order
 
 import (
 	. "High-Performance-Online-Bookstore/handler"
@@ -8,8 +8,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// List handler returns a list of orders
 func List(c *gin.Context) {
-	log.ListBookCalled(c)
+	log.ListOrderCalled(c)
 
 	var r ListRequest
 	if err := c.ShouldBindJSON(&r); err != nil {
@@ -17,15 +18,23 @@ func List(c *gin.Context) {
 		SendResponse(c, berror.ErrBindRequest, nil)
 		return
 	}
-	infos, err := service.ListBookInfo(r.Title, r.PageNum, r.PageSize)
+	// get user id
+	userID, err := service.GetIDByToken(c)
 	if err != nil {
-		log.ErrListBook(err)
-		SendResponse(c, err, nil)
+		log.ErrParseToken(err)
+		SendResponse(c, berror.InternalServerError, nil)
 		return
 	}
 
+	// get orders
+	orders, err := service.ListOrderInfo(userID, r.PageNum, r.PageSize)
+	if err != nil {
+		log.ErrListOrder(err)
+		SendResponse(c, berror.InternalServerError, nil)
+		return
+	}
 	SendResponse(c, nil, ListResponse{
-		TotalCount: len(infos),
-		BookList:   infos,
+		TotalCount: len(orders),
+		OrderList:  orders,
 	})
 }

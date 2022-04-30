@@ -16,7 +16,7 @@ type Order struct {
 
 type OrderBook struct {
 	Base
-	OrderID   uint64  `json:"CartID" gorm:"primaryKey"`
+	OrderID   uint64  `json:"-" gorm:"primaryKey"`
 	BookID    uint64  `json:"BookID" gorm:"primaryKey"`
 	UnitPrice float64 `json:"unitPrice"`
 	Number    uint    `json:"Number"`
@@ -27,18 +27,19 @@ func (o *Order) TableName() string {
 	return "tb_orders"
 }
 
-func CreateOrder(userID uint64) error {
-	return DB.Self.Create(&Order{
+func CreateOrder(userID uint64) (*Order, error) {
+	o := &Order{
 		UserID:     userID,
 		Books:      make([]OrderBook, 0),
 		OrderPrice: 0,
 		IsApproved: false,
-	}).Error
+	}
+	return o, DB.Self.Create(o).Error
 }
 
-func GetOrder(userID uint64) (*Order, error) {
+func GetOrder(orderID uint64) (*Order, error) {
 	var order Order
-	err := DB.Self.Where("user_id = ?", userID).First(&order).Error
+	err := DB.Self.Model(&Order{}).Where("id = ?", orderID).First(&order).Error
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +50,7 @@ func (o *Order) AddBook(books []*CartBook) error {
 	for _, book := range books {
 		o.Books = append(o.Books, OrderBook{
 			OrderID:   o.ID,
-			BookID:    book.ID,
+			BookID:    book.BookID,
 			UnitPrice: book.UnitPrice,
 			Number:    book.Number,
 		})
@@ -69,12 +70,16 @@ func (o *Order) TotalPrice() float64 {
 	return totalPrice
 }
 
-func (o *Order) UpdateOrderPrice() error {
+func (o *Order) SetOrderPrice() error {
 	o.OrderPrice = o.TotalPrice()
 	return DB.Self.Save(&o).Error
 }
 
 func (o *Order) ApproveOrder() error {
+	r := DB.Self.Model(&Order{}).Where("id = ?", o.ID).First(&Order{})
+	if r.Error != nil {
+		return r.Error
+	}
 	o.IsApproved = true
 	var ob []*OrderBook
 	if err := DB.Self.Model(&OrderBook{}).Where("order_id = ?", o.ID).Find(&ob).Error; err != nil {

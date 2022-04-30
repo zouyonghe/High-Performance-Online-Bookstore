@@ -114,10 +114,10 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	// The health check handlers
 	st := g.Group("/state")
 	{
-		st.GET("/health", state.HealthCheck)
-		st.GET("/disk", state.DiskCheck)
-		st.GET("/cpu", state.CPUCheck)
-		st.GET("/ram", state.RAMCheck)
+		st.GET("/health", state.HealthCheck) // health check
+		st.GET("/disk", state.DiskCheck)     // disk check
+		st.GET("/cpu", state.CPUCheck)       // cpu check
+		st.GET("/ram", state.RAMCheck)       // ram check
 	}
 
 	// api version group
@@ -126,52 +126,53 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	u := v1.Group("/user")
 	{
 		// user login router
-		u.POST("/login", common.Login)
+		u.POST("/login", common.Login) // user login
 		// user register router
-		u.POST("/register", common.Register)
+		u.POST("/register", common.Register) // user register
 	}
 
 	// common user router group
 	c := u.Group("/common")
 	{
 		// common user router
-		c.GET("", common.SelfCheck)
-		c.PUT("", common.SelfUpd)
-		c.DELETE("", common.SelfDel)
+		c.GET("", common.SelfCheck)  // check user self information
+		c.PUT("", common.SelfUpd)    // update user self information
+		c.DELETE("", common.SelfDel) // delete user self information
 	}
 	// admin user router group
 	a := u.Group("/admin")
 	{
 		// admin user router
-		a.DELETE("/:id", admin.Delete)
-		a.PUT("/:id", admin.Update)
-		a.GET("", admin.List)
-		a.GET("/:id", admin.Get)
-		a.POST("/register", admin.Register)
+		a.DELETE("/:id", admin.Delete)      // delete specified user
+		a.PUT("/:id", admin.Update)         // update specified user
+		a.GET("", admin.List)               // list all users
+		a.GET("/:id", admin.Get)            // get specified user information
+		a.POST("/register", admin.Register) // register seller user
 	}
 	// book manager router
 	b := v1.Group("/book")
 	{
 		// book manager router
-		b.POST("", book.Add)
-		b.GET("", book.List)
-		b.DELETE("/:id", book.Delete)
-		b.PUT("/:id", book.Update)
-		b.GET("/:id", book.Get)
+		b.POST("", book.Add)          // add a new book
+		b.GET("", book.List)          // list all books
+		b.DELETE("/:id", book.Delete) // delete specified book
+		b.PUT("/:id", book.Update)    // update specified book
+		b.GET("/:id", book.Get)       // get specified book information
 	}
 	ca := v1.Group("/cart")
 	{
 		// cart router
-		ca.GET("", cart.Show)
-		ca.PUT("", cart.Add)
-		ca.DELETE("", cart.Delete)
-		ca.DELETE("/all", cart.Clear)
+		ca.GET("", cart.Show)         // show user cart
+		ca.PUT("", cart.Add)          // add a book to cart
+		ca.DELETE("", cart.Delete)    // delete a book from cart
+		ca.DELETE("/all", cart.Clear) // clear user cart
 	}
 	o := v1.Group("/order")
 	{
 		// order router
-		o.POST("", order.Create)
-		o.PUT("", order.Deal)
+		o.POST("", order.Create) // create an order
+		o.PUT("", order.Deal)    // deal with an order: pay or cancel
+		o.GET("", order.List)    // list user orders
 		/*		o.GET("", order.List)
 				o.GET("/:id", order.Get)
 				o.PUT("/:id", order.Update)

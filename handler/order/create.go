@@ -38,33 +38,27 @@ func Create(c *gin.Context) {
 		return
 	}
 	// create order
-	err = model.CreateOrder(userID)
+	o, err := model.CreateOrder(userID)
 	if err != nil {
 		log.ErrCreateOrder(err)
 		SendResponse(c, berror.InternalServerError, nil)
 		return
 	}
-	o, err := model.GetOrder(userID)
-	if err != nil {
-		log.ErrGetOrder(err)
-		SendResponse(c, berror.InternalServerError, nil)
-		return
-	}
 	if err = o.AddBook(bookList); err != nil {
 		log.ErrAddOrder(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendResponse(c, berror.ErrAddBookToOrder, nil)
 		return
 	}
-	if err = o.UpdateOrderPrice(); err != nil {
+	if err = o.SetOrderPrice(); err != nil {
 		log.ErrUpdateOrderPrice(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendResponse(c, berror.ErrSetOrderPrice, nil)
 		return
 	}
 
 	// clear cart
 	if err = ct.ClearCart(); err != nil {
 		log.ErrDeleteCart(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendResponse(c, berror.ErrClearCart, nil)
 		return
 	}
 	SendResponse(c, nil, nil)

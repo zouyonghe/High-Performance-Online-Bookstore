@@ -19,24 +19,27 @@ func Delete(c *gin.Context) {
 		SendResponse(c, err, nil)
 		return
 	}
+
 	// get user id
 	userID, err := service.GetIDByToken(c)
 	if err != nil {
 		log.ErrParseToken(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendResponse(c, berror.ErrParseToken, nil)
 		return
 	}
+
 	// get cart
 	cart, err := model.GetCart(userID)
 	if err != nil {
 		log.ErrGetCart(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendResponse(c, berror.ErrGetCart, nil)
 		return
 	}
+
 	// delete books from cart
 	if err = model.DeleteFromCart(cart.ID, r.BookID, r.Number); err != nil {
 		log.ErrDeleteCart(err)
-		SendResponse(c, berror.ErrBookNotExist, nil)
+		SendResponse(c, berror.ErrDeleteBookFromCart, nil)
 		return
 	}
 

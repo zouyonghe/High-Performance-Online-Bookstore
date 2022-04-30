@@ -72,4 +72,14 @@ type CartInfo struct {
 }
 
 type OrderInfo struct {
+	OrderID    uint64      `json:"order_id"`
+	Books      []OrderBook `json:"orderBook"`
+	OrderPrice float64     `json:"orderPrice"`
+	CreatedAt  string      `json:"createdAt"`
+	IsApproved bool        `json:"isApproved"`
+}
+
+type OrderList struct {
+	Lock  *sync.Mutex
+	IdMap map[uint64]*OrderInfo
 }

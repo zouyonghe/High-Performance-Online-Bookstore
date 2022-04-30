@@ -23,20 +23,21 @@ var (
 	// ErrTokenInvalid token was invalid error
 	ErrTokenInvalid = &Berror{Code: 10006, Message: "The token was invalid."}
 	// ErrValidation validation failed
-	ErrValidation = &Berror{Code: 10006, Message: "Validation failed."}
+	ErrValidation = &Berror{Code: 10007, Message: "Validation failed."}
 	// ErrDatabase database operation failed
-	ErrDatabase = &Berror{Code: 20002, Message: "Database error."}
+	ErrDatabase = &Berror{Code: 10008, Message: "Database error."}
 	// ErrEncrypt encrypting the user password failed
-	ErrEncrypt = &Berror{Code: 20101, Message: "Error occurred while encrypting the user password."}
+	ErrEncrypt = &Berror{Code: 10109, Message: "Error occurred while encrypting the user password."}
 )
 
 //user
 var (
+	// ErrCreateUser create user failed
+	ErrCreateUser = &Berror{Code: 20101, Message: "Error occurred while creating the user."}
 	// ErrUserNotFound user was not found
 	ErrUserNotFound = &Berror{Code: 20102, Message: "The user was not found."}
 	// ErrUserExists user already exists
 	ErrUserExists = &Berror{Code: 20103, Message: "The username is already exists."}
-
 	// ErrPasswordIncorrect user password was incorrect
 	ErrPasswordIncorrect = &Berror{Code: 20105, Message: "The password was incorrect."}
 	// ErrDeleteUser deletes the user failed
@@ -59,6 +60,8 @@ var (
 	ErrBookNotEnough = &Berror{Code: 20205, Message: "The book is not enough."}
 	// ErrBookNotSell book not sell
 	ErrBookNotSell = &Berror{Code: 20206, Message: "The book is not sell."}
+	// ErrBookInCartNotEnough book in cart not enough
+	ErrBookInCartNotEnough = &Berror{Code: 20207, Message: "The book in cart is not enough."}
 )
 
 //cart
@@ -75,6 +78,8 @@ var (
 	ErrClearCart = &Berror{Code: 20205, Message: "Error occurred while clearing the cart."}
 	// ErrNothingInCart nothing in cart
 	ErrNothingInCart = &Berror{Code: 20206, Message: "Nothing in cart."}
+	// ErrDeleteBookFromCart delete book from cart failed
+	ErrDeleteBookFromCart = &Berror{Code: 20207, Message: "Error occurred while deleting the book from cart."}
 )
 
 //order
@@ -95,4 +100,8 @@ var (
 	ErrApproveOrder = &Berror{Code: 20210, Message: "Error occurred while approving the order."}
 	// ErrDealOrder deal order failed
 	ErrDealOrder = &Berror{Code: 20211, Message: "Error occurred while dealing the order."}
+	// ErrAddBookToOrder add book to order failed
+	ErrAddBookToOrder = &Berror{Code: 20212, Message: "Error occurred while adding the book to order."}
+	// ErrSetOrderPrice set order price failed
+	ErrSetOrderPrice = &Berror{Code: 20213, Message: "Error occurred while setting the order price."}
 )

@@ -26,3 +26,13 @@ type DealOrderRequest struct {
 type DealOrderResponse struct {
 	OrderID uint64 `json:"orderId"`
 }
+
+type ListRequest struct {
+	PageNum  int `json:"pageNum"`
+	PageSize int `json:"pageSize"`
+}
+
+type ListResponse struct {
+	TotalCount int                `json:"totalCount"`
+	OrderList  []*model.OrderInfo `json:"orderList"`
+}

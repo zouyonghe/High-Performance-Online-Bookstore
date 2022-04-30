@@ -29,7 +29,7 @@ type ListRequest struct {
 }
 
 type ListResponse struct {
-	TotalCount int64             `json:"totalCount"`
+	TotalCount int               `json:"totalCount"`
 	BookList   []*model.BookInfo `json:"bookList"`
 }
 

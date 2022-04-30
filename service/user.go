@@ -8,11 +8,11 @@ import (
 	"sync"
 )
 
-func ListUserInfo(username string, pageNum, pageSize int) ([]*model.UserInfo, int64, error) {
+func ListUserInfo(username string, pageNum, pageSize int) ([]*model.UserInfo, error) {
 	infos := make([]*model.UserInfo, 0)
-	users, count, err := ListUser(username, pageNum, pageSize)
+	users, err := ListUser(username, pageNum, pageSize)
 	if err != nil {
-		return nil, count, err
+		return nil, err
 	}
 
 	var ids []uint64
@@ -63,18 +63,18 @@ func ListUserInfo(username string, pageNum, pageSize int) ([]*model.UserInfo, in
 	select {
 	case <-finished:
 	case err := <-errChan:
-		return nil, count, err
+		return nil, err
 	}
 
 	for _, id := range ids {
 		infos = append(infos, userList.IdMap[id])
 	}
 
-	return infos, count, nil
+	return infos, nil
 }
 
 // ListUser lists all users.
-func ListUser(username string, pageNum, pageSize int) ([]*model.User, int64, error) {
+func ListUser(username string, pageNum, pageSize int) ([]*model.User, error) {
 	if pageSize <= 0 {
 		pageSize = constvar.DefaultPageSize
 	}
@@ -85,13 +85,12 @@ func ListUser(username string, pageNum, pageSize int) ([]*model.User, int64, err
 	if len(username) > 0 {
 		DB.Self.Where("username like ?", "%"+username+"%").Count(&count)
 		if err := DB.Self.Where("username like ?", "%"+username+"%").Offset(offset).Limit(pageSize).Find(&userList).Error; err != nil {
-			return userList, count, err
+			return userList, err
 		}
 	} else {
-		DB.Self.Model(&model.User{}).Count(&count)
 		if err := DB.Self.Offset(offset).Limit(pageSize).Find(&userList).Error; err != nil {
-			return userList, count, err
+			return userList, err
 		}
 	}
-	return userList, count, nil
+	return userList, nil
 }

@@ -28,7 +28,7 @@ func List(c *gin.Context) {
 		return
 	}
 
-	infos, count, err := service.ListUserInfo(r.Username, r.PageNum, r.PageSize)
+	infos, err := service.ListUserInfo(r.Username, r.PageNum, r.PageSize)
 	if err != nil {
 		log.ErrListUsers(err)
 		SendResponse(c, err, nil)
@@ -36,7 +36,7 @@ func List(c *gin.Context) {
 	}
 
 	SendResponse(c, nil, user.ListResponse{
-		TotalCount: count,
+		TotalCount: len(infos),
 		UserList:   infos,
 	})
 }

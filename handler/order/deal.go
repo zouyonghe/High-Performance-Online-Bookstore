@@ -28,6 +28,7 @@ func Deal(c *gin.Context) {
 	if err = o.Deal(r.IsApproved); err != nil {
 		log.ErrDealOrder(err)
 		SendResponse(c, berror.ErrDealOrder, nil)
+		return
 	}
 
 	rsp := DealOrderResponse{

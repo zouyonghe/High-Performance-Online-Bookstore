@@ -15,13 +15,13 @@ func Show(c *gin.Context) {
 	userID, err := service.GetIDByToken(c)
 	if err != nil {
 		log.ErrParseToken(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendResponse(c, berror.ErrParseToken, nil)
 		return
 	}
 	ct, err := model.GetCart(userID)
 	if err != nil {
 		log.ErrGetCart(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendResponse(c, berror.ErrGetCart, nil)
 		return
 	}
 	bookList, cartPrice, err := ct.GetBookList()

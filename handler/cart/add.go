@@ -19,8 +19,10 @@ func Add(c *gin.Context) {
 		SendResponse(c, berror.InternalServerError, nil)
 		return
 	}
+
+	// bind request body
 	var r AddCartRequest
-	if err := c.ShouldBindJSON(&r); err != nil {
+	if err = c.ShouldBindJSON(&r); err != nil {
 		log.ErrBind(err)
 		SendResponse(c, berror.ErrBindRequest, nil)
 		return
@@ -34,12 +36,12 @@ func Add(c *gin.Context) {
 		return
 	}
 
+	// set book in cart model
 	book, err := model.GetBookByID(r.BookID)
 	if err != nil {
 		SendResponse(c, berror.ErrGetBook, nil)
 		return
 	}
-
 	cb := model.CartBook{
 		CartID:    cart.ID,
 		BookID:    r.BookID,
@@ -47,13 +49,22 @@ func Add(c *gin.Context) {
 		Number:    r.Number,
 	}
 
+	// add book to cart
 	if err = cart.AddBook(cb); err != nil {
 		log.ErrAddCart(err)
+		SendResponse(c, err, nil)
+		return
 	}
-	rcb := model.GetCartBook(cart.ID, r.BookID)
+	// get book number
+	number, err := model.GetBookNumberInCart(cart.ID, book.ID)
+	if err != nil {
+		log.ErrGetBookNumber(err)
+		SendResponse(c, err, nil)
+	}
+
 	rsp := AddCartResponse{
 		BookID: r.BookID,
-		Number: rcb.Number,
+		Number: number,
 	}
 	SendResponse(c, nil, rsp)
 }

@@ -19,9 +19,6 @@ func HasPermission(c *gin.Context) {
 		c.Next()
 		return
 	} else {
-		c.JSON(401, gin.H{
-			"message": "Forbidden",
-		})
 		SendDenyResponse(c)
 		c.Abort()
 		return

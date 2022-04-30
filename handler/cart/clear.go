@@ -16,14 +16,15 @@ func Clear(c *gin.Context) {
 	userID, err := service.GetIDByToken(c)
 	if err != nil {
 		log.ErrParseToken(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendResponse(c, berror.ErrParseToken, nil)
 		return
 	}
+
 	// get cart
 	cart, err := model.GetCart(userID)
 	if err != nil {
 		log.ErrGetCart(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendResponse(c, berror.ErrGetCart, nil)
 		return
 	}
 
@@ -31,7 +32,7 @@ func Clear(c *gin.Context) {
 	err = cart.ClearCart()
 	if err != nil {
 		log.ErrClearCart(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendResponse(c, berror.ErrClearCart, nil)
 		return
 	}
 	SendResponse(c, nil, nil)

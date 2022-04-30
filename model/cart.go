@@ -2,6 +2,7 @@ package model
 
 import (
 	. "High-Performance-Online-Bookstore/database"
+	"High-Performance-Online-Bookstore/pkg/berror"
 	"errors"
 	"gorm.io/gorm"
 )
@@ -72,6 +73,13 @@ func (c *Cart) GetCartBook() (books []*CartBook, err error) {
 	return books, nil
 }
 func (c *Cart) AddBook(cb CartBook) error {
+	var b Book
+	if err := DB.Self.Where("id = ?", cb.BookID).First(&b).Error; err != nil {
+		return err
+	}
+	if b.IsSell == false {
+		return berror.ErrBookNotSell
+	}
 	var result CartBook
 	r := DB.Self.Where("cart_id = ? AND book_id = ?", cb.CartID, cb.BookID).First(&result)
 	if errors.Is(r.Error, gorm.ErrRecordNotFound) {
@@ -117,8 +125,11 @@ func DeleteFromCart(cartID uint64, bookID uint64, number uint) error {
 	if errors.Is(r.Error, gorm.ErrRecordNotFound) {
 		return r.Error
 	}
-	if cartBook.Number <= number {
-		return DB.Self.Where("cart_id = ? AND book_id = ?", cartID, bookID).Delete(&CartBook{}).Error
+	if cartBook.Number == number {
+		return DB.Self.Where("cart_id = ? AND book_id = ?", cartID, bookID).Unscoped().Delete(&CartBook{}).Error
+	}
+	if cartBook.Number < number {
+		return berror.ErrBookInCartNotEnough
 	} else {
 		cartBook.Number -= number
 		return DB.Self.Save(&cartBook).Error
@@ -135,7 +146,14 @@ func CheckCartBook(cartID uint64, bookID uint64) bool {
 }
 
 func (c *Cart) ClearCart() error {
-	return DB.Self.Where("cart_id = ?", c.ID).Delete(&CartBook{}).Error
+	c.CartPrice = 0
+	if err := DB.Self.Save(&c).Error; err != nil {
+		return err
+	}
+	if err := DB.Self.Where("cart_id = ?", c.ID).Unscoped().Delete(&CartBook{}).Error; err != nil {
+		return err
+	}
+	return nil
 }
 
 func CreateCartByName(userName string) error {
@@ -145,4 +163,13 @@ func CreateCartByName(userName string) error {
 		return r.Error
 	}
 	return CreateCart(user.ID)
+}
+
+func GetBookNumberInCart(cartID uint64, bookID uint64) (number uint, err error) {
+	var cartBook CartBook
+	r := DB.Self.Where("cart_id = ? AND book_id = ?", cartID, bookID).First(&cartBook)
+	if errors.Is(r.Error, gorm.ErrRecordNotFound) {
+		return 0, r.Error
+	}
+	return cartBook.Number, nil
 }
