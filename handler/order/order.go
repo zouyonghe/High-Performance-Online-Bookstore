@@ -12,8 +12,17 @@ type ShowOrderResponse struct {
 type CreateOrderRequest struct{}
 
 type CreateOrderResponse struct {
-	OrderId    uint64            `json:"orderId"`
+	OrderID    uint64            `json:"orderId"`
 	UserID     uint64            `json:"userId"`
 	Books      []*model.BookBase `json:"booksInfo"`
 	OrderPrice float64           `json:"orderPrice"`
+}
+
+type DealOrderRequest struct {
+	OrderID    uint64 `json:"orderId"`
+	IsApproved bool   `json:"isApproved"`
+}
+
+type DealOrderResponse struct {
+	OrderID uint64 `json:"orderId"`
 }

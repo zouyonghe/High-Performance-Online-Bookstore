@@ -24,7 +24,7 @@ func List(c *gin.Context) {
 	var r user.ListRequest
 	if err := c.ShouldBindJSON(&r); err != nil {
 		log.ErrBind(err)
-		SendResponse(c, berror.ErrBind, nil)
+		SendResponse(c, berror.ErrBindRequest, nil)
 		return
 	}
 

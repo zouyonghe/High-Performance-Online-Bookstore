@@ -22,7 +22,7 @@ func Add(c *gin.Context) {
 	var r AddCartRequest
 	if err := c.ShouldBindJSON(&r); err != nil {
 		log.ErrBind(err)
-		SendResponse(c, berror.ErrBind, nil)
+		SendResponse(c, berror.ErrBindRequest, nil)
 		return
 	}
 
@@ -47,7 +47,7 @@ func Add(c *gin.Context) {
 		Number:    r.Number,
 	}
 
-	if err := cart.AddBook(cb); err != nil {
+	if err = cart.AddBook(cb); err != nil {
 		log.ErrAddCart(err)
 	}
 	rcb := model.GetCartBook(cart.ID, r.BookID)

@@ -65,16 +65,39 @@ func (c *Cart) GetBookList() (books []*BookBase, cartPrice float64, err error) {
 	return books, cartPrice, nil
 }
 
+func (c *Cart) GetCartBook() (books []*CartBook, err error) {
+	if err := DB.Self.Model(&CartBook{}).Where("cart_id = ?", c.ID).Find(&books).Error; err != nil {
+		return nil, err
+	}
+	return books, nil
+}
 func (c *Cart) AddBook(cb CartBook) error {
 	var result CartBook
 	r := DB.Self.Where("cart_id = ? AND book_id = ?", cb.CartID, cb.BookID).First(&result)
 	if errors.Is(r.Error, gorm.ErrRecordNotFound) {
 		c.Books = append(c.Books, cb)
-		return DB.Self.Save(c).Error
+		if err := DB.Self.Save(&c).Error; err != nil {
+			return err
+		}
 	} else {
 		result.Number += cb.Number
-		return DB.Self.Save(&result).Error
+		if err := result.UpdateCartBook(); err != nil {
+			return err
+		}
 	}
+	c.CartPrice += cb.UnitPrice * float64(cb.Number)
+	if err := c.UpdateCart(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *Cart) UpdateCart() error {
+	return DB.Self.Save(&c).Error
+}
+
+func (cb *CartBook) UpdateCartBook() error {
+	return DB.Self.Save(&cb).Error
 }
 
 // GetCartBook returns a CartBook.
@@ -111,8 +134,8 @@ func CheckCartBook(cartID uint64, bookID uint64) bool {
 	return true
 }
 
-func ClearCart(cartID uint64) error {
-	return DB.Self.Where("cart_id = ?", cartID).Delete(&CartBook{}).Error
+func (c *Cart) ClearCart() error {
+	return DB.Self.Where("cart_id = ?", c.ID).Delete(&CartBook{}).Error
 }
 
 func CreateCartByName(userName string) error {

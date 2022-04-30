@@ -171,6 +171,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	{
 		// order router
 		o.POST("", order.Create)
+		o.PUT("", order.Deal)
 		/*		o.GET("", order.List)
 				o.GET("/:id", order.Get)
 				o.PUT("/:id", order.Update)

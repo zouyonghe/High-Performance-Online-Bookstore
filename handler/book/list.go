@@ -14,7 +14,7 @@ func List(c *gin.Context) {
 	var r ListRequest
 	if err := c.ShouldBindJSON(&r); err != nil {
 		log.ErrBind(err)
-		SendResponse(c, berror.ErrBind, nil)
+		SendResponse(c, berror.ErrBindRequest, nil)
 		return
 	}
 	infos, count, err := service.ListBookInfo(r.Title, r.PageNum, r.PageSize)

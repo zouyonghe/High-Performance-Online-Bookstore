@@ -32,7 +32,7 @@ func SelfUpd(c *gin.Context) {
 	var r user.SelfUpdRequest
 	if err := c.ShouldBindJSON(&r); err != nil {
 		log.ErrBind(err)
-		SendResponse(c, berror.ErrBind, nil)
+		SendResponse(c, berror.ErrBindRequest, nil)
 		return
 	}
 	u, err := model.GetUserByID(UserID)

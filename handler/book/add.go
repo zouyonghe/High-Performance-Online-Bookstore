@@ -15,7 +15,7 @@ func Add(c *gin.Context) {
 	var r AddRequest
 	if err := c.ShouldBindJSON(&r); err != nil {
 		zap.L().Error("AddBook Bind", zap.Error(err))
-		SendResponse(c, berror.ErrBind, nil)
+		SendResponse(c, berror.ErrBindRequest, nil)
 		return
 	}
 	b := model.Book{
@@ -30,7 +30,7 @@ func Add(c *gin.Context) {
 	// Validate the data.
 	if err := b.Validate(); err != nil {
 		log.ErrValidate(err)
-		SendResponse(c, err, nil)
+		SendResponse(c, berror.ErrValidation, nil)
 		return
 	}
 
@@ -44,9 +44,9 @@ func Add(c *gin.Context) {
 	}
 
 	// Insert the book into the database.
-	if err := b.CreateBook(deleted); err != nil {
+	if err = b.CreateBook(deleted); err != nil {
 		log.ErrCreateBook(err)
-		SendResponse(c, err, nil)
+		SendResponse(c, berror.ErrCreateBook, nil)
 		return
 	}
 

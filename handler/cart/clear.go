@@ -28,7 +28,7 @@ func Clear(c *gin.Context) {
 	}
 
 	// clear cart
-	err = model.ClearCart(cart.ID)
+	err = cart.ClearCart()
 	if err != nil {
 		log.ErrClearCart(err)
 		SendResponse(c, berror.InternalServerError, nil)

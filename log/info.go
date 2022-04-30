@@ -71,6 +71,10 @@ func AddBookCalled(c *gin.Context) {
 	zap.L().Info("add book function called", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
 }
 
+func UpdateBookCalled(c *gin.Context) {
+	zap.L().Info("update book function called", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
+}
+
 func GetBookCalled(c *gin.Context) {
 	zap.L().Info("get book function called", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
 }
@@ -105,4 +109,8 @@ func ClearCartCalled(c *gin.Context) {
 
 func CreateOrderCalled(c *gin.Context) {
 	zap.L().Info("create order function called", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
+}
+
+func DealOrderCalled(c *gin.Context) {
+	zap.L().Info("deal order function called", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
 }

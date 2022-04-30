@@ -36,7 +36,7 @@ func Update(c *gin.Context) {
 	var u model.User
 	// Binding the user data.
 	if err := c.ShouldBindJSON(&u); err != nil {
-		SendResponse(c, berror.ErrBind, nil)
+		SendResponse(c, berror.ErrBindRequest, nil)
 		return
 	}
 

@@ -7,23 +7,23 @@ import (
 	"High-Performance-Online-Bookstore/pkg/berror"
 	"High-Performance-Online-Bookstore/service"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 func Update(c *gin.Context) {
-	zap.L().Info("update book information function called", zap.String("X-Request-Id", c.GetString("X-Request-Id")))
+	log.UpdateBookCalled(c)
+
 	BookID, err := service.GetIDByParam(c)
 	if err != nil {
 		log.ErrParseToken(err)
-		SendResponse(c, nil, err)
+		SendResponse(c, berror.ErrParseToken, nil)
 		return
 	}
 
 	var b model.Book
 
-	if err := c.ShouldBindJSON(&b); err != nil {
+	if err = c.ShouldBindJSON(&b); err != nil {
 		log.ErrBind(err)
-		SendResponse(c, berror.ErrBind, nil)
+		SendResponse(c, berror.ErrBindRequest, nil)
 		return
 	}
 	b.ID = BookID

@@ -26,9 +26,9 @@ func Create(c *gin.Context) {
 		SendResponse(c, berror.InternalServerError, nil)
 		return
 	}
-
-	bookList, cartPrice, err := ct.GetBookList()
-	if cartPrice == 0 {
+	// get cart book list
+	bookList, err := ct.GetCartBook()
+	if len(bookList) == 0 {
 		SendResponse(c, berror.ErrNothingInCart, nil)
 		return
 	}
@@ -37,6 +37,7 @@ func Create(c *gin.Context) {
 		SendResponse(c, berror.InternalServerError, nil)
 		return
 	}
+	// create order
 	err = model.CreateOrder(userID)
 	if err != nil {
 		log.ErrCreateOrder(err)
@@ -56,6 +57,13 @@ func Create(c *gin.Context) {
 	}
 	if err = o.UpdateOrderPrice(); err != nil {
 		log.ErrUpdateOrderPrice(err)
+		SendResponse(c, berror.InternalServerError, nil)
+		return
+	}
+
+	// clear cart
+	if err = ct.ClearCart(); err != nil {
+		log.ErrDeleteCart(err)
 		SendResponse(c, berror.InternalServerError, nil)
 		return
 	}

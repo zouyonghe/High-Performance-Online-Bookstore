@@ -6,21 +6,36 @@ annotation model {
 +DeleteBook(id uint64): error
 +GetBook(title string): *Book, bool, error
 +GetBookByID(id uint64): *Book, error
++CreateCart(userID uint64): error
++GetCart(userID uint64): *Cart, error
++GetCartBook(cartID uint64, bookID uint64): *CartBook
++DeleteCart(cartID uint64): error
++DeleteFromCart(cartID uint64, bookID uint64, number uint): error
++CheckCartBook(cartID uint64, bookID uint64): bool
++ClearCart(cartID uint64): error
++CreateCartByName(userName string): error
++CreateOrder(userID uint64): error
++GetOrder(userID uint64): *Order, error
 +DeleteUser(id uint64): error
 +GetUser(username string): *User, bool, error
 +GetUserByID(id uint64): *User, error
+}
+class BookBase {
++Index: int
++Title: string
++Price: float64
++Number: uint
+
 }
 class Book {
 +: Base
 +Title: string
 +Price: float64
 +IsSell: bool
-+Number: uint64
++Number: uint
 +Author: string
 +PublishDate: string
 +Category: string
-+Orders: []*Order
-+Carts: []*Cart
 +TableName(): string
 +CreateBook(deleted bool): error
 +UpdateBook(): error
@@ -37,9 +52,22 @@ class Book {
 class Cart {
 +: Base
 +UserID: uint64
-+Books: []*Book
++Books: []CartBook
 +CartPrice: float64
-+GetCartPrice(): float64
++GetBookList(): []*BookBase, float64, error
++AddBook(cb CartBook): error
+}
+class CartBook {
++: Base
++CartID: uint64
++BookID: uint64
++UnitPrice: float64
++Number: uint
+
+}
+class Token {
++Token: string
+
 }
 class Base {
 +ID: uint64
@@ -48,40 +76,14 @@ class Base {
 +DeletedAt: DeletedAt
 
 }
-class CartInfo {
-
-
-}
-class BookInfo {
-+Id: uint64
-+Title: string
-+ShortId: string
-+Author: string
-+Price: float64
-+PublishDate: string
-+Category: string
-+IsSell: bool
-+Number: uint64
-+CreatedAt: string
-+UpdatedAt: string
-
-}
-class BookClass {
-+ClassId: uint64
-+ClassName: string
+class UserList {
++Lock: *Mutex
++IdMap: map[uint64]*UserInfo
 
 }
 class BookList {
 +Lock: *Mutex
 +IdMap: map[uint64]*BookInfo
-
-}
-class OrderInfo {
-
-
-}
-class Token {
-+Token: string
 
 }
 class UserInfo {
@@ -94,16 +96,50 @@ class UserInfo {
 +UpdatedAt: string
 
 }
-class UserList {
-+Lock: *Mutex
-+IdMap: map[uint64]*UserInfo
+class BookInfo {
++Id: uint64
++Title: string
++ShortId: string
++Author: string
++Price: float64
++PublishDate: string
++Category: string
++IsSell: bool
++Number: uint
++CreatedAt: string
++UpdatedAt: string
+
+}
+class BookClass {
++ClassId: uint64
++ClassName: string
+
+}
+class CartInfo {
++UserID: uint64
+
+}
+class OrderInfo {
+
 
 }
 class Order {
 +: Base
 +UserID: uint64
-+Books: []*Book
++Books: []OrderBook
 +OrderPrice: float64
++IsApproved: bool
++TableName(): string
++AddBook(books []*BookBase): error
++TotalPrice(): float64
++UpdateOrderPrice(): error
+}
+class OrderBook {
++: Base
++OrderID: uint64
++BookID: uint64
++UnitPrice: float64
++Number: uint
 
 }
 class UserBaseModel {
@@ -116,6 +152,7 @@ class User {
 +Username: string
 +Password: string
 +Role: string
++Cart: Cart
 +Orders: []Order
 +TableName(): string
 +CreateUser(deleted bool): error
@@ -125,13 +162,14 @@ class User {
 +Validate(): error
 +GetRole(): string
 +SetRole(role string)
-+CreateCart(): error
-+GetCart(): *Cart
 }
 }
 Book --> Base
 Cart --> Base
+User --> Cart
+CartBook --> Base
 Order --> Base
+OrderBook --> Base
 User --> Base
 
 @enduml

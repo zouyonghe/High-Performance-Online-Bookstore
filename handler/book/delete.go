@@ -4,6 +4,7 @@ import (
 	. "High-Performance-Online-Bookstore/handler"
 	"High-Performance-Online-Bookstore/log"
 	"High-Performance-Online-Bookstore/model"
+	"High-Performance-Online-Bookstore/pkg/berror"
 	"High-Performance-Online-Bookstore/service"
 	"github.com/gin-gonic/gin"
 )
@@ -20,15 +21,13 @@ func Delete(c *gin.Context) {
 	bm, err := model.GetBookByID(BookID)
 	if err != nil {
 		log.ErrGetBook(err)
-		c.JSON(400, gin.H{
-			"message": "Book not found",
-		})
+		SendResponse(c, berror.ErrBookNotExist, nil)
 		return
 	}
 
 	title := bm.Title
 
-	if err := model.DeleteBook(BookID); err != nil {
+	if err = model.DeleteBook(BookID); err != nil {
 		log.ErrDelBook(err)
 		SendResponse(c, err, nil)
 		return

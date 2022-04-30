@@ -29,7 +29,7 @@ func Login(c *gin.Context) {
 	//var u model.UserModel
 	if err := c.ShouldBindJSON(&r); err != nil {
 		log.ErrBind(err)
-		SendResponse(c, berror.ErrBind, nil)
+		SendResponse(c, berror.ErrBindRequest, nil)
 		return
 	}
 
@@ -49,7 +49,7 @@ func Login(c *gin.Context) {
 	// Sign the json web token.
 	t, err := token.Sign(token.Context{ID: d.ID, Username: d.Username, Role: d.Role}, "")
 	if err != nil {
-		SendResponse(c, berror.ErrToken, nil)
+		SendResponse(c, berror.ErrSignToken, nil)
 		return
 	}
 

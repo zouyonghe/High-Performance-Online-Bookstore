@@ -135,3 +135,15 @@ func ErrAddOrder(err error) {
 func ErrUpdateOrderPrice(err error) {
 	zap.L().Error("error updating order price", zap.Error(err))
 }
+
+func ErrApproveOrder(err error) {
+	zap.L().Error("error approving order", zap.Error(err))
+}
+
+func ErrDeleteOrder(err error) {
+	zap.L().Error("error deleting order", zap.Error(err))
+}
+
+func ErrDealOrder(err error) {
+	zap.L().Error("error dealing order", zap.Error(err))
+}

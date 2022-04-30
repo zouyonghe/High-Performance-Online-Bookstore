@@ -29,13 +29,12 @@ func SendResponse(c *gin.Context, err error, data interface{}) {
 	})
 }
 
-func SendDenyResponse(c *gin.Context, err error, data interface{}) {
-	code, message := berror.DecodeErr(err)
-
-	// always return http.StatusOK
-	c.JSON(http.StatusOK, Response{
-		Code:    code,
-		Message: message,
-		Data:    data,
+func SendDenyResponse(c *gin.Context) {
+	c.JSON(http.StatusForbidden, gin.H{
+		"message": "Forbidden",
 	})
+}
+
+func SendInternalError(c *gin.Context) {
+	SendResponse(c, berror.InternalServerError, nil)
 }

@@ -27,7 +27,7 @@ func Register(c *gin.Context) {
 	var r user.RegisterRequest
 	if err := c.ShouldBindJSON(&r); err != nil {
 		log.ErrBind(err)
-		SendResponse(c, berror.ErrBind, nil)
+		SendResponse(c, berror.ErrBindRequest, nil)
 		return
 	}
 	u := model.User{
