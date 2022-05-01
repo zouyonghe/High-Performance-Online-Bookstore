@@ -54,21 +54,21 @@ func Update(c *gin.Context) {
 	u.Role = m.Role
 
 	// Validate the data.
-	if err := u.Validate(); err != nil {
+	if err = u.Validate(); err != nil {
 		log.ErrValidate(err)
 		SendResponse(c, berror.ErrValidation, nil)
 		return
 	}
 
 	// Encrypt the user password.
-	if err := u.Encrypt(); err != nil {
+	if err = u.Encrypt(); err != nil {
 		log.ErrEncrypt(err)
 		SendResponse(c, berror.ErrEncrypt, nil)
 		return
 	}
 
 	// Save changed fields.
-	if err := u.UpdateUser(); err != nil {
+	if err = u.UpdateUser(); err != nil {
 		log.ErrUpdateUser(err)
 		SendResponse(c, berror.ErrDatabase, nil)
 		return

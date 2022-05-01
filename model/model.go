@@ -76,7 +76,7 @@ type OrderInfo struct {
 	Books      []OrderBook `json:"orderBook"`
 	OrderPrice float64     `json:"orderPrice"`
 	CreatedAt  string      `json:"createdAt"`
-	IsApproved bool        `json:"isApproved"`
+	Status     string      `json:"status"`
 }
 
 type OrderList struct {

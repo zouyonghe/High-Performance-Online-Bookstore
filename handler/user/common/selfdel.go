@@ -27,7 +27,7 @@ func SelfDel(c *gin.Context) {
 		log.ErrParseToken(err)
 		SendResponse(c, berror.InternalServerError, nil)
 	}
-	if err := model.DeleteUser(UserID); err != nil {
+	if err = model.DeleteUser(UserID); err != nil {
 		log.ErrDeleteUser(err)
 		SendResponse(c, berror.ErrDeleteUser, nil)
 		return

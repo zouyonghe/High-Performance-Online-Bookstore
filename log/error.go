@@ -63,6 +63,10 @@ func ErrUpdateUser(err error) {
 	zap.L().Error("error updating user", zap.Error(err))
 }
 
+func ErrSetUserInfo(err error) {
+	zap.L().Error("error setting user info", zap.Error(err))
+}
+
 // Book
 
 func ErrBookExists() {

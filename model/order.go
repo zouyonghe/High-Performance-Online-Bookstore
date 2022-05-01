@@ -9,9 +9,9 @@ import (
 type Order struct {
 	Base
 	UserID     uint64      `json:"userID" gorm:"not null" binding:"required" validate:"gte=2"`
-	Books      []OrderBook `json:"books"`
-	OrderPrice float64     `json:"orderPrice"`
-	IsApproved bool        `json:"isApproved" gorm:"not null;default:false"`
+	Books      []OrderBook `json:"books" gorm:"not null"`
+	OrderPrice float64     `json:"orderPrice" gorm:"column:order_price;not null" binding:"required" validate:"gt=0"`
+	Status     string      `json:"status" gorm:"not null;"`
 }
 
 type OrderBook struct {
@@ -32,7 +32,7 @@ func CreateOrder(userID uint64) (*Order, error) {
 		UserID:     userID,
 		Books:      make([]OrderBook, 0),
 		OrderPrice: 0,
-		IsApproved: false,
+		Status:     "open",
 	}
 	return o, DB.Self.Create(o).Error
 }
@@ -75,12 +75,12 @@ func (o *Order) SetOrderPrice() error {
 	return DB.Self.Save(&o).Error
 }
 
-func (o *Order) ApproveOrder() error {
+func (o *Order) Accept() error {
 	r := DB.Self.Model(&Order{}).Where("id = ?", o.ID).First(&Order{})
 	if r.Error != nil {
 		return r.Error
 	}
-	o.IsApproved = true
+	o.Status = "accept"
 	var ob []*OrderBook
 	if err := DB.Self.Model(&OrderBook{}).Where("order_id = ?", o.ID).Find(&ob).Error; err != nil {
 		return err
@@ -108,7 +108,21 @@ func (o *Order) ApproveOrder() error {
 	return DB.Self.Save(&o).Error
 }
 
+func (o *Order) Cancel() error {
+	var ro Order
+	r := DB.Self.Model(&Order{}).Where("id = ?", o.ID).First(&ro)
+	if r.Error != nil {
+		return r.Error
+	}
+	if ro.Status != "open" {
+		return berror.ErrOrderNotOpen
+	}
+	o.Status = "cancel"
+	return o.DeleteOrder()
+}
+
 func (o *Order) DeleteOrder() error {
+	o.Status = "delete"
 	return DB.Self.Delete(&o).Error
 }
 
@@ -145,14 +159,13 @@ func (o *Order) DeleteOrderBook(bookID uint64) error {
 	return DB.Self.Delete(&ob).Error
 }
 
-func (o *Order) Deal(IsApproved bool) error {
-	o.IsApproved = IsApproved
-	if IsApproved == true {
-		if err := o.ApproveOrder(); err != nil {
+func (o *Order) DealWith(operation string) error {
+	if operation == "accept" {
+		if err := o.Accept(); err != nil {
 			return err
 		}
-	} else {
-		if err := o.DeleteOrder(); err != nil {
+	} else if operation == "cancel" {
+		if err := o.Cancel(); err != nil {
 			return err
 		}
 	}

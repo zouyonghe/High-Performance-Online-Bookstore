@@ -61,5 +61,8 @@ func Create(c *gin.Context) {
 		SendResponse(c, berror.ErrClearCart, nil)
 		return
 	}
-	SendResponse(c, nil, nil)
+	rsp := &CreateOrderResponse{
+		OrderID: o.ID,
+	}
+	SendResponse(c, nil, rsp)
 }

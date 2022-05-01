@@ -39,7 +39,7 @@ func ListOrderInfo(userID uint64, pageNum int, pageSize int) ([]*model.OrderInfo
 				Books:      o.Books,
 				OrderPrice: o.OrderPrice,
 				CreatedAt:  o.CreatedAt.Format("2006-01-02 15:04:05"),
-				IsApproved: o.IsApproved,
+				Status:     o.Status,
 			}
 		}(o)
 	}
@@ -69,7 +69,7 @@ func ListOrder(userID uint64, pageNum int, pageSize int) ([]*model.Order, error)
 		pageNum = 1
 	}
 	offset := (pageNum - 1) * pageSize
-	if err := DB.Self.Offset(offset).Limit(pageSize).Where("user_id = ?", userID).Find(&orders).Error; err != nil {
+	if err := DB.Self.Offset(offset).Limit(pageSize).Where("user_id = ? and status IN ?", userID, []string{"open", "accept"}).Find(&orders).Error; err != nil {
 		return nil, err
 	}
 	for _, order := range orders {

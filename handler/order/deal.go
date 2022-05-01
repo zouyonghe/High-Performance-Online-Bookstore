@@ -25,9 +25,9 @@ func Deal(c *gin.Context) {
 		return
 	}
 
-	if err = o.Deal(r.IsApproved); err != nil {
+	if err = o.DealWith(r.Operation); err != nil {
 		log.ErrDealOrder(err)
-		SendResponse(c, berror.ErrDealOrder, nil)
+		SendResponse(c, err, nil)
 		return
 	}
 

@@ -42,6 +42,10 @@ var (
 	ErrPasswordIncorrect = &Berror{Code: 20105, Message: "The password was incorrect."}
 	// ErrDeleteUser deletes the user failed
 	ErrDeleteUser = &Berror{Code: 20106, Message: "Error occurred while deleting the user."}
+	// ErrDeleteAdmin delete admin user not permitted
+	ErrDeleteAdmin = &Berror{Code: 20107, Message: "Deleting admin user is not permitted."}
+	// ErrSetUserInfo set user info failed
+	ErrSetUserInfo = &Berror{Code: 20108, Message: "Error occurred while setting the user info."}
 )
 
 //book
@@ -104,4 +108,6 @@ var (
 	ErrAddBookToOrder = &Berror{Code: 20212, Message: "Error occurred while adding the book to order."}
 	// ErrSetOrderPrice set order price failed
 	ErrSetOrderPrice = &Berror{Code: 20213, Message: "Error occurred while setting the order price."}
+	// ErrOrderNotOpen order not open
+	ErrOrderNotOpen = &Berror{Code: 20214, Message: "The order is not open."}
 )

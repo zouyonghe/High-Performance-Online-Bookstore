@@ -3,9 +3,9 @@ package model
 import (
 	. "High-Performance-Online-Bookstore/database"
 	"High-Performance-Online-Bookstore/pkg/auth"
+	"High-Performance-Online-Bookstore/pkg/berror"
 	"errors"
 	"github.com/go-playground/validator/v10"
-	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -43,8 +43,7 @@ func (u *User) CreateUser(deleted bool) error {
 // DeleteUser deletes the user by the user ID.
 func DeleteUser(id uint64) error {
 	if id == 1 {
-		zap.L().Error("Tried to delete the admin user.")
-		return errors.New("can not delete the admin user")
+		return berror.ErrDeleteAdmin
 	}
 	return DB.Self.Where("id = ?", id).Delete(&User{}).Error
 }
@@ -61,7 +60,7 @@ func GetUser(username string) (u *User, deleted bool, err error) {
 	r1 := DB.Self.Where("username = ?", username).First(&u)
 
 	// found record
-	if err := r1.Error; err == nil {
+	if err = r1.Error; err == nil {
 		return u, false, nil
 	}
 	r2 := DB.Self.Unscoped().Where("username = ?", username).First(&u)
@@ -105,4 +104,14 @@ func (u *User) GetRole() string {
 
 func (u *User) SetRole(role string) {
 	u.Role = role
+}
+
+func (u *User) SetUserInfo(username string, password string) error {
+	if username != "" {
+		u.Username = username
+	}
+	if password != "" {
+		u.Password = password
+	}
+	return nil
 }

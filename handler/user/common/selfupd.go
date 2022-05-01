@@ -40,27 +40,26 @@ func SelfUpd(c *gin.Context) {
 		log.ErrGetUser(err)
 		SendResponse(c, berror.ErrDatabase, nil)
 	}
-	if r.Username != "" {
-		u.Username = r.Username
-	}
-	if r.Password != "" {
-		u.Password = r.Password
-	}
 
+	if err = u.SetUserInfo(r.Username, r.Password); err != nil {
+		log.ErrSetUserInfo(err)
+		SendResponse(c, berror.ErrSetUserInfo, nil)
+		return
+	}
 	// Validate the data.
-	if err := u.Validate(); err != nil {
+	if err = u.Validate(); err != nil {
 		SendResponse(c, berror.ErrValidation, nil)
 		return
 	}
 
 	// Encrypt the user password.
-	if err := u.Encrypt(); err != nil {
+	if err = u.Encrypt(); err != nil {
 		SendResponse(c, berror.ErrEncrypt, nil)
 		return
 	}
 
 	// Save changed fields.
-	if err := u.UpdateUser(); err != nil {
+	if err = u.UpdateUser(); err != nil {
 		SendResponse(c, berror.ErrDatabase, nil)
 		return
 	}

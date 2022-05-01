@@ -18,6 +18,7 @@ func List(c *gin.Context) {
 		SendResponse(c, berror.ErrBindRequest, nil)
 		return
 	}
+
 	// get user id
 	userID, err := service.GetIDByToken(c)
 	if err != nil {

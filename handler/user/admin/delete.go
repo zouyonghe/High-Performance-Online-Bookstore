@@ -32,13 +32,11 @@ func Delete(c *gin.Context) {
 	u, err := model.GetUserByID(UserID)
 	if err != nil {
 		log.ErrUserNotFound(err)
-		c.JSON(400, gin.H{
-			"message": "User not found",
-		})
+		SendResponse(c, berror.ErrUserNotFound, nil)
 		return
 	}
 	username := u.Username
-	if err := model.DeleteUser(UserID); err != nil {
+	if err = model.DeleteUser(UserID); err != nil {
 		SendResponse(c, err, nil)
 		return
 	}
