@@ -1,0 +1,27 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor 用户 as general
+participant 路由模块 as router
+participant 身份验证模块 as validate
+participant 购物车模块 as cart
+participant 数据库模块 as database
+participant 日志模块 as log
+
+general -> router++ : 添加购物车请求
+router -> validate ++: 身份验证请求
+validate --> router --: 身份验证响应
+router -> cart ++: 添加购物车函数调用请求
+cart -> database ++: 图书信息查询请求
+database --> cart --: 图书信息查询响应
+cart -> database ++: 购物车更新请求
+database --> cart --: 购物车更新响应
+cart --> router --: 添加购物车函数调用响应
+router -> log: 日志记录请求
+router --> general-- : 添加购物车响应
+
+
+
+@enduml

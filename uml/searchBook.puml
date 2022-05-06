@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor 用户 as general
+participant 路由模块 as router
+participant 图书模块 as book
+participant 数据库模块 as database
+participant 日志模块 as log
+
+
+general -> router++ : 搜索图书请求
+router -> book ++: 搜索图书函数调用请求
+book -> database ++: 图书查询请求
+database --> book --: 图书查询响应
+book --> router --: 搜索图书函数调用响应
+router -> log : 日志记录请求
+router --> general --: 搜索图书请求响应
+
+
+@enduml

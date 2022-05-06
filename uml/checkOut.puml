@@ -1,0 +1,31 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+autonumber
+
+actor 用户 as general
+participant 路由模块 as router
+participant 身份验证模块 as validate
+participant 订单模块 as order
+participant 图书模块 as book
+participant 数据库模块 as database
+participant 日志模块 as log
+
+general -> router++ : 结算订单请求
+router -> validate ++: 身份验证请求
+validate --> router --: 身份验证响应
+router -> order ++: 结算订单函数调用请求
+order -> book ++: 更新图书库存函数调用请求
+book -> database ++: 更新图书库存请求
+database --> book --: 更新图书库存响应
+book --> order --: 更新图书库存函数调用响应
+order -> database ++: 更新订单状态请求
+database --> order --: 更新订单状态响应
+order --> router --:结算订单函数调用响应
+
+
+router -> log: 日志记录请求
+router --> general-- : 结算订单响应
+@enduml

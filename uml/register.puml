@@ -1,0 +1,21 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor 用户 as general
+participant 路由模块 as router
+participant 注册模块 as register
+participant 数据库模块 as database
+participant 日志模块 as log
+
+
+general -> router++: 注册请求
+router -> register++: 注册函数调用请求
+register -> database++: 注册数据验证请求
+database --> register--: 注册数据验证响应
+register --> router--: 注册函数调用响应
+router -> log: 日志记录请求
+router --> general--: 注册请求响应
+
+@enduml

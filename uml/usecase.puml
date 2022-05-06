@@ -23,27 +23,31 @@ N2 .. (Use)
 '/
 
 
-skinparam dpi 800
+/'left to right direction'/
+skinparam dpi 600
 
-scale 1920 width
-scale 1080 height
+scale 600 width
+scale 600 height
 
+
+/'
 匿名用户 as guest
+'/
 注册用户 as general
-guest <|-- general
+/'guest <|-- general
 销售员 as seller
 general <|--- seller
 管理员 as admin
 general <|-- admin
-seller <|-- admin
+seller <|-- admin'/
 
 rectangle 基本功能 {
 usecase "访问主页" as V
 }
 
-rectangle 用户 as U {
-usecase "注册" as Rg
-usecase "登录" as Lg
+rectangle 账户 as U {
+/'usecase "注册" as Rg
+usecase "登录" as Lg'/
 usecase "修改账户" as Mu
 usecase "删除账户" as Du
 }
@@ -51,9 +55,9 @@ usecase "删除账户" as Du
 rectangle 图书 as B {
 usecase "查询图书" as Sb
 usecase "查看详情" as Vb
-usecase "上架图书" as Ab
+/'usecase "上架图书" as Ab
 usecase "修改图书" as Mb
-usecase "下架图书" as Db
+usecase "下架图书" as Db'/
 }
 
 rectangle 购物车 as C {
@@ -66,30 +70,32 @@ usecase "结算购物车" as Cc
 rectangle 订单 as O {
 usecase "创建订单" as Co
 usecase "支付订单" as P
-usecase "修改订单" as Mo
+usecase "拒绝订单" as R
+/'usecase "修改订单" as Mo
 usecase "删除订单" as Do
-usecase "处理订单" as So
+usecase "处理订单" as So'/
 }
 
-guest ---> Rg
+/'guest ---> Rg
 guest ---> Lg
 guest ---> V
 guest ---> Sb
-guest ---> Vb
+guest ---> Vb'/
 
 general ---> Mu
 general ---> Du
 general ---> V
-general ---> Sb
+general --> Sb
 general ---> Vb
-general ---> Ac
-general ---> Vc
-general ---> Dc
-general ----> Cc
+general --> Ac
+general --> Vc
+general --> Dc
+general ---> Cc
 general ---> Co
 general ---> P
+general ---> R
 
-seller ---> Ab
+/'seller ---> Ab
 seller ---> Mb
 seller ---> Db
 seller ---> Do
@@ -99,5 +105,5 @@ seller ---> Mo
 admin ---> V
 admin ---> B
 admin ---> C
-admin ---> O
+admin ---> O'/
 @enduml

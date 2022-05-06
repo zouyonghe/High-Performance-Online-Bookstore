@@ -1,6 +1,7 @@
 package policy
 
 import (
+	"High-Performance-Online-Bookstore/log"
 	"github.com/casbin/casbin/v2"
 	zaplogger "github.com/casbin/zap-logger/v2"
 	"github.com/gin-gonic/gin"
@@ -28,8 +29,8 @@ func InitPolicy() {
 	E.SetLogger(logger)
 }
 
-func CheckPermission(ctx *gin.Context, sub, obj, act string) bool {
-	zap.L().Info("checkPermission", zap.String("sub", sub), zap.String("obj", obj), zap.String("act", act))
+func CheckPermission(c *gin.Context, sub, obj, act string) bool {
+	log.CheckPermissionCalled(c, sub, obj, act)
 	ok, err := E.Enforce(sub, obj, act)
 	if err != nil {
 		zap.L().Error("checkPermission error", zap.Error(err))
@@ -39,6 +40,5 @@ func CheckPermission(ctx *gin.Context, sub, obj, act string) bool {
 		zap.L().Error("checkPermission error", zap.String("sub", sub), zap.String("obj", obj), zap.String("act", act))
 		return false
 	}
-	zap.L().Info("checkPermission ok", zap.String("sub", sub), zap.String("obj", obj), zap.String("act", act))
 	return true
 }
