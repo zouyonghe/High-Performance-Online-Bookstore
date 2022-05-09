@@ -18,6 +18,13 @@ func List(c *gin.Context) {
 		SendResponse(c, berror.ErrBindRequest, nil)
 		return
 	}
+	//get role from token
+	role, err := service.GetRoleByToken(c)
+	if err != nil {
+		log.ErrGetRole(err)
+		SendResponse(c, berror.ErrGetRole, nil)
+		return
+	}
 
 	// get user id
 	userID, err := service.GetIDByToken(c)
@@ -28,7 +35,7 @@ func List(c *gin.Context) {
 	}
 
 	// get orders
-	orders, err := service.ListOrderInfo(userID, r.PageNum, r.PageSize)
+	orders, err := service.List(role, userID, r.PageNum, r.PageSize)
 	if err != nil {
 		log.ErrListOrder(err)
 		SendResponse(c, berror.InternalServerError, nil)

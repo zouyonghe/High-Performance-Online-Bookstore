@@ -34,6 +34,10 @@ func ErrEncrypt(err error) {
 	zap.L().Error("error encrypting", zap.Error(err))
 }
 
+func ErrGetRole(err error) {
+	zap.L().Error("error getting role", zap.Error(err))
+}
+
 // User error
 
 func ErrCreateUser(err error) {

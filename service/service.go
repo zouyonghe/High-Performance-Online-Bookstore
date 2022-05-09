@@ -23,3 +23,11 @@ func GetIDByToken(c *gin.Context) (uint64, error) {
 	}
 	return ctx.ID, nil
 }
+
+func GetRoleByToken(c *gin.Context) (string, error) {
+	ctx, err := token.ParseRequest(c)
+	if err != nil {
+		return "guest", err
+	}
+	return ctx.Role, nil
+}

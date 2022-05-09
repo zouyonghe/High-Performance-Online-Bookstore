@@ -28,6 +28,10 @@ var (
 	ErrDatabase = &Berror{Code: 10008, Message: "Database error."}
 	// ErrEncrypt encrypting the user password failed
 	ErrEncrypt = &Berror{Code: 10109, Message: "Error occurred while encrypting the user password."}
+	// ErrGetRole get role failed
+	ErrGetRole = &Berror{Code: 10110, Message: "Error occurred while getting the role."}
+	// ErrIdentifyRole identify  role failed
+	ErrIdentifyRole = &Berror{Code: 10111, Message: "Error occurred while identifying the role."}
 )
 
 //user

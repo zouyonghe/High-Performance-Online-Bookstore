@@ -15,7 +15,7 @@ p, admin, /v1/user/admin, GET
 p, admin, /v1/user/admin/:id, GET
 p, admin, /v1/user/admin/:id, PUT
 p, admin, /v1/user/admin/:id, DELETE
-p, admin, /v1/user/admin/register, POST
+p, admin, /v1/user/admin, POST
 
 p, manager, /v1/book, POST
 p, all, /v1/book, GET
@@ -31,7 +31,7 @@ p, general, /v1/cart, DELETE
 p, general, /v1/cart/all, DELETE
 
 p, general, /v1/order, POST
-p, general, /v1/order, GET
+p, common, /v1/order, GET
 p, general, /v1/order, PUT
 
 p, manager, /v1/order/:id, GET

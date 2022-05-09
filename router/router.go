@@ -143,11 +143,11 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	a := u.Group("/admin")
 	{
 		// admin user router
-		a.DELETE("/:id", admin.Delete)      // delete specified user
-		a.PUT("/:id", admin.Update)         // update specified user
-		a.GET("", admin.List)               // list all users
-		a.GET("/:id", admin.Get)            // get specified user information
-		a.POST("/register", admin.Register) // register seller user
+		a.DELETE("/:id", admin.Delete) // delete specified user
+		a.PUT("/:id", admin.Update)    // update specified user
+		a.GET("", admin.List)          // list all users
+		a.GET("/:id", admin.Get)       // get specified user information
+		a.POST("", admin.Register)     // register seller user
 	}
 	// book manager router
 	b := v1.Group("/book")
@@ -172,7 +172,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		// order router
 		o.POST("", order.Create) // create an order
 		o.PUT("", order.Deal)    // deal with an order: pay or cancel
-		o.GET("", order.List)    // list user orders
+		o.GET("", order.List)    // list orders
 		/*		o.GET("", order.List)
 				o.GET("/:id", order.Get)
 				o.PUT("/:id", order.Update)

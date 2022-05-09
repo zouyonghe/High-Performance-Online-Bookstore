@@ -1,0 +1,12 @@
+@startuml
+'https://plantuml.com/class-diagram
+class Order {
+class OrderBook {
++: Base
++OrderID: uint64
++BookID: uint64
++UnitPrice: float64
++Number: uint
+
+}
+@enduml
