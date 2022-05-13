@@ -27,7 +27,7 @@ func Register(c *gin.Context) {
 	var r user.RegisterRequest
 	if err := c.ShouldBindJSON(&r); err != nil {
 		log.ErrBind(err)
-		SendResponse(c, berror.ErrBindRequest, nil)
+		SendError(c, err)
 		return
 	}
 	u := model.User{
@@ -39,7 +39,7 @@ func Register(c *gin.Context) {
 	// Validate the data.
 	if err := u.Validate(); err != nil {
 		log.ErrValidate(err)
-		SendResponse(c, berror.ErrValidation, nil)
+		SendError(c, err)
 		return
 	}
 
@@ -54,16 +54,16 @@ func Register(c *gin.Context) {
 	}
 
 	// Encrypt the user password.
-	if err := u.Encrypt(); err != nil {
+	if err = u.Encrypt(); err != nil {
 		log.ErrEncrypt(err)
-		SendResponse(c, berror.ErrEncrypt, nil)
+		SendError(c, err)
 		return
 	}
 
 	// Insert the user to the database.
-	if err := u.CreateUser(deleted); err != nil {
+	if err = u.CreateUser(deleted); err != nil {
 		log.ErrCreateUser(err)
-		SendResponse(c, berror.ErrDatabase, nil)
+		SendError(c, err)
 		return
 	}
 
@@ -71,7 +71,7 @@ func Register(c *gin.Context) {
 	err = model.CreateCartByName(r.Username)
 	if err != nil {
 		log.ErrCreateCart(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendError(c, err)
 		return
 	}
 

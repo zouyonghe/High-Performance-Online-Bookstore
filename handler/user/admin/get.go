@@ -4,7 +4,6 @@ import (
 	. "High-Performance-Online-Bookstore/handler"
 	"High-Performance-Online-Bookstore/log"
 	"High-Performance-Online-Bookstore/model"
-	"High-Performance-Online-Bookstore/pkg/berror"
 	"High-Performance-Online-Bookstore/service"
 	"github.com/gin-gonic/gin"
 )
@@ -25,14 +24,14 @@ func Get(c *gin.Context) {
 	UserID, err := service.GetIDByParam(c)
 	if err != nil {
 		log.ErrParseToken(err)
-		SendResponse(c, nil, err)
+		SendError(c, err)
 		return
 	}
 	// Get the user by the `username` from the database.
 	user, err := model.GetUserByID(UserID)
 	// if user is not found or deleted, send error
 	if err != nil {
-		SendResponse(c, berror.ErrUserNotFound, nil)
+		SendError(c, err)
 		return
 	}
 

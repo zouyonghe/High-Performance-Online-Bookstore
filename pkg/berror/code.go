@@ -114,4 +114,6 @@ var (
 	ErrSetOrderPrice = &Berror{Code: 20213, Message: "Error occurred while setting the order price."}
 	// ErrOrderNotOpen order not open
 	ErrOrderNotOpen = &Berror{Code: 20214, Message: "The order is not open."}
+	// ErrInvalidOwner invalid owner
+	ErrInvalidOwner = &Berror{Code: 20215, Message: "Invalid owner."}
 )

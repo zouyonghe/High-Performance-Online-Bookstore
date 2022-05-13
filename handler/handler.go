@@ -35,6 +35,6 @@ func SendDenyResponse(c *gin.Context) {
 	})
 }
 
-func SendInternalError(c *gin.Context) {
-	SendResponse(c, berror.InternalServerError, nil)
+func SendError(c *gin.Context, err error) {
+	SendResponse(c, err, nil)
 }

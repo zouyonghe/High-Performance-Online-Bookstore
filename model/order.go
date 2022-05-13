@@ -171,3 +171,9 @@ func (o *Order) DealWith(operation string) error {
 	}
 	return nil
 }
+func (o *Order) CheckOwner(userID uint64) error {
+	if o.UserID != userID {
+		return berror.ErrInvalidOwner
+	}
+	return nil
+}

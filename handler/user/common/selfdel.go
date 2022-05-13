@@ -5,7 +5,6 @@ import (
 	"High-Performance-Online-Bookstore/handler/user"
 	"High-Performance-Online-Bookstore/log"
 	"High-Performance-Online-Bookstore/model"
-	"High-Performance-Online-Bookstore/pkg/berror"
 	"High-Performance-Online-Bookstore/service"
 	"github.com/gin-gonic/gin"
 )
@@ -25,11 +24,12 @@ func SelfDel(c *gin.Context) {
 	UserID, err := service.GetIDByToken(c)
 	if err != nil {
 		log.ErrParseToken(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendError(c, err)
+		return
 	}
 	if err = model.DeleteUser(UserID); err != nil {
 		log.ErrDeleteUser(err)
-		SendResponse(c, berror.ErrDeleteUser, nil)
+		SendError(c, err)
 		return
 	}
 	rsp := user.SelfDelResponse{

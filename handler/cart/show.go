@@ -4,7 +4,6 @@ import (
 	. "High-Performance-Online-Bookstore/handler"
 	"High-Performance-Online-Bookstore/log"
 	"High-Performance-Online-Bookstore/model"
-	"High-Performance-Online-Bookstore/pkg/berror"
 	"High-Performance-Online-Bookstore/service"
 	"github.com/gin-gonic/gin"
 )
@@ -15,19 +14,20 @@ func Show(c *gin.Context) {
 	userID, err := service.GetIDByToken(c)
 	if err != nil {
 		log.ErrParseToken(err)
-		SendResponse(c, berror.ErrParseToken, nil)
+		SendError(c, err)
 		return
 	}
 	ct, err := model.GetCart(userID)
 	if err != nil {
 		log.ErrGetCart(err)
-		SendResponse(c, berror.ErrGetCart, nil)
+		SendError(c, err)
 		return
 	}
 	bookList, cartPrice, err := ct.GetBookList()
 	if err != nil {
 		log.ErrGetCartBookList(err)
-		SendResponse(c, berror.ErrGetBookList, nil)
+		SendError(c, err)
+		return
 	}
 	rsp := ShowCartResponse{
 		CartPrice: cartPrice,

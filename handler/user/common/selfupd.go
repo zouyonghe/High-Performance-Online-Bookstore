@@ -5,7 +5,6 @@ import (
 	"High-Performance-Online-Bookstore/handler/user"
 	"High-Performance-Online-Bookstore/log"
 	"High-Performance-Online-Bookstore/model"
-	"High-Performance-Online-Bookstore/pkg/berror"
 	"High-Performance-Online-Bookstore/service"
 	"github.com/gin-gonic/gin"
 )
@@ -26,47 +25,49 @@ func SelfUpd(c *gin.Context) {
 	UserID, err := service.GetIDByToken(c)
 	if err != nil {
 		log.ErrParseToken(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendError(c, err)
+		return
 	}
 
 	var r user.SelfUpdRequest
-	if err := c.ShouldBindJSON(&r); err != nil {
+	if err = c.ShouldBindJSON(&r); err != nil {
 		log.ErrBind(err)
-		SendResponse(c, berror.ErrBindRequest, nil)
+		SendError(c, err)
 		return
 	}
 	u, err := model.GetUserByID(UserID)
 	if err != nil {
 		log.ErrGetUser(err)
-		SendResponse(c, berror.ErrDatabase, nil)
+		SendError(c, err)
+		return
 	}
 
 	if err = u.SetUserInfo(r.Username, r.Password); err != nil {
 		log.ErrSetUserInfo(err)
-		SendResponse(c, berror.ErrSetUserInfo, nil)
+		SendError(c, err)
 		return
 	}
 	// Validate the data.
 	if err = u.Validate(); err != nil {
-		SendResponse(c, berror.ErrValidation, nil)
+		SendError(c, err)
 		return
 	}
 
 	// Encrypt the user password.
 	if err = u.Encrypt(); err != nil {
-		SendResponse(c, berror.ErrEncrypt, nil)
+		SendError(c, err)
 		return
 	}
 
 	// Save changed fields.
 	if err = u.UpdateUser(); err != nil {
-		SendResponse(c, berror.ErrDatabase, nil)
+		SendError(c, err)
 		return
 	}
 	rsp := user.SelfUpdResponse{
 		UserID:   UserID,
 		Username: u.Username,
 	}
-	//SendResponse(c, nil, nil)
+
 	SendResponse(c, nil, rsp)
 }

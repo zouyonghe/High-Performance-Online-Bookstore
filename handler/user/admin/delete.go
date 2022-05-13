@@ -5,7 +5,6 @@ import (
 	"High-Performance-Online-Bookstore/handler/user"
 	"High-Performance-Online-Bookstore/log"
 	"High-Performance-Online-Bookstore/model"
-	"High-Performance-Online-Bookstore/pkg/berror"
 	"High-Performance-Online-Bookstore/service"
 	"github.com/gin-gonic/gin"
 )
@@ -27,17 +26,18 @@ func Delete(c *gin.Context) {
 	UserID, err := service.GetIDByParam(c)
 	if err != nil {
 		log.ErrParseToken(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendError(c, err)
+		return
 	}
 	u, err := model.GetUserByID(UserID)
 	if err != nil {
 		log.ErrUserNotFound(err)
-		SendResponse(c, berror.ErrUserNotFound, nil)
+		SendError(c, err)
 		return
 	}
 	username := u.Username
 	if err = model.DeleteUser(UserID); err != nil {
-		SendResponse(c, err, nil)
+		SendError(c, err)
 		return
 	}
 	rsp := user.DeleteResponse{

@@ -4,7 +4,6 @@ import (
 	. "High-Performance-Online-Bookstore/handler"
 	"High-Performance-Online-Bookstore/log"
 	"High-Performance-Online-Bookstore/model"
-	"High-Performance-Online-Bookstore/pkg/berror"
 	"High-Performance-Online-Bookstore/service"
 	"github.com/gin-gonic/gin"
 )
@@ -14,14 +13,14 @@ func Delete(c *gin.Context) {
 	BookID, err := service.GetIDByParam(c)
 	if err != nil {
 		log.ErrParseToken(err)
-		SendResponse(c, nil, err)
+		SendError(c, err)
 		return
 	}
 
 	bm, err := model.GetBookByID(BookID)
 	if err != nil {
 		log.ErrGetBook(err)
-		SendResponse(c, berror.ErrBookNotExist, nil)
+		SendError(c, err)
 		return
 	}
 
@@ -29,7 +28,7 @@ func Delete(c *gin.Context) {
 
 	if err = model.DeleteBook(BookID); err != nil {
 		log.ErrDelBook(err)
-		SendResponse(c, err, nil)
+		SendError(c, err)
 		return
 	}
 
@@ -38,5 +37,4 @@ func Delete(c *gin.Context) {
 		Message: "Book <" + title + "> delete",
 	}
 	SendResponse(c, nil, rsp)
-	return
 }

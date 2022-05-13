@@ -4,7 +4,6 @@ import (
 	. "High-Performance-Online-Bookstore/handler"
 	"High-Performance-Online-Bookstore/log"
 	"High-Performance-Online-Bookstore/model"
-	"High-Performance-Online-Bookstore/pkg/berror"
 	"High-Performance-Online-Bookstore/service"
 	"github.com/gin-gonic/gin"
 )
@@ -16,7 +15,7 @@ func Add(c *gin.Context) {
 	userID, err := service.GetIDByToken(c)
 	if err != nil {
 		log.ErrParseToken(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendError(c, err)
 		return
 	}
 
@@ -24,7 +23,7 @@ func Add(c *gin.Context) {
 	var r AddCartRequest
 	if err = c.ShouldBindJSON(&r); err != nil {
 		log.ErrBind(err)
-		SendResponse(c, berror.ErrBindRequest, nil)
+		SendError(c, err)
 		return
 	}
 
@@ -32,14 +31,14 @@ func Add(c *gin.Context) {
 	cart, err := model.GetCart(userID)
 	if err != nil {
 		log.ErrGetCart(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendError(c, err)
 		return
 	}
 
 	// set book in cart model
 	book, err := model.GetBookByID(r.BookID)
 	if err != nil {
-		SendResponse(c, berror.ErrGetBook, nil)
+		SendError(c, err)
 		return
 	}
 	cb := model.CartBook{
@@ -52,14 +51,15 @@ func Add(c *gin.Context) {
 	// add book to cart
 	if err = cart.AddBook(cb); err != nil {
 		log.ErrAddCart(err)
-		SendResponse(c, err, nil)
+		SendError(c, err)
 		return
 	}
 	// get book number
 	number, err := model.GetBookNumberInCart(cart.ID, book.ID)
 	if err != nil {
 		log.ErrGetBookNumber(err)
-		SendResponse(c, err, nil)
+		SendError(c, err)
+		return
 	}
 
 	rsp := AddCartResponse{

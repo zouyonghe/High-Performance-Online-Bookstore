@@ -4,7 +4,6 @@ import (
 	. "High-Performance-Online-Bookstore/handler"
 	"High-Performance-Online-Bookstore/log"
 	"High-Performance-Online-Bookstore/model"
-	"High-Performance-Online-Bookstore/pkg/berror"
 	"High-Performance-Online-Bookstore/service"
 	"github.com/gin-gonic/gin"
 )
@@ -16,7 +15,7 @@ func Delete(c *gin.Context) {
 	var r DeleteCartRequest
 	if err := c.ShouldBindJSON(&r); err != nil {
 		log.ErrBind(err)
-		SendResponse(c, err, nil)
+		SendError(c, err)
 		return
 	}
 
@@ -24,7 +23,7 @@ func Delete(c *gin.Context) {
 	userID, err := service.GetIDByToken(c)
 	if err != nil {
 		log.ErrParseToken(err)
-		SendResponse(c, berror.ErrParseToken, nil)
+		SendError(c, err)
 		return
 	}
 
@@ -32,14 +31,14 @@ func Delete(c *gin.Context) {
 	cart, err := model.GetCart(userID)
 	if err != nil {
 		log.ErrGetCart(err)
-		SendResponse(c, berror.ErrGetCart, nil)
+		SendError(c, err)
 		return
 	}
 
 	// delete books from cart
 	if err = model.DeleteFromCart(cart.ID, r.BookID, r.Number); err != nil {
 		log.ErrDeleteCart(err)
-		SendResponse(c, berror.ErrDeleteBookFromCart, nil)
+		SendError(c, err)
 		return
 	}
 

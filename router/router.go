@@ -89,7 +89,7 @@ func pingServer() error {
 	return errors.New("connect to the router failed")
 }
 
-// Load loads the middlewares, routes, handlers.
+// Load loads the middlewares, routers and handlers.
 func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	// Internal Middlewares.
 	g.Use(middleware.NoCache)
@@ -97,7 +97,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	g.Use(middleware.Secure)
 	g.Use(middleware.HasPermission)
 	g.Use(mw...)
-	// 404 Handler.
+	// 404 handler.
 	g.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{
 			"code":    http.StatusNotFound,
@@ -164,7 +164,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		// cart router
 		ca.GET("", cart.Show)         // show user cart
 		ca.PUT("", cart.Add)          // add a book to cart
-		ca.DELETE("", cart.Delete)    // delete a book from cart
+		ca.DELETE("", cart.Delete)    // delete book from cart
 		ca.DELETE("/all", cart.Clear) // clear user cart
 	}
 	o := v1.Group("/order")
@@ -173,10 +173,6 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		o.POST("", order.Create) // create an order
 		o.PUT("", order.Deal)    // deal with an order: pay or cancel
 		o.GET("", order.List)    // list orders
-		/*		o.GET("", order.List)
-				o.GET("/:id", order.Get)
-				o.PUT("/:id", order.Update)
-				o.DELETE("/:id", order.Delete)*/
 	}
 
 	return g

@@ -4,7 +4,6 @@ import (
 	. "High-Performance-Online-Bookstore/handler"
 	"High-Performance-Online-Bookstore/log"
 	"High-Performance-Online-Bookstore/model"
-	"High-Performance-Online-Bookstore/pkg/berror"
 	"High-Performance-Online-Bookstore/service"
 	"github.com/gin-gonic/gin"
 )
@@ -16,13 +15,13 @@ func SelfCheck(c *gin.Context) {
 	UserID, err := service.GetIDByToken(c)
 	if err != nil {
 		log.ErrParseToken(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendError(c, err)
 		return
 	}
 
 	user, err := model.GetUserByID(UserID)
 	if err != nil {
-		SendResponse(c, berror.ErrUserNotFound, nil)
+		SendError(c, err)
 		return
 	}
 

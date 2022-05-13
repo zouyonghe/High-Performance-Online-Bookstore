@@ -3,7 +3,6 @@ package order
 import (
 	. "High-Performance-Online-Bookstore/handler"
 	"High-Performance-Online-Bookstore/log"
-	"High-Performance-Online-Bookstore/pkg/berror"
 	"High-Performance-Online-Bookstore/service"
 	"github.com/gin-gonic/gin"
 )
@@ -15,14 +14,14 @@ func List(c *gin.Context) {
 	var r ListRequest
 	if err := c.ShouldBindJSON(&r); err != nil {
 		log.ErrBind(err)
-		SendResponse(c, berror.ErrBindRequest, nil)
+		SendError(c, err)
 		return
 	}
 	//get role from token
 	role, err := service.GetRoleByToken(c)
 	if err != nil {
 		log.ErrGetRole(err)
-		SendResponse(c, berror.ErrGetRole, nil)
+		SendError(c, err)
 		return
 	}
 
@@ -30,7 +29,7 @@ func List(c *gin.Context) {
 	userID, err := service.GetIDByToken(c)
 	if err != nil {
 		log.ErrParseToken(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendError(c, err)
 		return
 	}
 
@@ -38,7 +37,7 @@ func List(c *gin.Context) {
 	orders, err := service.List(role, userID, r.PageNum, r.PageSize)
 	if err != nil {
 		log.ErrListOrder(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendError(c, err)
 		return
 	}
 	SendResponse(c, nil, ListResponse{

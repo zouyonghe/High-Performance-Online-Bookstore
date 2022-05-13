@@ -29,14 +29,14 @@ func Update(c *gin.Context) {
 	UserID, err := service.GetIDByParam(c)
 	if err != nil {
 		log.ErrParseToken(err)
-		SendResponse(c, nil, err)
+		SendError(c, err)
 		return
 	}
 
 	var u model.User
 	// Binding the user data.
-	if err := c.ShouldBindJSON(&u); err != nil {
-		SendResponse(c, berror.ErrBindRequest, nil)
+	if err = c.ShouldBindJSON(&u); err != nil {
+		SendError(c, err)
 		return
 	}
 
@@ -56,21 +56,21 @@ func Update(c *gin.Context) {
 	// Validate the data.
 	if err = u.Validate(); err != nil {
 		log.ErrValidate(err)
-		SendResponse(c, berror.ErrValidation, nil)
+		SendError(c, err)
 		return
 	}
 
 	// Encrypt the user password.
 	if err = u.Encrypt(); err != nil {
 		log.ErrEncrypt(err)
-		SendResponse(c, berror.ErrEncrypt, nil)
+		SendError(c, err)
 		return
 	}
 
 	// Save changed fields.
 	if err = u.UpdateUser(); err != nil {
 		log.ErrUpdateUser(err)
-		SendResponse(c, berror.ErrDatabase, nil)
+		SendError(c, err)
 		return
 	}
 	rsp := user.UpdateResponse{

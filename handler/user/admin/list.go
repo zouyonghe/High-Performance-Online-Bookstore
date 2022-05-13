@@ -3,7 +3,6 @@ package admin
 import (
 	"High-Performance-Online-Bookstore/handler/user"
 	"High-Performance-Online-Bookstore/log"
-	"High-Performance-Online-Bookstore/pkg/berror"
 	"High-Performance-Online-Bookstore/service"
 	"github.com/gin-gonic/gin"
 )
@@ -24,14 +23,14 @@ func List(c *gin.Context) {
 	var r user.ListRequest
 	if err := c.ShouldBindJSON(&r); err != nil {
 		log.ErrBind(err)
-		SendResponse(c, berror.ErrBindRequest, nil)
+		SendError(c, err)
 		return
 	}
 
 	infos, err := service.ListUserInfo(r.Username, r.PageNum, r.PageSize)
 	if err != nil {
 		log.ErrListUsers(err)
-		SendResponse(c, err, nil)
+		SendError(c, err)
 		return
 	}
 

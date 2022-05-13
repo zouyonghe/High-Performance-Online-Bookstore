@@ -163,3 +163,7 @@ func ErrGetBookNumber(err error) {
 func ErrListOrder(err error) {
 	zap.L().Error("error listing orders", zap.Error(err))
 }
+
+func ErrCheckOrderOwner(err error) {
+	zap.L().Error("error checking order owner", zap.Error(err))
+}

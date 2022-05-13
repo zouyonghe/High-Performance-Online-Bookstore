@@ -6,7 +6,6 @@ import (
 	"High-Performance-Online-Bookstore/log"
 	"High-Performance-Online-Bookstore/model"
 	"High-Performance-Online-Bookstore/pkg/auth"
-	"High-Performance-Online-Bookstore/pkg/berror"
 	"High-Performance-Online-Bookstore/pkg/token"
 	"github.com/gin-gonic/gin"
 )
@@ -29,27 +28,27 @@ func Login(c *gin.Context) {
 	//var u model.UserModel
 	if err := c.ShouldBindJSON(&r); err != nil {
 		log.ErrBind(err)
-		SendResponse(c, berror.ErrBindRequest, nil)
+		SendError(c, err)
 		return
 	}
 
 	// Get the user information by the login username.
 	d, deleted, err := model.GetUser(r.Username)
 	if deleted == true || err != nil {
-		SendResponse(c, berror.ErrUserNotFound, nil)
+		SendError(c, err)
 		return
 	}
 
 	// Compare the login password with the user password.
-	if err := auth.Compare(d.Password, r.Password); err != nil {
-		SendResponse(c, berror.ErrPasswordIncorrect, nil)
+	if err = auth.Compare(d.Password, r.Password); err != nil {
+		SendError(c, err)
 		return
 	}
 
 	// Sign the json web token.
 	t, err := token.Sign(token.Context{ID: d.ID, Username: d.Username, Role: d.Role}, "")
 	if err != nil {
-		SendResponse(c, berror.ErrSignToken, nil)
+		SendError(c, err)
 		return
 	}
 

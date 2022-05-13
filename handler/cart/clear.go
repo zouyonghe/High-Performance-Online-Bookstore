@@ -4,7 +4,6 @@ import (
 	. "High-Performance-Online-Bookstore/handler"
 	"High-Performance-Online-Bookstore/log"
 	"High-Performance-Online-Bookstore/model"
-	"High-Performance-Online-Bookstore/pkg/berror"
 	"High-Performance-Online-Bookstore/service"
 	"github.com/gin-gonic/gin"
 )
@@ -16,7 +15,7 @@ func Clear(c *gin.Context) {
 	userID, err := service.GetIDByToken(c)
 	if err != nil {
 		log.ErrParseToken(err)
-		SendResponse(c, berror.ErrParseToken, nil)
+		SendError(c, err)
 		return
 	}
 
@@ -24,7 +23,7 @@ func Clear(c *gin.Context) {
 	cart, err := model.GetCart(userID)
 	if err != nil {
 		log.ErrGetCart(err)
-		SendResponse(c, berror.ErrGetCart, nil)
+		SendError(c, err)
 		return
 	}
 
@@ -32,7 +31,7 @@ func Clear(c *gin.Context) {
 	err = cart.ClearCart()
 	if err != nil {
 		log.ErrClearCart(err)
-		SendResponse(c, berror.ErrClearCart, nil)
+		SendError(c, err)
 		return
 	}
 	SendResponse(c, nil, nil)

@@ -125,7 +125,6 @@ CREATE TABLE `tb_orders` (
                              `deleted_at` datetime(3) DEFAULT NULL,
                              `user_id` bigint(20) unsigned NOT NULL,
                              `order_price` double DEFAULT NULL,
-                             `is_approved` tinyint(1) NOT NULL DEFAULT 0,
                              `status` varchar(256) NOT NULL,
                              PRIMARY KEY (`id`),
                              KEY `fk_tb_users_orders` (`user_id`),

@@ -16,14 +16,14 @@ func Create(c *gin.Context) {
 	userID, err := service.GetIDByToken(c)
 	if err != nil {
 		log.ErrParseToken(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendError(c, err)
 		return
 	}
 	// get cart
 	ct, err := model.GetCart(userID)
 	if err != nil {
 		log.ErrGetCart(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendError(c, err)
 		return
 	}
 	// get cart book list
@@ -34,24 +34,24 @@ func Create(c *gin.Context) {
 	}
 	if err != nil {
 		log.ErrGetCartBookList(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendError(c, err)
 		return
 	}
 	// create order
 	o, err := model.CreateOrder(userID)
 	if err != nil {
 		log.ErrCreateOrder(err)
-		SendResponse(c, berror.InternalServerError, nil)
+		SendError(c, err)
 		return
 	}
 	if err = o.AddBook(bookList); err != nil {
 		log.ErrAddOrder(err)
-		SendResponse(c, berror.ErrAddBookToOrder, nil)
+		SendError(c, err)
 		return
 	}
 	if err = o.SetOrderPrice(); err != nil {
 		log.ErrUpdateOrderPrice(err)
-		SendResponse(c, berror.ErrSetOrderPrice, nil)
+		SendError(c, err)
 		return
 	}
 
