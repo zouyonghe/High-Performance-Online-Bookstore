@@ -55,7 +55,6 @@ CREATE TABLE `tb_cart_books` (
                                  `deleted_at` datetime(3) DEFAULT NULL,
                                  `cart_id` bigint(20) unsigned DEFAULT NULL,
                                  `book_id` bigint(20) unsigned NOT NULL,
-                                 `price` double DEFAULT NULL,
                                  `number` bigint(20) unsigned DEFAULT NULL,
                                  `unit_price` double DEFAULT NULL,
                                  PRIMARY KEY (`id`,`book_id`),

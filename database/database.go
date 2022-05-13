@@ -42,12 +42,12 @@ func openDB(username, password, addr, name string) *gorm.DB {
 			TablePrefix:   "tb_", //表名前缀
 			SingularTable: false, //是否单数表名
 		},
-		//DisableForeignKeyConstraintWhenMigrating: true,	//是否外键自动关联
+		//DisableForeignKeyConstraintWhenMigrating: true,	//是否禁用外键自动关联
 	}
 
 	db, err := gorm.Open(sql, cfg)
 	if err != nil {
-		zap.L().Error("Database connection failed. Database name: %s", zap.Error(err))
+		zap.L().Error("Database connection failed.", zap.Error(err))
 	}
 
 	return db
