@@ -34,5 +34,8 @@ func Clear(c *gin.Context) {
 		SendError(c, err)
 		return
 	}
-	SendResponse(c, nil, nil)
+	rsp := ClearCartResponse{
+		Message: "cart cleared",
+	}
+	SendResponse(c, nil, rsp)
 }

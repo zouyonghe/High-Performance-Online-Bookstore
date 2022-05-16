@@ -27,13 +27,21 @@ func SelfDel(c *gin.Context) {
 		SendError(c, err)
 		return
 	}
+	u, err := model.GetUserByID(UserID)
+	if err != nil {
+		log.ErrUserNotFound(err)
+		SendError(c, err)
+		return
+	}
+	username := u.Username
 	if err = model.DeleteUser(UserID); err != nil {
 		log.ErrDeleteUser(err)
 		SendError(c, err)
 		return
 	}
 	rsp := user.SelfDelResponse{
-		UserID: UserID,
+		UserID:  UserID,
+		Message: "User <" + username + "> deleted",
 	}
 	SendResponse(c, nil, rsp)
 }

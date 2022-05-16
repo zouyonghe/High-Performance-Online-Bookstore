@@ -16,7 +16,7 @@ func RequestId(c *gin.Context) {
 	}
 
 	// Expose it for use in the application
-	c.Set("ç", requestId)
+	c.Set("X-Request-Id", requestId)
 
 	// Set X-Request-Id header
 	c.Writer.Header().Set("X-Request-Id", requestId)

@@ -31,4 +31,6 @@ type DeleteCartResponse struct {
 
 type ClearCartRequest struct{}
 
-type ClearCartResponse struct{}
+type ClearCartResponse struct {
+	Message string `json:"Message"`
+}

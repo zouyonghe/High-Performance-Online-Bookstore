@@ -70,7 +70,7 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	UserID uint64 `json:"UserID"`
+	UserID uint64 `json:"userID"`
 	Token  string `json:"token"`
 }
 
@@ -81,7 +81,8 @@ type SelfUpdResponse UpdateResponse
 type SelfDelRequest struct{}
 
 type SelfDelResponse struct {
-	UserID uint64 `json:"UserID"`
+	UserID  uint64 `json:"userID"`
+	Message string `json:"message"`
 }
 
 //--- admin user struct ---
