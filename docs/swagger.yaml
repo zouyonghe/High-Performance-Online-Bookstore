@@ -4,10 +4,10 @@ definitions:
     properties:
       ShortId:
         type: string
+      UserID:
+        type: integer
       createdAt:
         type: string
-      id:
-        type: integer
       password:
         type: string
       role:
@@ -17,33 +17,21 @@ definitions:
       username:
         type: string
     type: object
-  user.CreateRequest:
-    properties:
-      password:
-        type: string
-      username:
-        type: string
-    type: object
-  user.CreateResponse:
-    properties:
-      UserID:
-        type: integer
-      username:
-        type: string
-    type: object
   user.DeleteResponse:
     properties:
       UserID:
         type: integer
+      message:
+        type: string
     type: object
   user.GetResponse:
     properties:
+      UserID:
+        type: integer
       password:
         type: string
       role:
         type: string
-      UserID:
-        type: integer
       username:
         type: string
     type: object
@@ -56,10 +44,24 @@ definitions:
     type: object
   user.LoginResponse:
     properties:
-      token:
-        type: string
       UserID:
         type: integer
+      token:
+        type: string
+    type: object
+  user.RegisterRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  user.RegisterResponse:
+    properties:
+      UserID:
+        type: integer
+      username:
+        type: string
     type: object
   user.SelfDelResponse:
     properties:
@@ -78,15 +80,6 @@ definitions:
       UserID:
         type: integer
       username:
-        type: string
-    type: object
-  user.SwaggerCreateResponse:
-    properties:
-      code:
-        type: integer
-      data:
-        $ref: '#/definitions/user.CreateResponse'
-      message:
         type: string
     type: object
   user.SwaggerDeleteResponse:
@@ -122,6 +115,15 @@ definitions:
         type: integer
       data:
         $ref: '#/definitions/user.LoginResponse'
+      message:
+        type: string
+    type: object
+  user.SwaggerRegisterResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/user.RegisterResponse'
       message:
         type: string
     type: object
@@ -178,12 +180,12 @@ info:
     url: https://www.gnu.org/licenses/gpl-3.0.html
   termsOfService: https://github.com/zouyonghe
   title: High-Performance-Online-Bookstore
-  version: "0.3"
+  version: 0.7.0
 paths:
   /user/admin:
     get:
-      description: List all users account include id, username, encrypted password,
-        etc
+      description: List users account by specified username format include id, username,
+        encrypted password, etc.
       produces:
       - application/json
       responses:
@@ -194,7 +196,7 @@ paths:
             $ref: '#/definitions/user.SwaggerListResponse'
       security:
       - ApiKeyAuth: []
-      summary: List all users account
+      summary: List users account by specified username format.
       tags:
       - user/admin
   /user/admin/{id}:
@@ -333,22 +335,22 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create a new user by username and password
+      description: Register a new user by username and password
       parameters:
       - description: user information include username and password
         in: body
         name: user
         required: true
         schema:
-          $ref: '#/definitions/user.CreateRequest'
+          $ref: '#/definitions/user.RegisterRequest'
       produces:
       - application/json
       responses:
         "200":
-          description: '{"code":0,"message":"OK","data":{"UserID":"7","username":"顾磊"}}'
+          description: '{"code":0,"message":"OK","data":{"UserID":12,"username":"汤桂英","role":"business"}}'
           schema:
-            $ref: '#/definitions/user.SwaggerCreateResponse'
-      summary: Create a new user
+            $ref: '#/definitions/user.SwaggerRegisterResponse'
+      summary: Register a new user
       tags:
       - user
 schemes:

@@ -32,14 +32,14 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "List all users account include id, username, encrypted password, etc",
+                "description": "List users account by specified username format include id, username, encrypted password, etc.",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "user/admin"
                 ],
-                "summary": "List all users account",
+                "summary": "List users account by specified username format.",
                 "responses": {
                     "200": {
                         "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"totalCount\":1,\"userList\":[{\"id\":1,\"username\":\"admin\",\"ShortId\":\"5P9Ia4QnR\",\"password\":\"$2a$10$Fv9BWzqsiQ.JuuGdcXdvN.Fx3ml.dVR47W22GoJMWQAlm9wHQIMVe\",\"role\":\"admin\",\"createdAt\":\"2021-04-18 15:40:33\",\"updatedAt\":\"2021-04-18 15:40:33\"}]}}",
@@ -263,7 +263,7 @@ const docTemplate = `{
         },
         "/user/register": {
             "post": {
-                "description": "Create a new user by username and password",
+                "description": "Register a new user by username and password",
                 "consumes": [
                     "application/json"
                 ],
@@ -273,7 +273,7 @@ const docTemplate = `{
                 "tags": [
                     "user"
                 ],
-                "summary": "Create a new user",
+                "summary": "Register a new user",
                 "parameters": [
                     {
                         "description": "user information include username and password",
@@ -281,15 +281,15 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/user.CreateRequest"
+                            "$ref": "#/definitions/user.RegisterRequest"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"UserID\":\"7\",\"username\":\"顾磊\"}}",
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"UserID\":12,\"username\":\"汤桂英\",\"role\":\"business\"}}",
                         "schema": {
-                            "$ref": "#/definitions/user.SwaggerCreateResponse"
+                            "$ref": "#/definitions/user.SwaggerRegisterResponse"
                         }
                     }
                 }
@@ -303,11 +303,11 @@ const docTemplate = `{
                 "ShortId": {
                     "type": "string"
                 },
+                "UserID": {
+                    "type": "integer"
+                },
                 "createdAt": {
                     "type": "string"
-                },
-                "id": {
-                    "type": "integer"
                 },
                 "password": {
                     "type": "string"
@@ -323,47 +323,28 @@ const docTemplate = `{
                 }
             }
         },
-        "user.CreateRequest": {
-            "type": "object",
-            "properties": {
-                "password": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "user.CreateResponse": {
-            "type": "object",
-            "properties": {
-                "UserID": {
-                    "type": "integer"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
         "user.DeleteResponse": {
             "type": "object",
             "properties": {
                 "UserID": {
                     "type": "integer"
+                },
+                "message": {
+                    "type": "string"
                 }
             }
         },
         "user.GetResponse": {
             "type": "object",
             "properties": {
+                "UserID": {
+                    "type": "integer"
+                },
                 "password": {
                     "type": "string"
                 },
                 "role": {
                     "type": "string"
-                },
-                "UserID": {
-                    "type": "integer"
                 },
                 "username": {
                     "type": "string"
@@ -384,11 +365,33 @@ const docTemplate = `{
         "user.LoginResponse": {
             "type": "object",
             "properties": {
-                "token": {
-                    "type": "string"
-                },
                 "UserID": {
                     "type": "integer"
+                },
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.RegisterRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.RegisterResponse": {
+            "type": "object",
+            "properties": {
+                "UserID": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
                 }
             }
         },
@@ -418,20 +421,6 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "user.SwaggerCreateResponse": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "integer"
-                },
-                "data": {
-                    "$ref": "#/definitions/user.CreateResponse"
-                },
-                "message": {
                     "type": "string"
                 }
             }
@@ -486,6 +475,20 @@ const docTemplate = `{
                 },
                 "data": {
                     "$ref": "#/definitions/user.LoginResponse"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.SwaggerRegisterResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/user.RegisterResponse"
                 },
                 "message": {
                     "type": "string"
@@ -568,7 +571,7 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "0.3",
+	Version:          "0.7.0",
 	Host:             "127.0.0.1:8081",
 	BasePath:         "/v1",
 	Schemes:          []string{"http", "https"},

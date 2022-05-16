@@ -19,7 +19,8 @@ var DB *Database
 
 // openDB is used to open a database connection.
 func openDB(username, password, addr, name string) *gorm.DB {
-	DSN := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s",
+	DSN := fmt.Sprintf(
+		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s",
 		username,
 		password,
 		addr,

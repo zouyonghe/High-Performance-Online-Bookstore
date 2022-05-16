@@ -38,3 +38,10 @@ func SendDenyResponse(c *gin.Context) {
 func SendError(c *gin.Context, err error) {
 	SendResponse(c, err, nil)
 }
+
+func NoRoute(c *gin.Context) {
+	c.JSON(http.StatusNotFound, gin.H{
+		"code":    http.StatusNotFound,
+		"message": "The api does not exist.",
+	})
+}

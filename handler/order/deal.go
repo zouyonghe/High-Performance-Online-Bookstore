@@ -32,6 +32,7 @@ func Deal(c *gin.Context) {
 		SendError(c, err)
 		return
 	}
+
 	err = o.CheckOwner(userID)
 	if err != nil {
 		log.ErrCheckOrderOwner(err)

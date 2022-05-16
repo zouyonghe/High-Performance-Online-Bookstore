@@ -3,8 +3,8 @@ package main
 import (
 	"High-Performance-Online-Bookstore/config"
 	"High-Performance-Online-Bookstore/database"
+	"High-Performance-Online-Bookstore/permission"
 	ver "High-Performance-Online-Bookstore/pkg/version"
-	"High-Performance-Online-Bookstore/policy"
 	"High-Performance-Online-Bookstore/router"
 	"github.com/spf13/pflag"
 	"go.uber.org/zap"
@@ -17,7 +17,7 @@ var (
 )
 
 // @title           High-Performance-Online-Bookstore
-// @version         0.3
+// @version         0.7.0
 // @description     The jinshuzhai bookstore api server.
 // @termsOfService  https://github.com/zouyonghe
 
@@ -53,7 +53,7 @@ func main() {
 	database.DB.InitDatabase()
 
 	// initialize RBAC
-	policy.InitPolicy()
+	permission.InitPermission()
 
 	// initialize router
 	router.InitRouter()

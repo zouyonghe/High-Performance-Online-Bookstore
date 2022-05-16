@@ -52,7 +52,6 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	//SendResponse(c, nil, model.Token{Token: t})
 	rsp := user.LoginResponse{
 		UserID: d.ID,
 		Token:  t,

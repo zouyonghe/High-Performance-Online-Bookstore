@@ -1,0 +1,196 @@
+@startuml
+package model/{
+annotation model/ {
+
+
++DeleteBook(id uint64): error
++GetBook(title string): *Book, bool, error
++GetBookByID(id uint64): *Book, error
++CreateCart(userID uint64): error
++GetCart(userID uint64): *Cart, error
++GetCartBook(cartID uint64, bookID uint64): *CartBook
++DeleteCart(cartID uint64): error
++DeleteFromCart(cartID uint64, bookID uint64, number uint): error
++CheckCartBook(cartID uint64, bookID uint64): bool
++CreateCartByName(userName string): error
++GetBookNumberInCart(cartID uint64, bookID uint64): uint, error
++CreateOrder(userID uint64): *Order, error
++GetOrder(orderID uint64): *Order, error
++DeleteUser(id uint64): error
++GetUser(username string): *User, bool, error
++GetUserByID(id uint64): *User, error
+}
+class BookBase {
++Index: int
++Title: string
++Price: float64
++Number: uint
+
+}
+class Book {
++: Base
++Title: string
++Price: float64
++IsSell: bool
++Number: uint
++Author: string
++PublishDate: string
++Category: string
++TableName(): string
++CreateBook(deleted bool): error
++UpdateBook(): error
++SetBookName(name string): error
++SetBookPrice(price float64): error
++SetBookCategory(category string): error
++SetBookAuthor(author string): error
++SetBookNum(num int): error
++SetSell(): error
++SetUnSell(): error
++SetBookSell(sell bool): error
++Validate(): error
+}
+class CartBook {
++: Base
++CartID: uint64
++BookID: uint64
++UnitPrice: float64
++Number: uint
++UpdateCartBook(): error
+}
+class Cart {
++: Base
++UserID: uint64
++Books: []CartBook
++CartPrice: float64
++GetBookList(): []*BookBase, float64, error
++GetCartBook(): []*CartBook, error
++AddBook(cb CartBook): error
++UpdateCart(): error
++ClearCart(): error
+}
+class OrderInfo {
++OrderID: uint64
++Books: []OrderBook
++OrderPrice: float64
++CreatedAt: string
++Status: string
+
+}
+class UserList {
++Lock: *Mutex
++IdMap: map[uint64]*UserInfo
+
+}
+class BookInfo {
++Id: uint64
++Title: string
++ShortId: string
++Author: string
++Price: float64
++PublishDate: string
++Category: string
++IsSell: bool
++Number: uint
++CreatedAt: string
++UpdatedAt: string
+
+}
+class BookClass {
++ClassId: uint64
++ClassName: string
+
+}
+class BookList {
++Lock: *Mutex
++IdMap: map[uint64]*BookInfo
+
+}
+class OrderList {
++Lock: *Mutex
++IdMap: map[uint64]*OrderInfo
+
+}
+class Token {
++Token: string
+
+}
+class Base {
++ID: uint64
++CreatedAt: Time
++UpdatedAt: Time
++DeletedAt: DeletedAt
+
+}
+class UserInfo {
++Id: uint64
++Username: string
++ShortId: string
++Password: string
++Role: string
++CreatedAt: string
++UpdatedAt: string
+
+}
+class CartInfo {
++UserID: uint64
+
+}
+class OrderBook {
++: Base
++OrderID: uint64
++BookID: uint64
++UnitPrice: float64
++Number: uint
+
+}
+class Order {
++: Base
++UserID: uint64
++Books: []OrderBook
++OrderPrice: float64
++Status: string
++TableName(): string
++AddBook(books []*CartBook): error
++TotalPrice(): float64
++SetOrderPrice(): error
++Accept(): error
++Cancel(): error
++DeleteOrder(): error
++GetOrderBooks(): []*OrderBook, error
++GetOrderBook(bookID uint64): *OrderBook, error
++UpdateOrderBook(bookID uint64, number uint): error
++DeleteOrderBook(bookID uint64): error
++DealWith(operation string): error
+}
+class UserBaseModel {
++Phone: string
++Address: string
+
+}
+class User {
++: Base
++Username: string
++Password: string
++Role: string
++Cart: Cart
++Orders: []Order
++TableName(): string
++CreateUser(deleted bool): error
++UpdateUser(): error
++Compare(pwd string): error
++Encrypt(): error
++Validate(): error
++GetRole(): string
++SetRole(role string)
++SetUserInfo(username string, password string): error
+}
+}
+Book --> Base
+CartBook --> Base
+Cart --> Base
+User --> Cart
+OrderBook --> Base
+Order --> Base
+User --> Base
+
+@enduml

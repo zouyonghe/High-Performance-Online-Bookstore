@@ -5,17 +5,17 @@ autonumber
 
 actor 用户 as general
 participant 路由模块 as router
-participant 身份验证模块 as validate
-participant 数据库模块 as database
+participant 登录函数 as validate
+participant 数据库 as database
 participant 日志模块 as log
 
 
 
 general -> router++: 登录请求
-router -> validate++: 身份验证函数调用请求
+router -> validate++: 登录函数调用请求
+validate -> log: 日志记录
 validate -> database++: 数据库查询请求
 database --> validate--: 数据库查询响应
-validate --> router--: 身份验证函数调用响应
-router -> log: 日志记录请求
-router ---> general--: 注册请求响应
+validate --> router--: 登录函数调用响应
+router ---> general--: 登录请求响应
 @enduml

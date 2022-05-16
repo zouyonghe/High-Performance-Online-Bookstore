@@ -1,4 +1,4 @@
-package policy
+package permission
 
 import (
 	"High-Performance-Online-Bookstore/log"
@@ -8,21 +8,19 @@ import (
 	"go.uber.org/zap"
 )
 
-var (
-	E *casbin.Enforcer
-)
+var E *casbin.Enforcer
 
-// InitPolicy inits the policy.
-func InitPolicy() {
+// InitPermission inits the permission.
+func InitPermission() {
 	logger := zaplogger.NewLoggerByZap(zap.L(), true)
 	var err error
 	E, err = casbin.NewEnforcer("conf/model.conf", "conf/policy.csv")
 	if err != nil {
-		zap.L().Error("init policy error", zap.Error(err))
+		zap.L().Error("init permission error", zap.Error(err))
 		return
 	}
-	if err := E.LoadPolicy(); err != nil {
-		zap.L().Error("load policy error", zap.Error(err))
+	if err = E.LoadPolicy(); err != nil {
+		zap.L().Error("load permission error", zap.Error(err))
 		return
 	}
 	E.EnableLog(true)
