@@ -10,7 +10,6 @@ import (
 
 func CheckPermissionCalled(c *gin.Context, sub, obj, act string) {
 	zap.L().Debug("checkPermission", zap.String("sub", sub), zap.String("obj", obj), zap.String("act", act))
-
 }
 
 func RegisterCalled(c *gin.Context) {

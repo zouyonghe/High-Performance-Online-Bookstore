@@ -41,7 +41,6 @@ func InitLogger() *zap.Logger {
 			zapcore.NewCore(encoder, writeSyncer, logLevel),
 		)
 	}
-
 	logger := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1))
 	defer func(logger *zap.Logger) {
 		_ = logger.Sync()
