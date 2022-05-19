@@ -31,7 +31,7 @@ func (b *Book) TableName() string {
 	return "tb_books"
 }
 
-// CreateBook creates a book information.
+// CreateBook creates a book record.
 func (b *Book) CreateBook(deleted bool) error {
 	if deleted == true {
 		bm := &Book{}
@@ -41,22 +41,21 @@ func (b *Book) CreateBook(deleted bool) error {
 	return DB.Self.Create(&b).Error
 }
 
-// DeleteBook deletes book information by the book ID.
+// DeleteBook deletes book record by the book ID.
 func DeleteBook(id uint64) error {
 	return DB.Self.Where("id = ?", id).Delete(&Book{}).Error
 }
 
-// UpdateBook updates book information.
+// UpdateBook updates book record.
 func (b *Book) UpdateBook() error {
 	return DB.Self.Save(&b).Error
 }
 
 // GetBook gets a book by the book name
-// returns book model, deleted and error
+// returns book model, deleted and error.
 func GetBook(title string) (bm *Book, deleted bool, err error) {
 	bm = &Book{}
 	d1 := DB.Self.Where("title = ?", title).First(&bm)
-
 	// found record
 	if err := d1.Error; err == nil {
 		return bm, false, err

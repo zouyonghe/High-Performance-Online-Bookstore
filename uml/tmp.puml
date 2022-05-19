@@ -1,6 +1,5 @@
 @startuml
 'https://plantuml.com/class-diagram
-class Order {
 class OrderBook {
 +: Base
 +OrderID: uint64

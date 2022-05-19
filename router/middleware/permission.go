@@ -2,6 +2,7 @@ package middleware
 
 import (
 	. "High-Performance-Online-Bookstore/handler"
+	"High-Performance-Online-Bookstore/log"
 	"High-Performance-Online-Bookstore/permission"
 	"High-Performance-Online-Bookstore/pkg/token"
 	"github.com/gin-gonic/gin"
@@ -15,7 +16,12 @@ func HasPermission(c *gin.Context) {
 	if err != nil {
 		ctx.Role = "guest"
 	}
-	if permission.CheckPermission(c, ctx.Role, c.Request.URL.Path, c.Request.Method) {
+	sub := ctx.Role
+	obj := c.Request.URL.Path
+	act := c.Request.Method
+	log.CheckPermissionCalled(c, sub, obj, act)
+
+	if permission.CheckPermission(sub, obj, act) {
 		c.Next()
 		return
 	} else {

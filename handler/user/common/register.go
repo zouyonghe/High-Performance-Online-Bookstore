@@ -6,7 +6,6 @@ import (
 	"High-Performance-Online-Bookstore/log"
 	"High-Performance-Online-Bookstore/model"
 	"High-Performance-Online-Bookstore/pkg/berror"
-	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
@@ -47,7 +46,6 @@ func Register(c *gin.Context) {
 	_, deleted, err := model.GetUser(r.Username)
 	// if user data exists and deleted is false, send an error
 	if deleted == false && err == nil {
-		fmt.Println(deleted, err)
 		log.ErrUserExists()
 		SendResponse(c, berror.ErrUserExists, nil)
 		return

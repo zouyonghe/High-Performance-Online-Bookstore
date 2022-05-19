@@ -4,7 +4,6 @@ import (
 	"High-Performance-Online-Bookstore/log"
 	"github.com/casbin/casbin/v2"
 	zaplogger "github.com/casbin/zap-logger/v2"
-	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
@@ -27,16 +26,11 @@ func InitPermission() {
 	E.SetLogger(logger)
 }
 
-func CheckPermission(c *gin.Context, sub, obj, act string) bool {
-	log.CheckPermissionCalled(c, sub, obj, act)
+func CheckPermission(sub, obj, act string) bool {
 	ok, err := E.Enforce(sub, obj, act)
 	if err != nil {
-		zap.L().Error("checkPermission error", zap.Error(err))
+		log.ErrCheckPermission(err)
 		return false
 	}
-	if !ok {
-		zap.L().Error("checkPermission error", zap.String("sub", sub), zap.String("obj", obj), zap.String("act", act))
-		return false
-	}
-	return true
+	return ok
 }

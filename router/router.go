@@ -36,9 +36,7 @@ func InitRouter() {
 		ginzap.Ginzap(zap.L(), time.RFC3339, false),
 		ginzap.RecoveryWithZap(zap.L(), true),
 	)
-
 	go testPing()
-
 	startListen(g)
 }
 

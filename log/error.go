@@ -38,6 +38,10 @@ func ErrGetRole(err error) {
 	zap.L().Error("error getting role", zap.Error(err))
 }
 
+func ErrCheckPermission(err error) {
+	zap.L().Error("error checking permission", zap.Error(err))
+}
+
 // User error
 
 func ErrCreateUser(err error) {
