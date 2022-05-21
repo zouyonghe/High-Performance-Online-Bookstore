@@ -50,12 +50,12 @@ func main() {
 	defer gl()
 
 	// initialize gorm
-	database.DB.InitDatabase()
+	database.Init()
 
 	// initialize RBAC
-	permission.InitPermission()
+	permission.Init()
 
 	// initialize router
-	router.InitRouter()
+	router.Init()
 
 }

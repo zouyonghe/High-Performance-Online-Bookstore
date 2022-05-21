@@ -85,3 +85,7 @@ func (db *Database) InitDatabase() {
 	zap.L().Info("Database connection established.")
 
 }
+
+func Init() {
+	DB.InitDatabase()
+}

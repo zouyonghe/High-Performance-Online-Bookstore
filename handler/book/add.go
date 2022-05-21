@@ -4,6 +4,7 @@ import (
 	. "High-Performance-Online-Bookstore/handler"
 	"High-Performance-Online-Bookstore/log"
 	"High-Performance-Online-Bookstore/model"
+	"High-Performance-Online-Bookstore/pkg/berror"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -38,7 +39,7 @@ func Add(c *gin.Context) {
 	// If the book exists and deleted is false, send an error.
 	if deleted == false && err == nil {
 		log.ErrBookExists()
-		SendError(c, err)
+		SendError(c, berror.ErrBookExists)
 		return
 	}
 

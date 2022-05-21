@@ -20,7 +20,7 @@ type User struct {
 	Base
 	Username string  `json:"username" gorm:"column:username;not null" binding:"required" validate:"min=2,max=32"`
 	Password string  `json:"password" gorm:"column:password;not null" binding:"required" validate:"min=5,max=32"`
-	Role     string  `json:"role"     gorm:"column:role;not null;default:general"        validate:"oneof=general seller admin"`
+	Role     string  `json:"role"     gorm:"column:role;not null;default:general"        validate:"oneof=general seller"`
 	Cart     Cart    `json:"-"`
 	Orders   []Order `json:"-"`
 }

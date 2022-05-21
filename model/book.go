@@ -21,7 +21,7 @@ type Book struct {
 	Price       float64 `json:"price" gorm:"column:price;not null"             binding:"required"  validate:"gte=0"`
 	IsSell      bool    `json:"isSell" gorm:"column:is_sell;not null;default:false"`
 	Number      uint    `json:"number" gorm:"column:number;not null;default:0" binding:"required"  validate:"gte=0"`
-	Author      string  `json:"author" gorm:"column:author;not null"           binding:"required"  validate:"min=5,max=32"`
+	Author      string  `json:"author" gorm:"column:author;not null"           binding:"required"  validate:"min=1,max=32"`
 	PublishDate string  `json:"publishDate" gorm:"column:publish_date;not null" binding:"required"  validate:"datetime=2006-01-02"`
 	Category    string  `json:"category" gorm:"column:category;not null"       binding:"required"  validate:"min=1,max=32"`
 }

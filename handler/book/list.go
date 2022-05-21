@@ -22,9 +22,9 @@ func List(c *gin.Context) {
 		SendError(c, err)
 		return
 	}
-
-	SendResponse(c, nil, ListResponse{
+	rsp := ListResponse{
 		TotalCount: len(infos),
 		BookList:   infos,
-	})
+	}
+	SendResponse(c, nil, rsp)
 }

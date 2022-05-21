@@ -23,9 +23,13 @@ import (
 	"time"
 )
 
+func Init() {
+	initRouter()
+}
+
 // InitRouter creates a gin router,
 // load middlewares and start listening.
-func InitRouter() {
+func initRouter() {
 	gin.SetMode(viper.GetString("level"))
 	g := gin.New()
 	Load(

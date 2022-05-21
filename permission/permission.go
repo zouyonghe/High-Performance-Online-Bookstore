@@ -9,11 +9,13 @@ import (
 
 var E *casbin.Enforcer
 
+func Init() {
+	E = initPermission("conf/model.conf", "conf/policy.csv", true)
+}
+
 // InitPermission inits the permission.
-func InitPermission() {
-	logger := zaplogger.NewLoggerByZap(zap.L(), true)
-	var err error
-	E, err = casbin.NewEnforcer("conf/model.conf", "conf/policy.csv")
+func initPermission(modelPath string, policyPath string, log bool) (E *casbin.Enforcer) {
+	E, err := casbin.NewEnforcer(modelPath, policyPath)
 	if err != nil {
 		zap.L().Error("init permission error", zap.Error(err))
 		return
@@ -22,8 +24,12 @@ func InitPermission() {
 		zap.L().Error("load permission error", zap.Error(err))
 		return
 	}
-	E.EnableLog(true)
-	E.SetLogger(logger)
+	if log == true {
+		logger := zaplogger.NewLoggerByZap(zap.L(), true)
+		E.EnableLog(true)
+		E.SetLogger(logger)
+	}
+	return E
 }
 
 func CheckPermission(sub, obj, act string) bool {
