@@ -20,6 +20,12 @@ A high performance online bookstore system.
 
 ## Configuration 配置
 
+复制示例配置文件并修改其中的配置（真实配置已被 git 忽略，请勿提交真实密钥）：
+
+```bash
+cp conf/config.example.yaml conf/config.yaml
+```
+
 在conf/config.yaml文件中修改配置。
 
 ```yaml

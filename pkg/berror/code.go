@@ -8,7 +8,7 @@ var (
 
 // ---- fail ----
 
-//common
+// common
 var (
 	// InternalServerError Internal server error
 	InternalServerError = &Berror{Code: 10001, Message: "Internal server error."}
@@ -34,7 +34,7 @@ var (
 	ErrIdentifyRole = &Berror{Code: 10111, Message: "Error occurred while identifying the role."}
 )
 
-//user
+// user
 var (
 	// ErrCreateUser create user failed
 	ErrCreateUser = &Berror{Code: 20101, Message: "Error occurred while creating the user."}
@@ -52,7 +52,7 @@ var (
 	ErrSetUserInfo = &Berror{Code: 20108, Message: "Error occurred while setting the user info."}
 )
 
-//book
+// book
 var (
 	// ErrCreateBook creates a book failed
 	ErrCreateBook = &Berror{Code: 20200, Message: "Error occurred while creating a book"}
@@ -72,7 +72,7 @@ var (
 	ErrBookInCartNotEnough = &Berror{Code: 20207, Message: "The book in cart is not enough."}
 )
 
-//cart
+// cart
 var (
 	// ErrAddCart add cart failed
 	ErrAddCart = &Berror{Code: 20300, Message: "Error occurred while adding the book to cart."}
@@ -90,7 +90,7 @@ var (
 	ErrDeleteBookFromCart = &Berror{Code: 20207, Message: "Error occurred while deleting the book from cart."}
 )
 
-//order
+// order
 var (
 	// ErrCreateOrder create order failed
 	ErrCreateOrder = &Berror{Code: 20400, Message: "Error occurred while creating the order."}

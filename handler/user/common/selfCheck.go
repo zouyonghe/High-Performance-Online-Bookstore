@@ -2,6 +2,7 @@ package common
 
 import (
 	. "High-Performance-Online-Bookstore/handler"
+	userpkg "High-Performance-Online-Bookstore/handler/user"
 	"High-Performance-Online-Bookstore/log"
 	"High-Performance-Online-Bookstore/model"
 	"High-Performance-Online-Bookstore/service"
@@ -25,5 +26,11 @@ func SelfCheck(c *gin.Context) {
 		return
 	}
 
-	SendResponse(c, nil, user)
+	// Return the public user information only,
+	// never the password hash.
+	SendResponse(c, nil, userpkg.GetResponse{
+		UserID:   user.ID,
+		Username: user.Username,
+		Role:     user.Role,
+	})
 }

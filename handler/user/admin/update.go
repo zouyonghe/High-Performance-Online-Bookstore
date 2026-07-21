@@ -45,6 +45,8 @@ func Update(c *gin.Context) {
 	m, err := model.GetUserByID(u.ID)
 	if err != nil {
 		log.ErrGetUser(err)
+		SendError(c, err)
+		return
 	}
 	if m.Role == "admin" && u.Role != "admin" {
 		zap.L().Error("admin user can't change role")

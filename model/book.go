@@ -101,8 +101,8 @@ func (b *Book) SetBookAuthor(author string) error {
 	return DB.Self.Model(&b).Update("author", author).Error
 }
 
-//SetBookNum sets the book number
-//and returns error.
+// SetBookNum sets the book number
+// and returns error.
 func (b *Book) SetBookNum(num int) error {
 	return DB.Self.Model(&b).Update("num", num).Error
 }

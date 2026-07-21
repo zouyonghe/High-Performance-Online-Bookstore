@@ -23,3 +23,8 @@ router/unused/*
 profile*.svg
 
 High-Performance-Online-Bookstore
+
+# Local configuration with real secrets - use conf/config.example.yaml as template
+conf/config.yaml
+conf/server.crt
+conf/server.key

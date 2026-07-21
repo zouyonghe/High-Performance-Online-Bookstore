@@ -44,6 +44,7 @@ func openDB(username, password, addr, name string) *gorm.DB {
 	db, err := gorm.Open(sql, cfg)
 	if err != nil {
 		zap.L().Error("Database connection failed.", zap.Error(err))
+		return nil
 	}
 	return db
 }
@@ -77,13 +78,23 @@ func GetDockerDB() *gorm.DB {
 }
 
 // InitDatabase initialize the database connection.
+// The main database is required; the server exits if it
+// cannot be connected. The docker database is optional
+// and only connected when configured.
 func (db *Database) InitDatabase() {
-	DB = &Database{
-		Self:   GetSelfDB(),
-		Docker: GetDockerDB(),
+	self := GetSelfDB()
+	if self == nil {
+		zap.L().Fatal("Main database connection is required, exiting.")
+	}
+
+	DB = &Database{Self: self}
+	if viper.GetString("docker_db.addr") != "" {
+		DB.Docker = GetDockerDB()
+		if DB.Docker == nil {
+			zap.L().Warn("Docker database connection failed, continuing without it.")
+		}
 	}
 	zap.L().Info("Database connection established.")
-
 }
 
 func Init() {

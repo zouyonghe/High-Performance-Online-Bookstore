@@ -8,8 +8,6 @@ definitions:
         type: integer
       createdAt:
         type: string
-      password:
-        type: string
       role:
         type: string
       updatedAt:
@@ -28,8 +26,6 @@ definitions:
     properties:
       UserID:
         type: integer
-      password:
-        type: string
       role:
         type: string
       username:
@@ -44,10 +40,10 @@ definitions:
     type: object
   user.LoginResponse:
     properties:
-      UserID:
-        type: integer
       token:
         type: string
+      userID:
+        type: integer
     type: object
   user.RegisterRequest:
     properties:
@@ -65,7 +61,9 @@ definitions:
     type: object
   user.SelfDelResponse:
     properties:
-      UserID:
+      message:
+        type: string
+      userID:
         type: integer
     type: object
   user.SelfUpdRequest:
@@ -185,12 +183,12 @@ paths:
   /user/admin:
     get:
       description: List users account by specified username format include id, username,
-        encrypted password, etc.
+        role, etc. The password hash is never returned.
       produces:
       - application/json
       responses:
         "200":
-          description: '{"code":0,"message":"OK","data":{"totalCount":1,"userList":[{"id":1,"username":"admin","ShortId":"5P9Ia4QnR","password":"$2a$10$Fv9BWzqsiQ.JuuGdcXdvN.Fx3ml.dVR47W22GoJMWQAlm9wHQIMVe","role":"admin","createdAt":"2021-04-18
+          description: '{"code":0,"message":"OK","data":{"totalCount":1,"userList":[{"id":1,"username":"admin","ShortId":"5P9Ia4QnR","role":"admin","createdAt":"2021-04-18
             15:40:33","updatedAt":"2021-04-18 15:40:33"}]}}'
           schema:
             $ref: '#/definitions/user.SwaggerListResponse'
@@ -206,6 +204,7 @@ paths:
       description: Delete a user by user ID
       parameters:
       - description: the ID of the specified user to delete
+        format: int64
         in: path
         name: id
         required: true
@@ -226,6 +225,7 @@ paths:
       description: Get a user account specified by user ID
       parameters:
       - description: the ID of the specified user to update
+        format: int64
         in: path
         name: id
         required: true
@@ -234,7 +234,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{"code":0,"message":"OK","data":{"username":"傅秀英","password":"$2a$10$5pLrLpEQ1HAD2Hcm3Bnud.Shhmf5bTaf1yTWYloot0i5nvn1Td4hq","role":"general"}}'
+          description: '{"code":0,"message":"OK","data":{"UserID":5,"username":"傅秀英","role":"general"}}'
           schema:
             $ref: '#/definitions/user.SwaggerGetResponse'
       security:
@@ -248,6 +248,7 @@ paths:
       description: Update a user account specified by user ID
       parameters:
       - description: the ID of the specified user to update
+        format: int64
         in: path
         name: id
         required: true

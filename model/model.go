@@ -2,7 +2,6 @@ package model
 
 import (
 	"gorm.io/gorm"
-	"sync"
 	"time"
 )
 
@@ -22,20 +21,14 @@ type Base struct {
 // User models
 
 // UserInfo represents user information.
+// NOTE: the password hash is intentionally never exposed here.
 type UserInfo struct {
 	Id        uint64 `json:"UserID"`
 	Username  string `json:"username"`
 	ShortId   string `json:"ShortId"`
-	Password  string `json:"password"`
 	Role      string `json:"role"`
 	CreatedAt string `json:"createdAt"`
 	UpdatedAt string `json:"updatedAt"`
-}
-
-// UserList represents users list.
-type UserList struct {
-	Lock  *sync.Mutex
-	IdMap map[uint64]*UserInfo
 }
 
 // Book models
@@ -61,12 +54,6 @@ type BookClass struct {
 	ClassName string `json:"className"`
 }
 
-// BookList represents books list.
-type BookList struct {
-	Lock  *sync.Mutex
-	IdMap map[uint64]*BookInfo
-}
-
 type CartInfo struct {
 	UserID uint64 `json:"user_id"`
 }
@@ -77,9 +64,4 @@ type OrderInfo struct {
 	OrderPrice float64     `json:"orderPrice"`
 	CreatedAt  string      `json:"createdAt"`
 	Status     string      `json:"status"`
-}
-
-type OrderList struct {
-	Lock  *sync.Mutex
-	IdMap map[uint64]*OrderInfo
 }

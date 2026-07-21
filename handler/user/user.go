@@ -101,10 +101,11 @@ type UpdateResponse struct {
 
 type GetRequest struct{}
 
+// GetResponse represents public user information.
+// The password hash is never exposed.
 type GetResponse struct {
 	UserID   uint64 `json:"UserID"`
 	Username string `json:"username"`
-	Password string `json:"password"`
 	Role     string `json:"role"`
 }
 

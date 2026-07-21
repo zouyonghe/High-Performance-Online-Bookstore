@@ -3,15 +3,18 @@ package token
 import (
 	"errors"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt"
-	"github.com/spf13/viper"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/spf13/viper"
 )
 
 var (
 	// ErrMissingHeader means the `Authorization` header was empty.
 	ErrMissingHeader = errors.New("the length of the `Authorization` header is zero")
+	// ErrInvalidClaims means the token claims were missing or malformed.
+	ErrInvalidClaims = errors.New("the token claims are missing or malformed")
 )
 
 // Context is the context of the JSON web token.
@@ -24,7 +27,7 @@ type Context struct {
 // secretFunc validates the secret format.
 func secretFunc(secret string) jwt.Keyfunc {
 	return func(token *jwt.Token) (interface{}, error) {
-		// Make sure the `alg` is what we except.
+		// Make sure the `alg` is what we expect.
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, jwt.ErrSignatureInvalid
 		}
@@ -38,24 +41,38 @@ func secretFunc(secret string) jwt.Keyfunc {
 func Parse(tokenString string, secret string) (*Context, error) {
 	ctx := &Context{}
 
-	// Parse the token.
-	token, err := jwt.Parse(tokenString, secretFunc(secret))
-
-	// Parse the token error.
+	// Parse the token, pinning the HMAC signing method to
+	// prevent algorithm confusion attacks.
+	token, err := jwt.Parse(tokenString, secretFunc(secret),
+		jwt.WithValidMethods([]string{jwt.SigningMethodHS256.Alg()}))
 	if err != nil {
 		return ctx, err
-
-		// Read the token if it is valid.
-	} else if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		ctx.ID = uint64(claims["id"].(float64))
-		ctx.Username = claims["username"].(string)
-		ctx.Role = claims["role"].(string)
-		return ctx, nil
-
-		// Other errors.
-	} else {
-		return ctx, err
 	}
+
+	// Read the token if it is valid.
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok || !token.Valid {
+		return ctx, jwt.ErrTokenInvalidClaims
+	}
+
+	// Safely extract the claims, never panic on malformed tokens.
+	id, ok := claims["id"].(float64)
+	if !ok {
+		return ctx, ErrInvalidClaims
+	}
+	username, ok := claims["username"].(string)
+	if !ok {
+		return ctx, ErrInvalidClaims
+	}
+	role, ok := claims["role"].(string)
+	if !ok {
+		return ctx, ErrInvalidClaims
+	}
+
+	ctx.ID = uint64(id)
+	ctx.Username = username
+	ctx.Role = role
+	return ctx, nil
 }
 
 // ParseRequest gets the token from the header and
@@ -85,14 +102,15 @@ func Sign(c Context, secret string) (tokenString string, err error) {
 	if secret == "" {
 		secret = viper.GetString("jwt_secret")
 	}
+	now := time.Now()
 	// The token content.
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":       c.ID,
 		"username": c.Username,
 		"role":     c.Role,
-		"nbf":      time.Now().Unix(),
-		"iat":      time.Now().Unix(),
-		"exp":      time.Now().Add(time.Hour * 72).Unix(),
+		"nbf":      now.Unix(),
+		"iat":      now.Unix(),
+		"exp":      now.Add(time.Hour * 72).Unix(),
 	})
 	// Sign the token with the specified secret.
 	tokenString, err = token.SignedString([]byte(secret))
