@@ -59,22 +59,51 @@
 
     <!-- 管理（seller/admin） -->
     <section id="view-manage" class="view hidden">
-      <h2>书籍管理</h2>
-      <form id="add-book-form" class="card form-card" onsubmit="return addBook(event)">
-        <h3>添加新书</h3>
-        <div class="form-row"><label>书名</label><input name="title" required maxlength="32"></div>
-        <div class="form-row"><label>作者</label><input name="author" required maxlength="32"></div>
-        <div class="form-row"><label>价格</label><input name="price" type="number" step="0.01" min="0" required></div>
-        <div class="form-row"><label>出版日期</label><input name="publishDate" type="date" required></div>
-        <div class="form-row"><label>分类</label><input name="category" required maxlength="32"></div>
-        <div class="form-row"><label>库存</label><input name="number" type="number" min="0" required></div>
-        <div class="form-row"><label>上架</label><input name="isSell" type="checkbox" checked></div>
-        <button class="primary" type="submit">添加</button>
-      </form>
-      <table class="table" id="manage-table">
-        <thead><tr><th>ID</th><th>书名</th><th>作者</th><th>价格</th><th>库存</th><th>状态</th><th>操作</th></tr></thead>
-        <tbody></tbody>
-      </table>
+      <div class="section-head">
+        <h2>管理后台</h2>
+        <div class="tabs" role="tablist" aria-label="管理后台">
+          <button class="tab active" data-admin-tab="books" onclick="switchAdminTab('books')">书籍</button>
+          <button class="tab" data-admin-tab="users" onclick="switchAdminTab('users')">用户</button>
+          <button class="tab" data-admin-tab="orders" onclick="switchAdminTab('orders')">订单</button>
+        </div>
+      </div>
+
+      <div id="admin-tab-books" class="admin-panel">
+        <form id="add-book-form" class="form-card" onsubmit="return addBook(event)">
+          <h3>添加新书</h3>
+          <div class="form-row"><label>书名</label><input name="title" required maxlength="32"></div>
+          <div class="form-row"><label>作者</label><input name="author" required maxlength="32"></div>
+          <div class="form-row"><label>价格</label><input name="price" type="number" step="0.01" min="0" required></div>
+          <div class="form-row"><label>出版日期</label><input name="publishDate" type="date" required></div>
+          <div class="form-row"><label>分类</label><input name="category" required maxlength="32"></div>
+          <div class="form-row"><label>库存</label><input name="number" type="number" min="0" required></div>
+          <div class="form-row"><label>上架</label><input name="isSell" type="checkbox" checked></div>
+          <button class="primary" type="submit">添加</button>
+        </form>
+        <table class="table admin-table" id="manage-table">
+          <thead><tr><th>ID</th><th>书名</th><th>作者</th><th>出版日期</th><th>分类</th><th>价格</th><th>库存</th><th>状态</th><th>操作</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div id="admin-tab-users" class="admin-panel hidden">
+        <div class="section-head compact">
+          <h3>用户列表</h3>
+          <button onclick="loadUsers()">刷新</button>
+        </div>
+        <table class="table admin-table" id="user-table">
+          <thead><tr><th>ID</th><th>用户名</th><th>角色</th><th>创建时间</th><th>更新时间</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div id="admin-tab-orders" class="admin-panel hidden">
+        <div class="section-head compact">
+          <h3>订单列表</h3>
+          <button onclick="loadAdminOrders()">刷新</button>
+        </div>
+        <div id="admin-order-list"></div>
+      </div>
     </section>
   </main>
 
@@ -92,6 +121,18 @@
   </div>
 
   <div id="toast" class="toast hidden"></div>
+
+  <div id="cart-fab" class="cart-fab hidden" onmouseenter="openCartPreview()" onmouseleave="closeCartPreview()">
+    <button id="cart-fab-button" onclick="showView('cart')">🛒 <span id="cart-fab-count">0</span></button>
+    <div id="cart-fab-panel" class="cart-fab-panel hidden">
+      <div class="cart-fab-head">
+        <strong>购物车</strong>
+        <span id="cart-fab-price">¥0.00</span>
+      </div>
+      <div id="cart-fab-items" class="cart-fab-items"></div>
+    </div>
+  </div>
+
   <script src="/web/app.js"></script>
 </body>
 </html>

@@ -13,9 +13,9 @@ p, all, /web/*, GET
 p, all, /v1/user/login, POST
 p, all, /v1/user/register, POST
 
-p, register, /v1/user/common, GET
-p, register, /v1/user/common, PUT
-p, register, /v1/user/common, DELETE
+p, common, /v1/user/common, GET
+p, common, /v1/user/common, PUT
+p, common, /v1/user/common, DELETE
 
 p, admin, /v1/user/admin, GET
 p, admin, /v1/user/admin/:id, GET

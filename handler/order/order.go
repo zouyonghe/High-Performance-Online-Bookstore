@@ -20,6 +20,11 @@ type SwaggerListResponse struct {
 	Data ListResponse `json:"data"`
 }
 
+type SwaggerGetResponse struct {
+	handler.BaseResponse
+	Data GetResponse `json:"data"`
+}
+
 type ShowOrderRequest struct{}
 
 type ShowOrderResponse struct {
@@ -40,6 +45,10 @@ type DealOrderRequest struct {
 
 type DealOrderResponse struct {
 	OrderID uint64 `json:"orderId"`
+}
+
+type GetResponse struct {
+	Order model.OrderInfo `json:"order"`
 }
 
 // ListRequest represents an order list query.

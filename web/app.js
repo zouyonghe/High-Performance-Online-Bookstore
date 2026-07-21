@@ -11,7 +11,11 @@ const state = {
   title: "",
   category: "",
   authMode: "login",
+  adminTab: "books",
 };
+
+let cartPreviewTimer = null;
+let cartPreviewCache = null;
 
 /* ---------- 基础工具 ---------- */
 
@@ -60,7 +64,18 @@ function showView(name) {
   if (name === "books") loadBooks();
   if (name === "cart") loadCart();
   if (name === "orders") loadOrders();
-  if (name === "manage") loadManage();
+  if (name === "manage") switchAdminTab(state.adminTab);
+}
+
+function switchAdminTab(tab) {
+  state.adminTab = tab;
+  ["books", "users", "orders"].forEach((name) => {
+    document.getElementById("admin-tab-" + name).classList.toggle("hidden", name !== tab);
+    document.querySelector(`[data-admin-tab="${name}"]`).classList.toggle("active", name === tab);
+  });
+  if (tab === "books") loadManage();
+  if (tab === "users") loadUsers();
+  if (tab === "orders") loadAdminOrders();
 }
 
 /* ---------- 认证 ---------- */
@@ -136,6 +151,8 @@ function renderNav() {
   const info = document.getElementById("user-info");
   info.classList.toggle("hidden", !loggedIn);
   info.textContent = loggedIn ? `👤 ${state.username}（${state.role}）` : "";
+  const cartFab = document.getElementById("cart-fab");
+  cartFab.classList.toggle("hidden", !isGeneral);
 }
 
 /* ---------- 书籍浏览 ---------- */
@@ -174,6 +191,29 @@ async function loadBooks() {
     renderBooks(books);
     updateCategories(books);
   } catch (_) {}
+}
+
+function adminBookRow(b) {
+  return `
+    <tr>
+      <td>${b.BookID}</td>
+      <td><input class="inline-input" id="book-title-${b.BookID}" value="${escAttr(b.title)}"></td>
+      <td><input class="inline-input" id="book-author-${b.BookID}" value="${escAttr(b.author)}"></td>
+      <td><input class="inline-input" id="book-publish-${b.BookID}" type="date" value="${escAttr(b.publishDate)}"></td>
+      <td><input class="inline-input" id="book-category-${b.BookID}" value="${escAttr(b.category)}"></td>
+      <td><input class="inline-input small" id="book-price-${b.BookID}" type="number" step="0.01" min="0" value="${b.price}"></td>
+      <td><input class="inline-input small" id="book-number-${b.BookID}" type="number" min="0" value="${b.number}"></td>
+      <td>
+        <select class="inline-input small" id="book-sell-${b.BookID}">
+          <option value="true" ${b.isSell ? "selected" : ""}>在售</option>
+          <option value="false" ${!b.isSell ? "selected" : ""}>下架</option>
+        </select>
+      </td>
+      <td class="actions-cell">
+        <button class="primary" onclick="saveBook(${b.BookID})">保存</button>
+        <button class="danger" onclick="deleteBook(${b.BookID})">删除</button>
+      </td>
+    </tr>`;
 }
 
 function renderBooks(books) {
@@ -219,13 +259,14 @@ function updateCategories(books) {
 async function addToCart(bookID) {
   try {
     await api("/cart", { method: "PUT", body: { BookID: bookID, number: 1 } });
+    renderCartFab(await fetchCartData());
     toast("已加入购物车");
   } catch (_) {}
 }
 
 async function loadCart() {
   try {
-    const data = await api("/cart");
+    const data = await fetchCartData();
     const books = data.booksInfo || [];
     document.getElementById("cart-price").textContent = (data.cartPrice || 0).toFixed(2);
     const tbody = document.querySelector("#cart-table tbody");
@@ -242,7 +283,53 @@ async function loadCart() {
       </tr>`
       )
       .join("");
+    renderCartFab(data);
   } catch (_) {}
+}
+
+async function fetchCartData() {
+  const data = await api("/cart");
+  cartPreviewCache = data;
+  return data;
+}
+
+function renderCartFab(data) {
+  const books = data.booksInfo || [];
+  const count = books.reduce((sum, b) => sum + Number(b.number || 0), 0);
+  document.getElementById("cart-fab-count").textContent = count;
+  document.getElementById("cart-fab-price").textContent = `¥${(data.cartPrice || 0).toFixed(2)}`;
+  const items = document.getElementById("cart-fab-items");
+  if (!books.length) {
+    items.innerHTML = '<p class="empty-preview">购物车空</p>';
+    return;
+  }
+  items.innerHTML = books
+    .slice(0, 5)
+    .map((b) => `
+      <div class="cart-fab-item">
+        <div>
+          <strong>${esc(b.title)}</strong>
+          <div class="meta">x${b.number}</div>
+        </div>
+        <span>¥${(b.price * b.number).toFixed(2)}</span>
+      </div>`)
+    .join("");
+}
+
+async function openCartPreview() {
+  clearTimeout(cartPreviewTimer);
+  document.getElementById("cart-fab-panel").classList.remove("hidden");
+  try {
+    const data = cartPreviewCache || (await fetchCartData());
+    renderCartFab(data);
+  } catch (_) {}
+}
+
+function closeCartPreview() {
+  clearTimeout(cartPreviewTimer);
+  cartPreviewTimer = setTimeout(() => {
+    document.getElementById("cart-fab-panel").classList.add("hidden");
+  }, 180);
 }
 
 async function removeFromCart(bookID, number) {
@@ -346,39 +433,31 @@ async function addBook(e) {
   return false;
 }
 
+async function saveBook(id) {
+  const body = {
+    title: document.getElementById(`book-title-${id}`).value.trim(),
+    author: document.getElementById(`book-author-${id}`).value.trim(),
+    publishDate: document.getElementById(`book-publish-${id}`).value,
+    category: document.getElementById(`book-category-${id}`).value.trim(),
+    price: parseFloat(document.getElementById(`book-price-${id}`).value),
+    isSell: document.getElementById(`book-sell-${id}`).value === "true",
+    number: parseInt(document.getElementById(`book-number-${id}`).value, 10),
+  };
+  try {
+    await api(`/book/${id}`, { method: "PUT", body });
+    toast("已保存");
+    loadManage();
+  } catch (_) {}
+}
+
 async function loadManage() {
   try {
     const data = await api("/book", { query: { pageNum: 1, pageSize: 100 } });
     const books = data.bookList || [];
     const tbody = document.querySelector("#manage-table tbody");
     tbody.innerHTML = books
-      .map(
-        (b) => `
-      <tr>
-        <td>${b.BookID}</td>
-        <td>${esc(b.title)}</td>
-        <td>${esc(b.author)}</td>
-        <td>¥${b.price.toFixed(2)}</td>
-        <td>${b.number}</td>
-        <td>${b.isSell ? "在售" : "下架"}</td>
-        <td>
-          <button onclick="toggleSell(${b.BookID}, ${!b.isSell}, '${esc(b.title)}', '${esc(b.author)}', ${b.price}, '${esc(b.publishDate)}', '${esc(b.category)}', ${b.number})">${b.isSell ? "下架" : "上架"}</button>
-          <button class="danger" onclick="deleteBook(${b.BookID})">删除</button>
-        </td>
-      </tr>`
-      )
+      .map((b) => adminBookRow(b))
       .join("");
-  } catch (_) {}
-}
-
-async function toggleSell(id, isSell, title, author, price, publishDate, category, number) {
-  try {
-    await api("/book/" + id, {
-      method: "PUT",
-      body: { title, author, price, publishDate, category, isSell, number },
-    });
-    toast(isSell ? "已上架" : "已下架");
-    loadManage();
   } catch (_) {}
 }
 
@@ -391,6 +470,77 @@ async function deleteBook(id) {
   } catch (_) {}
 }
 
+async function loadUsers() {
+  try {
+    const data = await api("/user/admin", { query: { pageNum: 1, pageSize: 100 } });
+    const users = data.userList || [];
+    const tbody = document.querySelector("#user-table tbody");
+    tbody.innerHTML = users
+      .map(
+        (u) => `
+      <tr>
+        <td>${u.UserID}</td>
+        <td>${esc(u.username)}</td>
+        <td>${esc(u.role)}</td>
+        <td>${esc(u.createdAt)}</td>
+        <td>${esc(u.updatedAt)}</td>
+      </tr>`
+      )
+      .join("");
+  } catch (_) {}
+}
+
+async function loadAdminOrders() {
+  try {
+    const data = await api("/order", { query: { pageNum: 1, pageSize: 100 } });
+    const orders = data.orderList || [];
+    const box = document.getElementById("admin-order-list");
+    if (!orders.length) {
+      box.innerHTML = '<p class="empty">暂无订单</p>';
+      return;
+    }
+    box.innerHTML = orders
+      .map(
+        (o) => `
+      <div class="card order-card">
+        <div class="order-head">
+          <strong>订单 #${o.order_id}</strong>
+          <span class="status status-${o.status}">${statusText(o.status)}</span>
+        </div>
+        <p class="meta">用户：#${o.userID || "-"} ｜ 下单时间：${esc(o.createdAt)} ｜ 金额：¥${o.orderPrice.toFixed(2)}</p>
+        <table class="table">
+          <thead><tr><th>书籍ID</th><th>单价</th><th>数量</th></tr></thead>
+          <tbody>${(o.orderBook || [])
+            .map((b) => `<tr><td>${b.BookID}</td><td>¥${b.unitPrice.toFixed(2)}</td><td>${b.Number}</td></tr>`)
+            .join("")}</tbody>
+        </table>
+        <div class="admin-order-actions">
+          ${o.status === "open" ? `<button class="primary" onclick="adminDealOrder(${o.order_id}, 'accept')">支付</button><button class="danger" onclick="adminDealOrder(${o.order_id}, 'cancel')">取消</button>` : ""}
+          <button class="danger" onclick="adminDeleteOrder(${o.order_id})">删除</button>
+        </div>
+      </div>`
+      )
+      .join("");
+  } catch (_) {}
+}
+
+async function adminDealOrder(orderID, operation) {
+  try {
+    await api(`/order/${orderID}`, { method: "POST", body: { orderId: orderID, operation } });
+    toast(operation === "accept" ? "已支付" : "已取消");
+    loadAdminOrders();
+  } catch (_) {}
+}
+
+async function adminDeleteOrder(orderID) {
+  if (!confirm("确定删除该订单？")) return;
+  try {
+    await api(`/order/${orderID}`, { method: "DELETE" });
+    toast("已删除");
+    loadAdminOrders();
+  } catch (_) {}
+}
+
 /* ---------- 工具 ---------- */
 
 function esc(s) {
@@ -399,10 +549,15 @@ function esc(s) {
   }[c]));
 }
 
+function escAttr(s) {
+  return esc(s).replace(/`/g, "&#96;");
+}
+
 /* ---------- 启动 ---------- */
 
 (async function init() {
   if (state.token) await refreshUserInfo();
   renderNav();
   showView("books");
+  switchAdminTab(state.adminTab);
 })();

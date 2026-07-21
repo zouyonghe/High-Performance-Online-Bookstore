@@ -10,7 +10,7 @@ import (
 // List returns a list of orders.
 //
 // @Summary List orders
-// @Description List orders: general users see their own orders, sellers and admins see all accepted orders
+// @Description List orders: general users see their own orders, sellers and admins see all orders
 // @Tags order
 // @Produce json
 // @Param pageNum query int false "page number, default 1"

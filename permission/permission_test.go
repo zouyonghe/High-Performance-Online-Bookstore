@@ -25,7 +25,13 @@ func TestCheckPermission(t *testing.T) {
 		act: "POST",
 	}
 	ok2 := CheckPermission(test2.sub, test2.obj, test2.act)
-	if ok1 && !ok2 {
+	test3 := testCase{
+		sub: "admin",
+		obj: "/v1/user/common",
+		act: "GET",
+	}
+	ok3 := CheckPermission(test3.sub, test3.obj, test3.act)
+	if ok1 && !ok2 && ok3 {
 		fmt.Println("Test CheckPermission passed")
 	} else {
 		t.Error("Test CheckPermission failed")

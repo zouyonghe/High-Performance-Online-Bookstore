@@ -80,6 +80,9 @@ func (o *Order) Accept() error {
 	if r.Error != nil {
 		return r.Error
 	}
+	if o.Status != "open" {
+		return berror.ErrOrderNotOpen
+	}
 	o.Status = "accept"
 	var ob []*OrderBook
 	if err := DB.Self.Model(&OrderBook{}).Where("order_id = ?", o.ID).Find(&ob).Error; err != nil {

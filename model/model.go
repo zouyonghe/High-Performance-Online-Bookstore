@@ -60,6 +60,7 @@ type CartInfo struct {
 
 type OrderInfo struct {
 	OrderID    uint64      `json:"order_id"`
+	UserID     uint64      `json:"userID"`
 	Books      []OrderBook `json:"orderBook"`
 	OrderPrice float64     `json:"orderPrice"`
 	CreatedAt  string      `json:"createdAt"`

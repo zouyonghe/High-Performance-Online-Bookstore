@@ -36,6 +36,36 @@ button.danger { background: #e74c3c; color: #fff; }
 main { max-width: 1100px; margin: 24px auto; padding: 0 16px; }
 .view h2 { margin-bottom: 16px; }
 
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.section-head.compact { margin-bottom: 10px; }
+
+.tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.tab { background: #ecf0f1; color: #2c3e50; }
+.tab.active { background: #3498db; color: #fff; }
+
+.admin-panel { margin-bottom: 24px; }
+.admin-table { table-layout: fixed; }
+.actions-cell { white-space: nowrap; }
+.actions-cell button { margin-right: 6px; }
+.admin-order-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+
+.inline-input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #dfe4ea;
+  border-radius: 4px;
+  font-size: 13px;
+}
+.inline-input.small { min-width: 80px; }
+.inline-input:focus { border-color: #3498db; outline: none; }
+
 /* 书籍卡片 */
 .book-grid {
   display: grid; gap: 16px;
@@ -108,7 +138,49 @@ main { max-width: 1100px; margin: 24px auto; padding: 0 16px; }
 }
 .toast.err { background: #e74c3c; }
 
+/* 悬浮购物车 */
+.cart-fab {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 120;
+}
+.cart-fab > button {
+  min-width: 84px;
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.18);
+  background: #2c3e50;
+  color: #fff;
+}
+.cart-fab-panel {
+  position: absolute;
+  right: 0;
+  bottom: 52px;
+  width: 320px;
+  max-width: calc(100vw - 36px);
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 12px 32px rgba(0,0,0,.16);
+  padding: 12px;
+}
+.cart-fab-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.cart-fab-items { display: grid; gap: 8px; }
+.cart-fab-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+}
+.empty-preview { color: #95a5a6; font-size: 13px; }
+
 @media (max-width: 640px) {
   .topbar { padding: 10px 12px; }
   .search-box { order: 3; width: 100%; }
+  .cart-fab-panel { width: min(320px, calc(100vw - 24px)); }
 }

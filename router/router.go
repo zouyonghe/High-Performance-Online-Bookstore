@@ -177,9 +177,12 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	o := v1.Group("/order")
 	{
 		// order router
-		o.POST("", order.Create) // create an order
-		o.PUT("", order.Deal)    // deal with an order: pay or cancel
-		o.GET("", order.List)    // list orders
+		o.POST("", order.Create)       // create an order
+		o.PUT("", order.Deal)          // deal with an order: pay or cancel
+		o.GET("", order.List)          // list orders
+		o.GET("/:id", order.Get)       // get specified order information
+		o.POST("/:id", order.DealByID) // deal with specified order
+		o.DELETE("/:id", order.Delete) // delete specified order
 	}
 
 	return g
