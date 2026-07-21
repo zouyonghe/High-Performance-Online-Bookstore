@@ -116,10 +116,12 @@ type DeleteResponse struct {
 	Message string `json:"message"`
 }
 
+// ListRequest represents a user list query.
+// The parameters are passed in the query string.
 type ListRequest struct {
-	Username string `json:"username"`
-	PageNum  int    `json:"pageNum"`
-	PageSize int    `json:"pageSize"`
+	Username string `json:"username" form:"username"`
+	PageNum  int    `json:"pageNum"  form:"pageNum"`
+	PageSize int    `json:"pageSize" form:"pageSize"`
 }
 
 type ListResponse struct {

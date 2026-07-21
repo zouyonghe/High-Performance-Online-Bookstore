@@ -83,11 +83,11 @@ var (
 	// ErrUpdateCart update cart failed
 	ErrUpdateCart = &Berror{Code: 20303, Message: "Error occurred while updating the cart."}
 	// ErrClearCart clear cart failed
-	ErrClearCart = &Berror{Code: 20205, Message: "Error occurred while clearing the cart."}
+	ErrClearCart = &Berror{Code: 20304, Message: "Error occurred while clearing the cart."}
 	// ErrNothingInCart nothing in cart
-	ErrNothingInCart = &Berror{Code: 20206, Message: "Nothing in cart."}
+	ErrNothingInCart = &Berror{Code: 20305, Message: "Nothing in cart."}
 	// ErrDeleteBookFromCart delete book from cart failed
-	ErrDeleteBookFromCart = &Berror{Code: 20207, Message: "Error occurred while deleting the book from cart."}
+	ErrDeleteBookFromCart = &Berror{Code: 20306, Message: "Error occurred while deleting the book from cart."}
 )
 
 // order
@@ -105,15 +105,17 @@ var (
 	// ErrOrderNotExist order was not found
 	ErrOrderNotExist = &Berror{Code: 20405, Message: "The order is not exist."}
 	// ErrApproveOrder approve order failed
-	ErrApproveOrder = &Berror{Code: 20210, Message: "Error occurred while approving the order."}
+	ErrApproveOrder = &Berror{Code: 20406, Message: "Error occurred while approving the order."}
 	// ErrDealOrder deal order failed
-	ErrDealOrder = &Berror{Code: 20211, Message: "Error occurred while dealing the order."}
+	ErrDealOrder = &Berror{Code: 20407, Message: "Error occurred while dealing the order."}
 	// ErrAddBookToOrder add book to order failed
-	ErrAddBookToOrder = &Berror{Code: 20212, Message: "Error occurred while adding the book to order."}
+	ErrAddBookToOrder = &Berror{Code: 20408, Message: "Error occurred while adding the book to order."}
 	// ErrSetOrderPrice set order price failed
-	ErrSetOrderPrice = &Berror{Code: 20213, Message: "Error occurred while setting the order price."}
+	ErrSetOrderPrice = &Berror{Code: 20409, Message: "Error occurred while setting the order price."}
 	// ErrOrderNotOpen order not open
-	ErrOrderNotOpen = &Berror{Code: 20214, Message: "The order is not open."}
+	ErrOrderNotOpen = &Berror{Code: 20410, Message: "The order is not open."}
 	// ErrInvalidOwner invalid owner
-	ErrInvalidOwner = &Berror{Code: 20215, Message: "Invalid owner."}
+	ErrInvalidOwner = &Berror{Code: 20411, Message: "Invalid owner."}
+	// ErrInvalidOperation invalid order operation
+	ErrInvalidOperation = &Berror{Code: 20412, Message: "The operation is invalid, expected accept or cancel."}
 )

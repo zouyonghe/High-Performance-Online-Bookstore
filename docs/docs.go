@@ -24,6 +24,500 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/book": {
+            "get": {
+                "description": "List books by fuzzy title and exact category with pagination",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "book"
+                ],
+                "summary": "List books",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "fuzzy book title",
+                        "name": "title",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exact book category",
+                        "name": "category",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page number, default 1",
+                        "name": "pageNum",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size, default 10",
+                        "name": "pageSize",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/book.SwaggerListResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Add a new book (seller or admin only)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "book"
+                ],
+                "summary": "Add a new book",
+                "parameters": [
+                    {
+                        "description": "book information",
+                        "name": "book",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/book.AddRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/book.SwaggerAddResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/book/{id}": {
+            "get": {
+                "description": "Get a book specified by book ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "book"
+                ],
+                "summary": "Get a book",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "int64",
+                        "description": "the ID of the book",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/book.SwaggerGetResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update a book specified by book ID (seller or admin only)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "book"
+                ],
+                "summary": "Update a book",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "int64",
+                        "description": "the ID of the book",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "book information",
+                        "name": "book",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/book.AddRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/book.SwaggerUpdateResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete a book specified by book ID (seller or admin only)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "book"
+                ],
+                "summary": "Delete a book",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "int64",
+                        "description": "the ID of the book",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/book.SwaggerDeleteResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/cart": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Show the books and total price of the current user's cart",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cart"
+                ],
+                "summary": "Show the cart",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/cart.SwaggerShowCartResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Add a book to the current user's cart",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cart"
+                ],
+                "summary": "Add a book to the cart",
+                "parameters": [
+                    {
+                        "description": "book ID and number",
+                        "name": "book",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/cart.AddCartRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/cart.SwaggerAddCartResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Remove the specified number of a book from the current user's cart",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cart"
+                ],
+                "summary": "Remove books from the cart",
+                "parameters": [
+                    {
+                        "description": "book ID and number",
+                        "name": "book",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/cart.DeleteCartRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/cart.SwaggerDeleteCartResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/cart/all": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Remove all books from the current user's cart",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cart"
+                ],
+                "summary": "Clear the cart",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/cart.SwaggerClearCartResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/order": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "List orders: general users see their own orders, sellers and admins see all accepted orders",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "order"
+                ],
+                "summary": "List orders",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "page number, default 1",
+                        "name": "pageNum",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size, default 10",
+                        "name": "pageSize",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/order.SwaggerListResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Deal with an order: operation=accept pays the order, operation=cancel cancels the order",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "order"
+                ],
+                "summary": "Deal with an order",
+                "parameters": [
+                    {
+                        "description": "order ID and operation",
+                        "name": "order",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/order.DealOrderRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/order.SwaggerDealOrderResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create an order from all books in the current user's cart and clear the cart",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "order"
+                ],
+                "summary": "Create an order",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/order.SwaggerCreateOrderResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/state/cpu": {
+            "get": {
+                "description": "Check the cpu load of the server",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "state"
+                ],
+                "summary": "CPU check",
+                "responses": {
+                    "200": {
+                        "description": "OK - Load average: ...",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/state/disk": {
+            "get": {
+                "description": "Check the disk usage of the server",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "state"
+                ],
+                "summary": "Disk check",
+                "responses": {
+                    "200": {
+                        "description": "OK - Free space: ...",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/state/health": {
+            "get": {
+                "description": "Show OK as the ping-pong result",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "state"
+                ],
+                "summary": "Health check",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/state/ram": {
+            "get": {
+                "description": "Check the ram usage of the server",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "state"
+                ],
+                "summary": "RAM check",
+                "responses": {
+                    "200": {
+                        "description": "OK - Free space: ...",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/user/admin": {
             "get": {
                 "security": [
@@ -39,6 +533,26 @@ const docTemplate = `{
                     "user/admin"
                 ],
                 "summary": "List users account by specified username format.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "fuzzy username",
+                        "name": "username",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page number, default 1",
+                        "name": "pageNum",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size, default 10",
+                        "name": "pageSize",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"totalCount\":1,\"userList\":[{\"id\":1,\"username\":\"admin\",\"ShortId\":\"5P9Ia4QnR\",\"role\":\"admin\",\"createdAt\":\"2021-04-18 15:40:33\",\"updatedAt\":\"2021-04-18 15:40:33\"}]}}",
@@ -166,6 +680,29 @@ const docTemplate = `{
             }
         },
         "/user/common": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get the information of the user specified by the token. The password hash is never returned.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user/common"
+                ],
+                "summary": "Get self user information",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.SwaggerGetResponse"
+                        }
+                    }
+                }
+            },
             "put": {
                 "security": [
                     {
@@ -299,6 +836,408 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "book.AddRequest": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "isSell": {
+                    "type": "boolean"
+                },
+                "number": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "publishDate": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "book.AddResponse": {
+            "type": "object",
+            "properties": {
+                "BookID": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "book.DeleteResponse": {
+            "type": "object",
+            "properties": {
+                "BookID": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "book.ListResponse": {
+            "type": "object",
+            "properties": {
+                "bookList": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.BookInfo"
+                    }
+                },
+                "totalCount": {
+                    "type": "integer"
+                }
+            }
+        },
+        "book.SwaggerAddResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/book.AddResponse"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "book.SwaggerDeleteResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/book.DeleteResponse"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "book.SwaggerGetResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/model.Book"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "book.SwaggerListResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/book.ListResponse"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "book.SwaggerUpdateResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/book.UpdateResponse"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "book.UpdateResponse": {
+            "type": "object",
+            "properties": {
+                "BookID": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "cart.AddCartRequest": {
+            "type": "object",
+            "properties": {
+                "BookID": {
+                    "type": "integer"
+                },
+                "number": {
+                    "type": "integer"
+                }
+            }
+        },
+        "cart.AddCartResponse": {
+            "type": "object",
+            "properties": {
+                "BookID": {
+                    "type": "integer"
+                },
+                "Number": {
+                    "type": "integer"
+                }
+            }
+        },
+        "cart.ClearCartResponse": {
+            "type": "object",
+            "properties": {
+                "Message": {
+                    "type": "string"
+                }
+            }
+        },
+        "cart.DeleteCartRequest": {
+            "type": "object",
+            "properties": {
+                "BookID": {
+                    "type": "integer"
+                },
+                "Number": {
+                    "type": "integer"
+                }
+            }
+        },
+        "cart.DeleteCartResponse": {
+            "type": "object",
+            "properties": {
+                "BookID": {
+                    "type": "integer"
+                },
+                "Number": {
+                    "type": "integer"
+                }
+            }
+        },
+        "cart.ShowCartResponse": {
+            "type": "object",
+            "properties": {
+                "booksInfo": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.BookBase"
+                    }
+                },
+                "cartPrice": {
+                    "type": "number"
+                }
+            }
+        },
+        "cart.SwaggerAddCartResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/cart.AddCartResponse"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "cart.SwaggerClearCartResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/cart.ClearCartResponse"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "cart.SwaggerDeleteCartResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/cart.DeleteCartResponse"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "cart.SwaggerShowCartResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/cart.ShowCartResponse"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Book": {
+            "type": "object",
+            "required": [
+                "author",
+                "category",
+                "number",
+                "price",
+                "publishDate",
+                "title"
+            ],
+            "properties": {
+                "author": {
+                    "type": "string",
+                    "maxLength": 32,
+                    "minLength": 1
+                },
+                "category": {
+                    "type": "string",
+                    "maxLength": 32,
+                    "minLength": 1
+                },
+                "isSell": {
+                    "type": "boolean"
+                },
+                "number": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "price": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "publishDate": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string",
+                    "maxLength": 32,
+                    "minLength": 1
+                }
+            }
+        },
+        "model.BookBase": {
+            "type": "object",
+            "properties": {
+                "BookID": {
+                    "type": "integer"
+                },
+                "index": {
+                    "type": "integer"
+                },
+                "number": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.BookInfo": {
+            "type": "object",
+            "properties": {
+                "BookID": {
+                    "type": "integer"
+                },
+                "author": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "isSell": {
+                    "type": "boolean"
+                },
+                "number": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "publishDate": {
+                    "type": "string"
+                },
+                "shortId": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.OrderBook": {
+            "type": "object",
+            "properties": {
+                "BookID": {
+                    "type": "integer"
+                },
+                "Number": {
+                    "type": "integer"
+                },
+                "unitPrice": {
+                    "type": "number"
+                }
+            }
+        },
+        "model.OrderInfo": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "orderBook": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.OrderBook"
+                    }
+                },
+                "orderPrice": {
+                    "type": "number"
+                },
+                "order_id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
         "model.UserInfo": {
             "type": "object",
             "properties": {
@@ -318,6 +1257,89 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "order.CreateOrderResponse": {
+            "type": "object",
+            "properties": {
+                "orderId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "order.DealOrderRequest": {
+            "type": "object",
+            "properties": {
+                "operation": {
+                    "type": "string"
+                },
+                "orderId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "order.DealOrderResponse": {
+            "type": "object",
+            "properties": {
+                "orderId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "order.ListResponse": {
+            "type": "object",
+            "properties": {
+                "orderList": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.OrderInfo"
+                    }
+                },
+                "totalCount": {
+                    "type": "integer"
+                }
+            }
+        },
+        "order.SwaggerCreateOrderResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/order.CreateOrderResponse"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "order.SwaggerDealOrderResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/order.DealOrderResponse"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "order.SwaggerListResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/order.ListResponse"
+                },
+                "message": {
                     "type": "string"
                 }
             }

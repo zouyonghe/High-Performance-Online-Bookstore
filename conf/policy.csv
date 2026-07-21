@@ -4,6 +4,12 @@ p, all, /swagger/*, GET
 
 p, all, /debug/*, GET
 
+p, all, /, GET
+
+p, all, /favicon.ico, GET
+
+p, all, /web/*, GET
+
 p, all, /v1/user/login, POST
 p, all, /v1/user/register, POST
 

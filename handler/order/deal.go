@@ -8,6 +8,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Deal deals with an order.
+//
+// @Summary Deal with an order
+// @Description Deal with an order: operation=accept pays the order, operation=cancel cancels the order
+// @Tags order
+// @Accept json
+// @Produce json
+// @Param order body order.DealOrderRequest true "order ID and operation"
+// @Success 200 {object} order.SwaggerDealOrderResponse
+// @Router /order [put]
+// @Security ApiKeyAuth
 func Deal(c *gin.Context) {
 	log.DealOrderCalled(c)
 

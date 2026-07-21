@@ -93,11 +93,12 @@ func (o *Order) Accept() error {
 		if b.IsSell == false {
 			return berror.ErrBookNotSell
 		}
-		b.Number -= book.Number
-		if b.Number < 0 {
-			b.Number = 0
+		// check the stock BEFORE decrementing to avoid uint underflow
+		if b.Number < book.Number {
 			return berror.ErrBookNotEnough
-		} else if b.Number == 0 {
+		}
+		b.Number -= book.Number
+		if b.Number == 0 {
 			b.IsSell = false
 		}
 
@@ -117,8 +118,13 @@ func (o *Order) Cancel() error {
 	if ro.Status != "open" {
 		return berror.ErrOrderNotOpen
 	}
+	// mark the order as cancelled and soft-delete it so it
+	// no longer shows up in the open order list
 	o.Status = "cancel"
-	return o.DeleteOrder()
+	if err := DB.Self.Save(&o).Error; err != nil {
+		return err
+	}
+	return DB.Self.Delete(&o).Error
 }
 
 func (o *Order) DeleteOrder() error {
@@ -160,16 +166,13 @@ func (o *Order) DeleteOrderBook(bookID uint64) error {
 }
 
 func (o *Order) DealWith(operation string) error {
-	if operation == "accept" {
-		if err := o.Accept(); err != nil {
-			return err
-		}
-	} else if operation == "cancel" {
-		if err := o.Cancel(); err != nil {
-			return err
-		}
+	switch operation {
+	case "accept":
+		return o.Accept()
+	case "cancel":
+		return o.Cancel()
 	}
-	return nil
+	return berror.ErrInvalidOperation
 }
 func (o *Order) CheckOwner(userID uint64) error {
 	if o.UserID != userID {

@@ -8,6 +8,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Update updates a book.
+//
+// @Summary Update a book
+// @Description Update a book specified by book ID (seller or admin only)
+// @Tags book
+// @Accept json
+// @Produce json
+// @Param id path uint64 true "the ID of the book"
+// @Param book body book.AddRequest true "book information"
+// @Success 200 {object} book.SwaggerUpdateResponse
+// @Router /book/{id} [put]
+// @Security ApiKeyAuth
 func Update(c *gin.Context) {
 	log.UpdateBookCalled(c)
 

@@ -8,6 +8,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Show shows the cart of the current user.
+//
+// @Summary Show the cart
+// @Description Show the books and total price of the current user's cart
+// @Tags cart
+// @Produce json
+// @Success 200 {object} cart.SwaggerShowCartResponse
+// @Router /cart [get]
+// @Security ApiKeyAuth
 func Show(c *gin.Context) {
 	log.ShowCartCalled(c)
 

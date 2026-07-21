@@ -11,6 +11,12 @@ import (
 // HasPermission checks if the user has the permission
 // to access the resource.
 func HasPermission(c *gin.Context) {
+	// Skip unregistered routes; they are handled by the 404 handler.
+	if c.FullPath() == "" {
+		c.Next()
+		return
+	}
+
 	var ctx *token.Context
 	ctx, err := token.ParseRequest(c)
 	if err != nil {

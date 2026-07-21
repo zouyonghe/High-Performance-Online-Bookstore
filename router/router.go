@@ -106,6 +106,15 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	// swagger api docs
 	g.GET("/swagger/*any", swag.WrapHandler(swaggerFiles.Handler))
 
+	// web frontend static files
+	g.Static("/web", "./web")
+	g.GET("/", func(c *gin.Context) {
+		c.Redirect(http.StatusMovedPermanently, "/web/index.html")
+	})
+	g.GET("/favicon.ico", func(c *gin.Context) {
+		c.Status(http.StatusNoContent)
+	})
+
 	// pprof router
 	pprof.Register(g)
 

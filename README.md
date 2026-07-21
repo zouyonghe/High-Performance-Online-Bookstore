@@ -14,6 +14,13 @@ A high performance online bookstore system.
 
 路由高效，日志高性能，配置读取便捷，代码通俗易懂。
 
+- 用户体系：注册、登录、JWT 鉴权，admin / seller / general / guest 四种角色（casbin RBAC）
+- 书籍浏览：标题模糊搜索、分类筛选、分页
+- 购物车：加购（含库存校验）、移除、清空
+- 订单：下单、支付（自动扣减库存）、取消
+- 书籍管理：卖家/管理员添加、上下架、删除书籍
+- 自带简单前端（web/ 目录，原生 HTML/JS 单页应用）与 Swagger 在线文档
+
 ## Requirements 必要条件
 
 系统支持Go语言环境，已经安装mariadb或mysql数据库，其它模块依赖参考go.mod文件。
@@ -92,6 +99,14 @@ go build
 
 ./server.sh start
 
+#访问前端页面
+
+#浏览器打开 http://127.0.0.1:8080/ （自动跳转到 /web/index.html）
+
+#访问API文档
+
+#浏览器打开 http://127.0.0.1:8080/swagger/index.html
+
 #终止服务
 
 ./server.sh stop
@@ -104,6 +119,21 @@ go build
 
 ./server.sh version
 ```
+
+### API 说明
+
+列表类接口通过 query string 传参，例如：
+
+```bash
+#书籍列表（标题模糊搜索、分类筛选、分页）
+curl "http://127.0.0.1:8080/v1/book?title=Go&category=编程&pageNum=1&pageSize=10"
+
+#订单列表（需携带 token）
+curl "http://127.0.0.1:8080/v1/order?pageNum=1&pageSize=10" \
+  -H "Authorization: Bearer <token>"
+```
+
+其余接口参数参考 Swagger 文档。
 
 ## Struct 项目结构
 

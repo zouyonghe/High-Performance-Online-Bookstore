@@ -8,6 +8,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Add adds a book to the cart.
+//
+// @Summary Add a book to the cart
+// @Description Add a book to the current user's cart
+// @Tags cart
+// @Accept json
+// @Produce json
+// @Param book body cart.AddCartRequest true "book ID and number"
+// @Success 200 {object} cart.SwaggerAddCartResponse
+// @Router /cart [put]
+// @Security ApiKeyAuth
 func Add(c *gin.Context) {
 	log.AddCartCalled(c)
 

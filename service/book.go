@@ -7,9 +7,9 @@ import (
 	"High-Performance-Online-Bookstore/util"
 )
 
-// ListBookInfo lists book information matching the title.
-func ListBookInfo(title string, pageNum int, pageSize int) ([]*model.BookInfo, error) {
-	books, err := ListBook(title, pageNum, pageSize)
+// ListBookInfo lists book information matching the title and category.
+func ListBookInfo(title, category string, pageNum int, pageSize int) ([]*model.BookInfo, error) {
+	books, err := ListBook(title, category, pageNum, pageSize)
 	if err != nil {
 		return nil, err
 	}
@@ -37,8 +37,8 @@ func ListBookInfo(title string, pageNum int, pageSize int) ([]*model.BookInfo, e
 	return infos, nil
 }
 
-// ListBook lists books.
-func ListBook(title string, pageNum int, pageSize int) ([]*model.Book, error) {
+// ListBook lists books matching the title and category.
+func ListBook(title, category string, pageNum int, pageSize int) ([]*model.Book, error) {
 	if pageSize <= 0 {
 		pageSize = constvar.DefaultPageSize
 	}
@@ -51,6 +51,9 @@ func ListBook(title string, pageNum int, pageSize int) ([]*model.Book, error) {
 	query := DB.Self.Offset(offset).Limit(pageSize)
 	if len(title) > 0 {
 		query = query.Where("title like ?", "%"+title+"%")
+	}
+	if len(category) > 0 {
+		query = query.Where("category = ?", category)
 	}
 	if err := query.Find(&bookList).Error; err != nil {
 		return bookList, err

@@ -9,6 +9,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Create creates an order from the cart.
+//
+// @Summary Create an order
+// @Description Create an order from all books in the current user's cart and clear the cart
+// @Tags order
+// @Produce json
+// @Success 200 {object} order.SwaggerCreateOrderResponse
+// @Router /order [post]
+// @Security ApiKeyAuth
 func Create(c *gin.Context) {
 	log.CreateOrderCalled(c)
 

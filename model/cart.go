@@ -30,15 +30,20 @@ func CreateCart(userID uint64) error {
 	}).Error
 }
 
-// GetCart returns a cart model.
-// If not exists, create a new one.
+// GetCart returns the cart of the user.
+// If the user has no cart yet, a new one is created.
 func GetCart(userID uint64) (*Cart, error) {
 	c := &Cart{}
 	r := DB.Self.Where("user_id = ?", userID).First(c)
+	if errors.Is(r.Error, gorm.ErrRecordNotFound) {
+		if err := CreateCart(userID); err != nil {
+			return nil, err
+		}
+		return c, DB.Self.Where("user_id = ?", userID).First(c).Error
+	}
 	if r.Error != nil {
 		return nil, r.Error
 	}
-
 	return c, nil
 }
 
@@ -56,6 +61,7 @@ func (c *Cart) GetBookList() (books []*BookBase, cartPrice float64, err error) {
 		}
 		bookInfo := &BookBase{
 			Index:  i + 1,
+			BookID: book.BookID,
 			Title:  b.Title,
 			Price:  book.UnitPrice,
 			Number: book.Number,
@@ -83,11 +89,18 @@ func (c *Cart) AddBook(cb CartBook) error {
 	var result CartBook
 	r := DB.Self.Where("cart_id = ? AND book_id = ?", cb.CartID, cb.BookID).First(&result)
 	if errors.Is(r.Error, gorm.ErrRecordNotFound) {
-		c.Books = append(c.Books, cb)
-		if err := DB.Self.Save(&c).Error; err != nil {
+		// reject if the requested number exceeds the stock
+		if cb.Number > b.Number {
+			return berror.ErrBookNotEnough
+		}
+		if err := DB.Self.Create(&cb).Error; err != nil {
 			return err
 		}
 	} else {
+		// reject if the accumulated number exceeds the stock
+		if result.Number+cb.Number > b.Number {
+			return berror.ErrBookNotEnough
+		}
 		result.Number += cb.Number
 		if err := result.UpdateCartBook(); err != nil {
 			return err

@@ -9,6 +9,7 @@ import (
 
 type BookBase struct {
 	Index  int     `json:"index"`
+	BookID uint64  `json:"BookID"`
 	Title  string  `json:"title"`
 	Price  float64 `json:"price"`
 	Number uint    `json:"number"`

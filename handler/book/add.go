@@ -9,6 +9,17 @@ import (
 	"go.uber.org/zap"
 )
 
+// Add adds a new book.
+//
+// @Summary Add a new book
+// @Description Add a new book (seller or admin only)
+// @Tags book
+// @Accept json
+// @Produce json
+// @Param book body book.AddRequest true "book information"
+// @Success 200 {object} book.SwaggerAddResponse
+// @Router /book [post]
+// @Security ApiKeyAuth
 func Add(c *gin.Context) {
 	log.AddBookCalled(c)
 

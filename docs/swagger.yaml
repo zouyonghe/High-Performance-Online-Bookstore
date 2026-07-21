@@ -1,5 +1,269 @@
 basePath: /v1
 definitions:
+  book.AddRequest:
+    properties:
+      author:
+        type: string
+      category:
+        type: string
+      isSell:
+        type: boolean
+      number:
+        type: integer
+      price:
+        type: number
+      publishDate:
+        type: string
+      title:
+        type: string
+    type: object
+  book.AddResponse:
+    properties:
+      BookID:
+        type: integer
+      title:
+        type: string
+    type: object
+  book.DeleteResponse:
+    properties:
+      BookID:
+        type: integer
+      message:
+        type: string
+    type: object
+  book.ListResponse:
+    properties:
+      bookList:
+        items:
+          $ref: '#/definitions/model.BookInfo'
+        type: array
+      totalCount:
+        type: integer
+    type: object
+  book.SwaggerAddResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/book.AddResponse'
+      message:
+        type: string
+    type: object
+  book.SwaggerDeleteResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/book.DeleteResponse'
+      message:
+        type: string
+    type: object
+  book.SwaggerGetResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/model.Book'
+      message:
+        type: string
+    type: object
+  book.SwaggerListResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/book.ListResponse'
+      message:
+        type: string
+    type: object
+  book.SwaggerUpdateResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/book.UpdateResponse'
+      message:
+        type: string
+    type: object
+  book.UpdateResponse:
+    properties:
+      BookID:
+        type: integer
+      message:
+        type: string
+    type: object
+  cart.AddCartRequest:
+    properties:
+      BookID:
+        type: integer
+      number:
+        type: integer
+    type: object
+  cart.AddCartResponse:
+    properties:
+      BookID:
+        type: integer
+      Number:
+        type: integer
+    type: object
+  cart.ClearCartResponse:
+    properties:
+      Message:
+        type: string
+    type: object
+  cart.DeleteCartRequest:
+    properties:
+      BookID:
+        type: integer
+      Number:
+        type: integer
+    type: object
+  cart.DeleteCartResponse:
+    properties:
+      BookID:
+        type: integer
+      Number:
+        type: integer
+    type: object
+  cart.ShowCartResponse:
+    properties:
+      booksInfo:
+        items:
+          $ref: '#/definitions/model.BookBase'
+        type: array
+      cartPrice:
+        type: number
+    type: object
+  cart.SwaggerAddCartResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/cart.AddCartResponse'
+      message:
+        type: string
+    type: object
+  cart.SwaggerClearCartResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/cart.ClearCartResponse'
+      message:
+        type: string
+    type: object
+  cart.SwaggerDeleteCartResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/cart.DeleteCartResponse'
+      message:
+        type: string
+    type: object
+  cart.SwaggerShowCartResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/cart.ShowCartResponse'
+      message:
+        type: string
+    type: object
+  model.Book:
+    properties:
+      author:
+        maxLength: 32
+        minLength: 1
+        type: string
+      category:
+        maxLength: 32
+        minLength: 1
+        type: string
+      isSell:
+        type: boolean
+      number:
+        minimum: 0
+        type: integer
+      price:
+        minimum: 0
+        type: number
+      publishDate:
+        type: string
+      title:
+        maxLength: 32
+        minLength: 1
+        type: string
+    required:
+    - author
+    - category
+    - number
+    - price
+    - publishDate
+    - title
+    type: object
+  model.BookBase:
+    properties:
+      BookID:
+        type: integer
+      index:
+        type: integer
+      number:
+        type: integer
+      price:
+        type: number
+      title:
+        type: string
+    type: object
+  model.BookInfo:
+    properties:
+      BookID:
+        type: integer
+      author:
+        type: string
+      category:
+        type: string
+      createdAt:
+        type: string
+      isSell:
+        type: boolean
+      number:
+        type: integer
+      price:
+        type: number
+      publishDate:
+        type: string
+      shortId:
+        type: string
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  model.OrderBook:
+    properties:
+      BookID:
+        type: integer
+      Number:
+        type: integer
+      unitPrice:
+        type: number
+    type: object
+  model.OrderInfo:
+    properties:
+      createdAt:
+        type: string
+      order_id:
+        type: integer
+      orderBook:
+        items:
+          $ref: '#/definitions/model.OrderBook'
+        type: array
+      orderPrice:
+        type: number
+      status:
+        type: string
+    type: object
   model.UserInfo:
     properties:
       ShortId:
@@ -13,6 +277,59 @@ definitions:
       updatedAt:
         type: string
       username:
+        type: string
+    type: object
+  order.CreateOrderResponse:
+    properties:
+      orderId:
+        type: integer
+    type: object
+  order.DealOrderRequest:
+    properties:
+      operation:
+        type: string
+      orderId:
+        type: integer
+    type: object
+  order.DealOrderResponse:
+    properties:
+      orderId:
+        type: integer
+    type: object
+  order.ListResponse:
+    properties:
+      orderList:
+        items:
+          $ref: '#/definitions/model.OrderInfo'
+        type: array
+      totalCount:
+        type: integer
+    type: object
+  order.SwaggerCreateOrderResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/order.CreateOrderResponse'
+      message:
+        type: string
+    type: object
+  order.SwaggerDealOrderResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/order.DealOrderResponse'
+      message:
+        type: string
+    type: object
+  order.SwaggerListResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/order.ListResponse'
+      message:
         type: string
     type: object
   user.DeleteResponse:
@@ -180,10 +497,338 @@ info:
   title: High-Performance-Online-Bookstore
   version: 0.7.0
 paths:
+  /book:
+    get:
+      description: List books by fuzzy title and exact category with pagination
+      parameters:
+      - description: fuzzy book title
+        in: query
+        name: title
+        type: string
+      - description: exact book category
+        in: query
+        name: category
+        type: string
+      - description: page number, default 1
+        in: query
+        name: pageNum
+        type: integer
+      - description: page size, default 10
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/book.SwaggerListResponse'
+      summary: List books
+      tags:
+      - book
+    post:
+      consumes:
+      - application/json
+      description: Add a new book (seller or admin only)
+      parameters:
+      - description: book information
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/book.AddRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/book.SwaggerAddResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Add a new book
+      tags:
+      - book
+  /book/{id}:
+    delete:
+      description: Delete a book specified by book ID (seller or admin only)
+      parameters:
+      - description: the ID of the book
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/book.SwaggerDeleteResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a book
+      tags:
+      - book
+    get:
+      description: Get a book specified by book ID
+      parameters:
+      - description: the ID of the book
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/book.SwaggerGetResponse'
+      summary: Get a book
+      tags:
+      - book
+    put:
+      consumes:
+      - application/json
+      description: Update a book specified by book ID (seller or admin only)
+      parameters:
+      - description: the ID of the book
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: book information
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/book.AddRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/book.SwaggerUpdateResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update a book
+      tags:
+      - book
+  /cart:
+    delete:
+      consumes:
+      - application/json
+      description: Remove the specified number of a book from the current user's cart
+      parameters:
+      - description: book ID and number
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/cart.DeleteCartRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/cart.SwaggerDeleteCartResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Remove books from the cart
+      tags:
+      - cart
+    get:
+      description: Show the books and total price of the current user's cart
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/cart.SwaggerShowCartResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Show the cart
+      tags:
+      - cart
+    put:
+      consumes:
+      - application/json
+      description: Add a book to the current user's cart
+      parameters:
+      - description: book ID and number
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/cart.AddCartRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/cart.SwaggerAddCartResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Add a book to the cart
+      tags:
+      - cart
+  /cart/all:
+    delete:
+      description: Remove all books from the current user's cart
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/cart.SwaggerClearCartResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Clear the cart
+      tags:
+      - cart
+  /order:
+    get:
+      description: 'List orders: general users see their own orders, sellers and admins
+        see all accepted orders'
+      parameters:
+      - description: page number, default 1
+        in: query
+        name: pageNum
+        type: integer
+      - description: page size, default 10
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/order.SwaggerListResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: List orders
+      tags:
+      - order
+    post:
+      description: Create an order from all books in the current user's cart and clear
+        the cart
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/order.SwaggerCreateOrderResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create an order
+      tags:
+      - order
+    put:
+      consumes:
+      - application/json
+      description: 'Deal with an order: operation=accept pays the order, operation=cancel
+        cancels the order'
+      parameters:
+      - description: order ID and operation
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/order.DealOrderRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/order.SwaggerDealOrderResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Deal with an order
+      tags:
+      - order
+  /state/cpu:
+    get:
+      description: Check the cpu load of the server
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: 'OK - Load average: ...'
+          schema:
+            type: string
+      summary: CPU check
+      tags:
+      - state
+  /state/disk:
+    get:
+      description: Check the disk usage of the server
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: 'OK - Free space: ...'
+          schema:
+            type: string
+      summary: Disk check
+      tags:
+      - state
+  /state/health:
+    get:
+      description: Show OK as the ping-pong result
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Health check
+      tags:
+      - state
+  /state/ram:
+    get:
+      description: Check the ram usage of the server
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: 'OK - Free space: ...'
+          schema:
+            type: string
+      summary: RAM check
+      tags:
+      - state
   /user/admin:
     get:
       description: List users account by specified username format include id, username,
         role, etc. The password hash is never returned.
+      parameters:
+      - description: fuzzy username
+        in: query
+        name: username
+        type: string
+      - description: page number, default 1
+        in: query
+        name: pageNum
+        type: integer
+      - description: page size, default 10
+        in: query
+        name: pageSize
+        type: integer
       produces:
       - application/json
       responses:
@@ -272,6 +917,21 @@ paths:
       tags:
       - user/admin
   /user/common:
+    get:
+      description: Get the information of the user specified by the token. The password
+        hash is never returned.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.SwaggerGetResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get self user information
+      tags:
+      - user/common
     put:
       consumes:
       - application/json

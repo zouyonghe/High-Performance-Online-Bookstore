@@ -10,6 +10,14 @@ import (
 )
 
 // SelfCheck returns self user information.
+//
+// @Summary Get self user information
+// @Description Get the information of the user specified by the token. The password hash is never returned.
+// @Tags user/common
+// @Produce json
+// @Success 200 {object} user.SwaggerGetResponse
+// @Router /user/common [get]
+// @Security ApiKeyAuth
 func SelfCheck(c *gin.Context) {
 	log.SelfCheckCalled(c)
 

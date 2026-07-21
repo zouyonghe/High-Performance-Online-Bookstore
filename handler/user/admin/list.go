@@ -13,7 +13,10 @@ import . "High-Performance-Online-Bookstore/handler"
 // @Summary List users account by specified username format.
 // @Description List users account by specified username format include id, username, role, etc. The password hash is never returned.
 // @Tags user/admin
-// @Produce  json
+// @Produce json
+// @Param username query string false "fuzzy username"
+// @Param pageNum query int false "page number, default 1"
+// @Param pageSize query int false "page size, default 10"
 // @Success 200 {object} user.SwaggerListResponse "{"code":0,"message":"OK","data":{"totalCount":1,"userList":[{"id":1,"username":"admin","ShortId":"5P9Ia4QnR","role":"admin","createdAt":"2021-04-18 15:40:33","updatedAt":"2021-04-18 15:40:33"}]}}"
 // @Router /user/admin [get]
 // @Security ApiKeyAuth
@@ -21,7 +24,7 @@ func List(c *gin.Context) {
 	log.ListUserCalled(c)
 
 	var r user.ListRequest
-	if err := c.ShouldBindJSON(&r); err != nil {
+	if err := c.ShouldBindQuery(&r); err != nil {
 		log.ErrBind(err)
 		SendError(c, err)
 		return

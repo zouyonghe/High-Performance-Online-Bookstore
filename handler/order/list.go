@@ -7,12 +7,22 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// List handler returns a list of orders
+// List returns a list of orders.
+//
+// @Summary List orders
+// @Description List orders: general users see their own orders, sellers and admins see all accepted orders
+// @Tags order
+// @Produce json
+// @Param pageNum query int false "page number, default 1"
+// @Param pageSize query int false "page size, default 10"
+// @Success 200 {object} order.SwaggerListResponse
+// @Router /order [get]
+// @Security ApiKeyAuth
 func List(c *gin.Context) {
 	log.ListOrderCalled(c)
 
 	var r ListRequest
-	if err := c.ShouldBindJSON(&r); err != nil {
+	if err := c.ShouldBindQuery(&r); err != nil {
 		log.ErrBind(err)
 		SendError(c, err)
 		return

@@ -1,6 +1,24 @@
 package order
 
-import "High-Performance-Online-Bookstore/model"
+import (
+	"High-Performance-Online-Bookstore/handler"
+	"High-Performance-Online-Bookstore/model"
+)
+
+type SwaggerCreateOrderResponse struct {
+	handler.BaseResponse
+	Data CreateOrderResponse `json:"data"`
+}
+
+type SwaggerDealOrderResponse struct {
+	handler.BaseResponse
+	Data DealOrderResponse `json:"data"`
+}
+
+type SwaggerListResponse struct {
+	handler.BaseResponse
+	Data ListResponse `json:"data"`
+}
 
 type ShowOrderRequest struct{}
 
@@ -24,9 +42,11 @@ type DealOrderResponse struct {
 	OrderID uint64 `json:"orderId"`
 }
 
+// ListRequest represents an order list query.
+// The parameters are passed in the query string.
 type ListRequest struct {
-	PageNum  int `json:"pageNum"`
-	PageSize int `json:"pageSize"`
+	PageNum  int `json:"pageNum"  form:"pageNum"`
+	PageSize int `json:"pageSize" form:"pageSize"`
 }
 
 type ListResponse struct {

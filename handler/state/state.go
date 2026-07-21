@@ -19,12 +19,26 @@ const (
 )
 
 // HealthCheck shows `OK` as the ping-pong result.
+//
+// @Summary Health check
+// @Description Show OK as the ping-pong result
+// @Tags state
+// @Produce plain
+// @Success 200 {string} string "OK"
+// @Router /state/health [get]
 func HealthCheck(c *gin.Context) {
 	message := "OK"
 	c.String(http.StatusOK, "\n"+message)
 }
 
 // DiskCheck checks the disk usage.
+//
+// @Summary Disk check
+// @Description Check the disk usage of the server
+// @Tags state
+// @Produce plain
+// @Success 200 {string} string "OK - Free space: ..."
+// @Router /state/disk [get]
 func DiskCheck(c *gin.Context) {
 	u, _ := disk.Usage("/")
 
@@ -50,6 +64,13 @@ func DiskCheck(c *gin.Context) {
 }
 
 // CPUCheck checks the cpu usage.
+//
+// @Summary CPU check
+// @Description Check the cpu load of the server
+// @Tags state
+// @Produce plain
+// @Success 200 {string} string "OK - Load average: ..."
+// @Router /state/cpu [get]
 func CPUCheck(c *gin.Context) {
 	cores, _ := cpu.Counts(false)
 
@@ -73,7 +94,14 @@ func CPUCheck(c *gin.Context) {
 	c.String(status, "\n"+message)
 }
 
-// RAMCheck checks the disk usage.
+// RAMCheck checks the ram usage.
+//
+// @Summary RAM check
+// @Description Check the ram usage of the server
+// @Tags state
+// @Produce plain
+// @Success 200 {string} string "OK - Free space: ..."
+// @Router /state/ram [get]
 func RAMCheck(c *gin.Context) {
 	u, _ := mem.VirtualMemory()
 

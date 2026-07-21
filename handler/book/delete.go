@@ -8,6 +8,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Delete deletes a book.
+//
+// @Summary Delete a book
+// @Description Delete a book specified by book ID (seller or admin only)
+// @Tags book
+// @Produce json
+// @Param id path uint64 true "the ID of the book"
+// @Success 200 {object} book.SwaggerDeleteResponse
+// @Router /book/{id} [delete]
+// @Security ApiKeyAuth
 func Delete(c *gin.Context) {
 	log.DelBookCalled(c)
 	BookID, err := service.GetIDByParam(c)

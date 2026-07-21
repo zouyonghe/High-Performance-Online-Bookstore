@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>锦书斋 · 网上书店</title>
+  <link rel="stylesheet" href="/web/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1 class="logo" onclick="showView('books')">📚 锦书斋</h1>
+    <div class="search-box">
+      <input id="search-input" type="text" placeholder="搜索书名…" onkeydown="if(event.key==='Enter')searchBooks()">
+      <input id="category-input" type="text" placeholder="分类" list="category-list">
+      <datalist id="category-list"></datalist>
+      <button onclick="searchBooks()">搜索</button>
+    </div>
+    <nav class="actions">
+      <button id="btn-cart" class="hidden" onclick="showView('cart')">🛒 购物车</button>
+      <button id="btn-orders" class="hidden" onclick="showView('orders')">📦 订单</button>
+      <button id="btn-manage" class="hidden" onclick="showView('manage')">⚙️ 管理</button>
+      <span id="user-info" class="hidden"></span>
+      <button id="btn-logout" class="hidden" onclick="logout()">退出</button>
+      <button id="btn-login" onclick="openAuthModal('login')">登录</button>
+      <button id="btn-register" onclick="openAuthModal('register')">注册</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- 书籍列表 -->
+    <section id="view-books" class="view">
+      <div id="book-grid" class="book-grid"></div>
+      <div class="pager">
+        <button onclick="prevPage()">上一页</button>
+        <span id="page-info">第 1 页</span>
+        <button onclick="nextPage()">下一页</button>
+      </div>
+    </section>
+
+    <!-- 购物车 -->
+    <section id="view-cart" class="view hidden">
+      <h2>我的购物车</h2>
+      <table class="table" id="cart-table">
+        <thead><tr><th>#</th><th>书名</th><th>单价</th><th>数量</th><th>小计</th><th>操作</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="cart-footer">
+        <strong>总价：¥<span id="cart-price">0.00</span></strong>
+        <button class="danger" onclick="clearCart()">清空</button>
+        <button class="primary" onclick="createOrder()">下单</button>
+      </div>
+    </section>
+
+    <!-- 订单 -->
+    <section id="view-orders" class="view hidden">
+      <h2>我的订单</h2>
+      <div id="order-list"></div>
+    </section>
+
+    <!-- 管理（seller/admin） -->
+    <section id="view-manage" class="view hidden">
+      <h2>书籍管理</h2>
+      <form id="add-book-form" class="card form-card" onsubmit="return addBook(event)">
+        <h3>添加新书</h3>
+        <div class="form-row"><label>书名</label><input name="title" required maxlength="32"></div>
+        <div class="form-row"><label>作者</label><input name="author" required maxlength="32"></div>
+        <div class="form-row"><label>价格</label><input name="price" type="number" step="0.01" min="0" required></div>
+        <div class="form-row"><label>出版日期</label><input name="publishDate" type="date" required></div>
+        <div class="form-row"><label>分类</label><input name="category" required maxlength="32"></div>
+        <div class="form-row"><label>库存</label><input name="number" type="number" min="0" required></div>
+        <div class="form-row"><label>上架</label><input name="isSell" type="checkbox" checked></div>
+        <button class="primary" type="submit">添加</button>
+      </form>
+      <table class="table" id="manage-table">
+        <thead><tr><th>ID</th><th>书名</th><th>作者</th><th>价格</th><th>库存</th><th>状态</th><th>操作</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- 登录/注册模态框 -->
+  <div id="auth-modal" class="modal hidden">
+    <div class="modal-content card">
+      <span class="close" onclick="closeAuthModal()">&times;</span>
+      <h2 id="auth-title">登录</h2>
+      <form onsubmit="return submitAuth(event)">
+        <div class="form-row"><label>用户名</label><input id="auth-username" required minlength="2" maxlength="32"></div>
+        <div class="form-row"><label>密码</label><input id="auth-password" type="password" required minlength="5" maxlength="32"></div>
+        <button class="primary" type="submit" id="auth-submit">登录</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+  <script src="/web/app.js"></script>
+</body>
+</html>
